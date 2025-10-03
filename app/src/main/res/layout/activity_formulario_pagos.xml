@@ -52,9 +52,7 @@
                     android:layout_marginBottom="0dp"
                     android:foreground="?attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/card_dark"
-                    app:cardCornerRadius="16dp"
                     app:cardUseCompatPadding="false"
-                    app:cardElevation="0dp"
                     app:strokeColor="@color/border_dim"
                     app:strokeWidth="0dp"
                     app:contentPadding="16dp">
