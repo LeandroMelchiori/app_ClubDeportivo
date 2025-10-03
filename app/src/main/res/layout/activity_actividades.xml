@@ -114,7 +114,10 @@
                 android:background="@drawable/bg_input_gray"
                 android:layout_marginTop="10dp"
                 android:inputType="text"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:minHeight="48dp"
+                android:paddingVertical="12dp"
+                />
 
             <!-- Tarjeta azul actividad -->
             <LinearLayout

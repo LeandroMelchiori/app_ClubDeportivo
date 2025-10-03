@@ -104,10 +104,12 @@
                         android:textSize="18sp"/>
 
                     <EditText
+                        android:importantForAutofill="no"
+                        android:id="@+id/etNombreActividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
-                        android:hint=""
+                        android:hint="AquaGYM"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"/>
@@ -123,6 +125,9 @@
                         android:layout_marginTop="14dp"/>
 
                     <EditText
+                        android:id="@+id/etNombreProfe"
+                        android:hint="Heber Choque"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
@@ -141,12 +146,16 @@
                         android:layout_marginTop="14dp"/>
 
                     <EditText
+                        android:id="@+id/etDia"
+                        android:hint="Lunes"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"/>
+                        android:paddingRight="12dp"
+                        />
 
                     <!-- Campo: Horario -->
                     <TextView
@@ -160,6 +169,9 @@
                         />
 
                     <EditText
+                        android:id="@+id/etHorario"
+                        android:hint="9:00"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
@@ -178,6 +190,9 @@
                         android:layout_marginTop="14dp"/>
 
                     <EditText
+                        android:id="@+id/etDuracion"
+                        android:hint="1 hora"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
@@ -196,6 +211,9 @@
                         android:layout_marginTop="14dp"/>
 
                     <EditText
+                        android:id="@+id/etValor"
+                        android:hint="5000"
+                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
