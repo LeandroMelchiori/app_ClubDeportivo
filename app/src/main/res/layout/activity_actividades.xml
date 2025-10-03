@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_end"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/text_primary"
+        app:itemTextColor="@color/text_primary"
+        app:itemIconSize="22dp"/>
+
+    <!-- Contenido scrollable -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:fillViewport="true"
+        android:paddingBottom="16dp"
+        android:background="@color/card_dark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="40dp">
+
+            <!-- Encabezado: Bienvenida + perfil -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvBienvenido"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivPerfil"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="Icono perfil"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <!-- Nombre sección -->
+            <TextView
+                android:id="@+id/tvPagosTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Actividades"
+                android:textColor="@color/text_primary"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="36dp" />
+
+            <!-- Botón “Agregar actividad” -->
+            <TextView
+                android:id="@+id/btnAgregar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar actividad"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:background="@drawable/bg_chip_blue"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:paddingVertical="20dp"/>
+
+            <!-- Barra de búsqueda -->
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Buscar"
+                android:textColor="@color/bg_dark"
+                android:textColorHint="#7A7A7A"
+                android:background="@drawable/bg_input_gray"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Tarjeta azul actividad -->
+            <LinearLayout
+                android:id="@+id/cardActividad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_gradient_blue"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/tvNombreAct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AcuaGYM"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profesor: Heber Choque"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Día y horario:  Lunes 9hs"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Valor: $ 5000 ARS"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Botones Editar / Eliminar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+
+                    >
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditar"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Editar"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:minHeight="0dp" android:minWidth="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="8dp"
+                        android:paddingVertical="10dp"
+                        />
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEliminar"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Eliminar"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:minHeight="0dp" android:minWidth="0dp"
+                        android:backgroundTint="@color/red"
+                        android:layout_marginStart="8dp"
+                        android:paddingVertical="10dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    app:cardBackgroundColor="@color/card_dark">
+
+    <!-- BottomNav fijo -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_end"
+        android:paddingTop="6dp"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/text_primary"
+        app:itemTextColor="@color/text_primary"
+        app:itemIconSize="30dp" />
+
+    <!-- Contenido con scroll (el paddingBottom evita que lo tape el BottomNav) -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:paddingBottom="0dp"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@color/card_dark"
+            >
+
+            <!-- Contenedor centrado -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!-- Tarjeta oscura con elevación -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPrincipal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="0dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/card_dark"
+                    app:cardCornerRadius="16dp"
+                    app:cardUseCompatPadding="false"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/border_dim"
+                    app:strokeWidth="0dp"
+                    app:contentPadding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Encabezado: Bienvenida + perfil -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tvBienvenido"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Bienvenido, Pepe"
+                                android:textColor="@color/blue_accent"
+                                android:textSize="32sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/ivPerfil"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:src="@drawable/ic_person"
+                                android:contentDescription="Icono perfil"
+                                app:tint="@color/text_primary" />
+                        </LinearLayout>
+
+                        <!-- Fecha -->
+                        <TextView
+                            android:id="@+id/tvFecha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jueves, 28 de Septiembre"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="4dp" />
+
+                        <!-- Sección -->
+                        <TextView
+                            android:id="@+id/tvPagosTitulo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pagos"
+                            android:textColor="@color/text_primary"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="30dp"
+                            android:layout_marginTop="16dp" />
+
+                        <!-- Bloque azul con bordes y aire -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardMes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="2dp"
+                            app:strokeColor="@color/border_dim"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_gradient_blue"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvMes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Enero"
+                                    android:textStyle="bold"
+                                    android:textSize="30sp"
+                                    android:textColor="@color/black" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="No Socios : 129"
+                                    android:textColor="@color/black"
+                                    android:layout_marginTop="8dp"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="8dp"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Socios: 88"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="8dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="total clientes: 217"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="8dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Monto cuotas: $2.640.000"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="8dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Monto Actividades: $500.000"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="8dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ingresos Totales: $3.140.000"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="16dp"/>
+
+                                <!-- Botón píldora centrado -->
+                                <TextView
+                                    android:id="@+id/btnDescargar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:background="@drawable/bg_pill_light"
+                                    android:text="Descargar"
+                                    android:textColor="@color/bg_dark"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:paddingLeft="100dp"
+                                    android:paddingRight="100dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
