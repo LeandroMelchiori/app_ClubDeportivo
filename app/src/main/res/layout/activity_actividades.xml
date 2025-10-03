@@ -88,14 +88,17 @@
                 android:layout_marginTop="36dp" />
 
             <!-- Botón “Agregar actividad” -->
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAgregar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Agregar actividad"
+                android:textAllCaps="false"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
-                android:background="@drawable/bg_chip_blue"
+                android:minWidth="0dp" android:minHeight="0dp"
+                app:cornerRadius="18dp"
+                app:backgroundTint="@color/blue_start"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="10dp"
                 android:paddingVertical="20dp"/>
@@ -164,7 +167,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="12dp"
-
                     >
 
                     <com.google.android.material.button.MaterialButton

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,16 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClubDeportivo">
         <activity
-            android:name=".MainActivity"
+            android:name=".PagosActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".IngresarActividadActivity"/>
-        <activity android:name=".EditarActividadActivity"/>
+        <activity android:name=".ActividadesActivity" android:exported="false"/>
+        <activity android:name=".IngresarActividadActivity" android:exported="false"/>
+        <activity android:name=".EditarActividadActivity" android:exported="false"/>
     </application>
-
 </manifest>
