@@ -20,5 +20,6 @@
         <activity android:name=".ActividadesActivity" android:exported="false"/>
         <activity android:name=".IngresarActividadActivity" android:exported="false"/>
         <activity android:name=".EditarActividadActivity" android:exported="false"/>
+        <activity android:name=".ListadoSociosActivity" android:exported="false"/>
     </application>
 </manifest>
