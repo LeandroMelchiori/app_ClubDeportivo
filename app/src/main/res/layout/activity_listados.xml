@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <!-- Bottom bar -->
+
+    <!-- Contenido scrollable -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:fillViewport="true"
+        android:paddingBottom="16dp"
+        android:background="@color/card_dark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="40dp">
+
+            <!-- Encabezado: Bienvenida + perfil -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvBienvenido"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivPerfil"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="Icono perfil"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_gradient_blue"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+
+
+            </LinearLayout>
+
+            <!-- Botones de listados de clientes -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <!-- Boton listar vencimientos del dia -->
+                <Button
+                    android:id="@+id/btnListVencimientos"
+                    android:layout_width="115dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start"
+                    android:padding="0dp"
+                    android:background="@drawable/bg_chip_blue"
+                    app:backgroundTint="#0099FF"
+                    android:text="Vencimientos" />
+
+                <!-- Boton listar socios -->
+                <Button
+                    android:id="@+id/btnListSocios"
+                    android:layout_width="115dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="0dp"
+                    android:background="@drawable/bg_chip_blue"
+                    app:backgroundTint="#0099FF"
+                    android:text="Socios" />
+
+                <!-- Boton listar no socios -->
+                <Button
+                    android:id="@+id/btnListNoSocios"
+                    android:layout_width="115dp"
+                    android:layout_height="55dp"
+                    android:padding="0dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_chip_blue"
+                    app:backgroundTint="#0099FF"
+                    android:text="No Socios" />
+            </LinearLayout>
+
+            <!-- Buscar usuario por id segun la lista actual -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input_gray"
+                android:text="Buscar"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="80dp" >
+
+
+                <!-- Scroll vencimientos de hoy -->
+                <ScrollView
+                    android:id="@+id/scrollVencimientos"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <!-- Listado de vencimientos -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Cliente 1 vence hoy -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Garcia, Charly" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#123456789" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/red_user"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <!-- Informacion actual del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Vence hoy"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 05/09/2025"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton cuota -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/red_user"
+                                        android:textColor="@color/white"
+                                        android:text="Pagar" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#D9D9D9"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+
+                <!-- Scroll de socios -->
+                <ScrollView
+                    android:id="@+id/scrollSocios"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <!-- Listado de socios -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Cliente 1 sin deuda -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Garza, Andres" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#123456789" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/green_user"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <!-- Informacion actual del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Sin deuda"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 28/08/2034"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton cuota -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#4DCA4B"
+                                        android:textColor="@color/black"
+                                        android:text="Cuota" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#D9D9D9"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Cliente 2 cuota vencida -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Choque, Heber" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#987654321" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/red_user"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <!-- Informacion del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Debe hace 8,804 dias"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 28/08/2001"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton pagar -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/red_user"
+                                        android:textColor="@color/white"
+                                        android:text="Pagar" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#D9D9D9"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Cliente 3 vence hoy -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Garcia, Charly" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#123456789" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/red_user"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <!-- Informacion actual del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Vence hoy"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 05/09/2025"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton cuota -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/red_user"
+                                        android:textColor="@color/white"
+                                        android:text="Pagar" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#D9D9D9"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+
+                <!-- Scroll de no socios -->
+                <ScrollView
+                    android:id="@+id/scrollNoSocios"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <!-- Listado de no socios -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Cliente 1 no socio-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Grillo, Pepito" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#123456789" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/white"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <!-- Informacion actual del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Sin deuda"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 28/09/2025"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton ser socio -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/white_button"
+                                        android:textColor="@color/black"
+                                        android:text="Ser Socio" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/white_button"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Cliente 2 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_gradient_blue"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="15dp">
+
+                            <!-- Nombre del cliente y estado de la cuenta -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="10dp">
+
+                                <!-- Nombre e id de usuario -->
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="26sp"
+                                        android:textStyle="bold"
+                                        android:text="Navarro, Javier" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:textColor="@color/bg_dark"
+                                        android:textSize="16sp"
+                                        android:text="#384838232" />
+                                </LinearLayout>
+
+                                <!-- Estado de la cuota -->
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_user_status"
+                                    android:backgroundTint="@color/white_button"/>
+                            </LinearLayout>
+
+                            <!-- Informacion y Botones -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="horizontal">
+
+                                <!-- Informacion del pago y ultima fecha -->
+                                <LinearLayout
+                                    android:layout_width="240dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+                                    <!-- Informacion del pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:textSize="22sp"
+                                        android:textColor="@color/black"
+                                        android:text="Sin deuda"/>
+
+                                    <!-- Ultima fecha de pago -->
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/black"
+                                        android:text="Ultima pago: 28/08/2008"/>
+                                </LinearLayout>
+
+                                <!-- Botones de accion -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal">
+
+                                    <!-- Boton pagar -->
+                                    <Button
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="@color/white_button"
+                                        android:textColor="@color/black"
+                                        android:text="Ser Socio" />
+
+                                    <!-- Boton ver mas -->
+                                    <Button
+                                        android:onClick="onVerMasClick"
+                                        android:layout_width="80dp"
+                                        android:layout_height="40dp"
+                                        android:layout_marginTop="7dp"
+                                        android:padding="0dp"
+                                        android:background="@drawable/bg_chip_blue"
+                                        app:backgroundTint="#D9D9D9"
+                                        android:textColor="@color/black"
+                                        android:text="Ver mas" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </ScrollView>
+            </FrameLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -28,7 +28,8 @@
         <activity android:name=".EditarAdminActivity" android:exported="false"/>
         <activity android:name=".InscribirActividadActivity" android:exported="false"/>
         <activity android:name=".PagoDeCuotaActivity" android:exported="false"/>
-
+        <activity android:name=".ListadosActivity" android:exported="false"/>
+        <activity android:name=".VerMasActivity" android:exported="false"/>
 
 
     </application>

@@ -2,25 +2,25 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 
-
-class ActividadesActivity : AppCompatActivity() {
+class VerMasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_actividades)
+        setContentView(R.layout.activity_ver_mas)
 
-        findViewById<MaterialButton>(R.id.btnAgregar).setOnClickListener {
-            startActivity(Intent(this, IngresarActividadActivity::class.java))
-        }
-        findViewById<MaterialButton>(R.id.btnEditar).setOnClickListener {
+        findViewById<Button>(R.id.btnEditar).setOnClickListener {
             startActivity(Intent(this, EditarActividadActivity::class.java))
         }
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_activity
+        bottom.selectedItemId = R.id.nav_listas
 
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {

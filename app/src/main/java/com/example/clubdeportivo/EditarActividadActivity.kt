@@ -33,10 +33,10 @@ class EditarActividadActivity : AppCompatActivity() {
                     startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
-//                R.id.nav_listas -> {
-//                    startActivity(Intent(this, `plan B`.ListadoSociosActivity::class.java)) // o MainActivity
-//                    true
-//                }
+                R.id.nav_listas -> {
+                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
+                    true
+                }
                 else -> false
             }
         }
