@@ -121,7 +121,7 @@
 
                     />
                 <com.google.android.material.button.MaterialButton
-
+                    android:id="@+id/btnInscribir"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:text="9:00 - AcuaGym"

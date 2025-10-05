@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
+
+    <!-- Contenido -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:fillViewport="true"
+        android:paddingTop="20dp"
+        android:background="@color/card_dark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Encabezado (igual al de las otras pantallas) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_start"
+                    android:textSize="32sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/text_primary"
+                    android:contentDescription="perfil"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Configuración"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"/>
+
+            <!-- Tarjeta azul con el formulario -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                />
+
+            <!-- Botón “Configuración” -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNuevo"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="16dp"
+                android:text="Nuevo administrador"
+                android:textAllCaps="false"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                app:backgroundTint="@color/blue_start"
+                app:cornerRadius="18dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditar"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="16dp"
+                android:text="Editar administrador"
+                android:textAllCaps="false"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                app:backgroundTint="@color/blue_start"
+                app:cornerRadius="18dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUsuario2"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120dp"
+                android:layout_marginBottom="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="16dp"
+                android:text="Cerrar Sesión"
+                android:textAllCaps="false"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                app:backgroundTint="#CA504B"
+                app:cornerRadius="18dp"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

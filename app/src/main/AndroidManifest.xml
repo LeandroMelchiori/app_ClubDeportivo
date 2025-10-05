@@ -24,6 +24,12 @@
         <activity android:name=".EditarUsuarioActivity" android:exported="false"/>
         <activity android:name=".InicioActivity" android:exported="false"/>
         <activity android:name=".PagosActivity" android:exported="false"/>
+        <activity android:name=".ConfiguracionActivity" android:exported="false"/>
+        <activity android:name=".EditarAdminActivity" android:exported="false"/>
+        <activity android:name=".InscribirActividadActivity" android:exported="false"/>
+        <activity android:name=".PagoDeCuotaActivity" android:exported="false"/>
+
+
 
     </application>
 </manifest>

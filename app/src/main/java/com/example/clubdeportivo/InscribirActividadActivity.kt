@@ -6,18 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
-class InicioActivity : AppCompatActivity() {
+class InscribirActividadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_inicio)
-
-        findViewById<MaterialButton>(R.id.btnUsuario).setOnClickListener {
-            startActivity(Intent(this, NuevoUsuarioActivity::class.java))
-        }
-
-        findViewById<MaterialButton>(R.id.btnInscribir).setOnClickListener {
-            startActivity(Intent(this, InscribirActividadActivity::class.java))
-        }
+        setContentView(R.layout.activity_inscribir_actividad)
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
@@ -36,6 +28,11 @@ class InicioActivity : AppCompatActivity() {
 
                 R.id.nav_settings-> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
+                    true
+                }
+
+                R.id.nav_home-> {
+                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
 //                R.id.nav_listas -> {

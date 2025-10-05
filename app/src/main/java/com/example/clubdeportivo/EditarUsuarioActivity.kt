@@ -24,6 +24,17 @@ class EditarUsuarioActivity : AppCompatActivity()  {
                     startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
                     true
                 }
+
+                R.id.nav_settings-> {
+                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
+                    true
+                }
+
+                R.id.nav_home-> {
+                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
+                    true
+                }
+
 //                R.id.nav_listas -> {
 //                    startActivity(Intent(this, `plan B`.ListadoSociosActivity::class.java)) // o MainActivity
 //                    true

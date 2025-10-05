@@ -4,23 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 
-class InicioActivity : AppCompatActivity() {
+class PagoDeCuotaActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_inicio)
-
-        findViewById<MaterialButton>(R.id.btnUsuario).setOnClickListener {
-            startActivity(Intent(this, NuevoUsuarioActivity::class.java))
-        }
-
-        findViewById<MaterialButton>(R.id.btnInscribir).setOnClickListener {
-            startActivity(Intent(this, InscribirActividadActivity::class.java))
-        }
+        setContentView(R.layout.activity_pago_de_cuota)
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_home
+        bottom.selectedItemId = R.id.nav_pagos
 
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -38,6 +29,12 @@ class InicioActivity : AppCompatActivity() {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
+
+                R.id.nav_home -> {
+                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
+                    true
+                }
+
 //                R.id.nav_listas -> {
 //                    startActivity(Intent(this, `plan B`.ListadoSociosActivity::class.java)) // o MainActivity
 //                    true

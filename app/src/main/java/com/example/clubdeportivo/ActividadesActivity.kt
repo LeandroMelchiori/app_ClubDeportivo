@@ -24,9 +24,23 @@ class ActividadesActivity : AppCompatActivity() {
 
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> true                    // ya estás aquí
                 R.id.nav_pagos -> {
                     startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
+                    true
+                }
+
+                R.id.nav_activity -> {
+                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
+                    true
+                }
+
+                R.id.nav_settings-> {
+                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
+                    true
+                }
+
+                R.id.nav_home-> {
+                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
 //                R.id.nav_listas -> {
