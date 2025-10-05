@@ -18,6 +18,10 @@ class ConfiguracionActivity : AppCompatActivity()  {
             startActivity(Intent(this, EditarAdminActivity::class.java))
         }
 
+        findViewById<MaterialButton>(R.id.btnCerrarSesion).setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
