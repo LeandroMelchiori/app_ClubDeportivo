@@ -12,17 +12,20 @@ class ListadoSociosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_listado_socios)
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_activity
+        bottom.selectedItemId = R.id.nav_listas
 
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_listas -> true
                 R.id.nav_pagos -> {
                     startActivity(Intent(this, PagosActivity::class.java))
                     true
                 }
                 R.id.nav_activity -> {
                     startActivity(Intent(this, ActividadesActivity::class.java))
+                    true
+                }
+                R.id.nav_home -> {
+                    startActivity(Intent(this, InicioActivity::class.java))
                     true
                 }
                 else -> true

@@ -3,14 +3,20 @@ package com.example.clubdeportivo
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 
-class EditarActividadActivity : AppCompatActivity() {
+class InicioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_editar_actividad)
+        setContentView(R.layout.activity_inicio)
 
-        val bottom = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_activity
+        findViewById<MaterialButton>(R.id.btnUsuario).setOnClickListener {
+            startActivity(Intent(this, NuevoUsuarioActivity::class.java))
+        }
+
+        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottom.selectedItemId = R.id.nav_home
 
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -27,9 +33,8 @@ class EditarActividadActivity : AppCompatActivity() {
                     startActivity(Intent(this, ListadoSociosActivity::class.java)) // o MainActivity
                     true
                 }
-                else -> false
+                else -> true
             }
         }
     }
-
 }

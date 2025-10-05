@@ -45,13 +45,13 @@
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/tvBienvenido"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Bienvenido, Pepe"
                     android:textColor="@color/blue_start"
-                    android:textSize="26sp"
+                    android:textSize="32sp"
                     android:textStyle="bold"/>
 
                 <ImageView
@@ -67,12 +67,12 @@
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
-                android:textSize="14sp"/>
+                android:textSize="24sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingrese actividad:"
+                android:text="Editar Usuario:"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -86,7 +86,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="0dp"
+
+                >
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,18 +102,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre Actividad:"
+                        android:text="Nombre:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="18sp"/>
 
                     <EditText
                         android:importantForAutofill="no"
-                        android:id="@+id/etNombreActividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
-                        android:hint="AquaGYM"
+                        android:hint="Heber"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"/>
@@ -119,15 +121,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre Prof:"
+                        android:text="Apellido:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:layout_marginTop="14dp"/>
 
                     <EditText
-                        android:id="@+id/etNombreProfe"
-                        android:hint="Heber Choque"
+
+                        android:hint="Choque"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -140,15 +142,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Día:"
+                        android:text="Fecha de Naciomiento:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:layout_marginTop="14dp"/>
 
                     <EditText
-                        android:id="@+id/etDia"
-                        android:hint="Lunes"
+                        android:hint="01/01/2030"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -162,7 +163,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Horario:"
+                        android:text="Edad:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="18sp"
@@ -170,8 +171,7 @@
                         />
 
                     <EditText
-                        android:id="@+id/etHorario"
-                        android:hint="9:00"
+                        android:hint="44"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -184,15 +184,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Duración:"
+                        android:text="DNI:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         android:layout_marginTop="14dp"/>
 
                     <EditText
-                        android:id="@+id/etDuracion"
-                        android:hint="1 hora"
+
+                        android:hint="12345678"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,27 +201,65 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"/>
 
-                    <!-- Campo: Valor -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Valor:"
+                        android:text="Dirección:"
                         android:textColor="@color/black"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:layout_marginTop="14dp"/>
 
                     <EditText
-                        android:id="@+id/etValor"
-                        android:hint="5000"
+
+                        android:hint="falsa 123"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:layout_marginBottom="30dp"/>
+                        android:paddingRight="12dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teléfono:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+
+                        android:hint="1122334455"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+
+                        android:hint="ejemplo@gmail.com"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
 
                     <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton
@@ -231,7 +269,7 @@
                         android:layout_marginTop="18dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
-                        android:text="INGRESAR"
+                        android:text="CONFIRMAR"
                         android:textSize="24sp"
                         android:textAllCaps="true"
                         android:textColor="@color/black"

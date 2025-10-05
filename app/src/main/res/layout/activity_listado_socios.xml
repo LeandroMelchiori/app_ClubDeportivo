@@ -11,15 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/blue_end"
+        android:background="@color/blue_start"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/text_primary"
-        app:itemTextColor="@color/text_primary"
-        app:itemIconSize="30dp" />
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
 
     <!-- Contenido -->
     <ScrollView
@@ -80,6 +81,22 @@
                 android:layout_marginTop="20dp">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnListado"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_blue"
+                    android:gravity="center"
+                    android:paddingVertical="10dp"
+                    android:padding="0dp"
+                    android:text="Listado Socios"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/blue_start"
+                    />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVencimientos"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -95,18 +112,6 @@
                     app:backgroundTint="@color/blue_start"
                     />
 
-                <TextView
-                    android:id="@+id/btnListado"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@drawable/bg_chip_blue"
-                    android:text="Listado  Socios"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:paddingVertical="14dp"
-                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <!-- Buscar -->

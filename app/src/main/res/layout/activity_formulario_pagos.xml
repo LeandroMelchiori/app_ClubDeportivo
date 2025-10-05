@@ -12,14 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/blue_end"
+        android:background="@color/blue_start"
         android:paddingTop="6dp"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/text_primary"
-        app:itemTextColor="@color/text_primary"
-        app:itemIconSize="30dp" />
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
 
     <!-- Contenido con scroll (el paddingBottom evita que lo tape el BottomNav) -->
     <ScrollView
