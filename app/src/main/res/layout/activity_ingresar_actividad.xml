@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
+
+    <!-- Contenido -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:fillViewport="true"
+        android:paddingTop="20dp"
+        android:background="@color/card_dark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Encabezado (igual al de las otras pantallas) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvBienvenido"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_start"
+                    android:textSize="26sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/text_primary"
+                    android:contentDescription="perfil"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingrese actividad:"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"/>
+
+            <!-- Tarjeta azul con el formulario -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:strokeColor="@android:color/transparent"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_gradient_blue"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Campo: Nombre Actividad -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre Actividad:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <EditText
+                        android:importantForAutofill="no"
+                        android:id="@+id/etNombreActividad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="AquaGYM"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
+
+                    <!-- Campo: Nombre Prof -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre Prof:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/etNombreProfe"
+                        android:hint="Heber Choque"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
+
+                    <!-- Campo: Día -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Día:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/etDia"
+                        android:hint="Lunes"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+
+                    <!-- Campo: Horario -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Horario:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginTop="14dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/etHorario"
+                        android:hint="9:00"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
+
+                    <!-- Campo: Duración -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duración:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/etDuracion"
+                        android:hint="1 hora"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"/>
+
+                    <!-- Campo: Valor -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Valor:"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/etValor"
+                        android:hint="5000"
+                        android:importantForAutofill="no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_light"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:layout_marginBottom="30dp"/>
+
+                    <!-- Botón INGRESAR -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnIngresar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="INGRESAR"
+                        android:textSize="24sp"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/white"
+                        app:cornerRadius="24dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
