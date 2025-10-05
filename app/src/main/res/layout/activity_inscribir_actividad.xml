@@ -19,7 +19,7 @@
         android:paddingBottom="6dp"
         app:itemHorizontalTranslationEnabled="false"
         app:itemIconSize="30dp"
-        app:itemIconTint="@color/text_primary"
+        app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav" />
