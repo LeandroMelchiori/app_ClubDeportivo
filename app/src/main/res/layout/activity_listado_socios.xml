@@ -81,6 +81,21 @@
                 android:layout_marginTop="20dp">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVencimientos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_blue"
+                    android:gravity="center"
+                    android:padding="0dp"
+                    android:paddingVertical="10dp"
+                    android:text="Vencimientos"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/blue_start" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnListado"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -90,27 +105,26 @@
                     android:gravity="center"
                     android:paddingVertical="10dp"
                     android:padding="0dp"
-                    android:text="Listado Socios"
+                    android:text="Socios"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     app:backgroundTint="@color/blue_start"
                     />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnVencimientos"
+                    android:id="@+id/btnNoSocios"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_chip_blue"
                     android:gravity="center"
-                    android:paddingVertical="10dp"
                     android:padding="0dp"
-                    android:text="Vencimientos"
-                    android:textColor="@color/text_primary"
+                    android:paddingVertical="10dp"
+                    android:text="No Socios"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:backgroundTint="@color/blue_start"
-                    />
+                    app:backgroundTint="@color/blue_start" />
 
             </LinearLayout>
 
@@ -133,7 +147,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:strokeColor="@android:color/transparent"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -146,17 +163,17 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Heber, Choque"
+                            android:textColor="@color/black"
                             android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black" />
+                            android:textStyle="bold" />
 
                         <View
                             android:layout_width="14dp"
@@ -172,46 +189,46 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:text="Sin Deuda"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:layout_marginTop="6dp" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Último Pago : 19/09/2025"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="4dp" />
+                        android:textColor="@color/black" />
 
                     <!-- Acciones -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
                         android:gravity="end"
-                        android:layout_marginTop="10dp">
+                        android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:minHeight="48dp"
                             android:text="Cuota"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
-                            android:minHeight="48dp"
-                            app:cornerRadius="20dp"
                             app:backgroundTint="@android:color/holo_green_light"
-                            android:layout_marginEnd="8dp" />
+                            app:cornerRadius="20dp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:minHeight="48dp"
                             android:text="Ver Mas"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
-                            android:minHeight="48dp"
-                            app:cornerRadius="20dp"
-                            app:backgroundTint="@color/white" />
+                            app:backgroundTint="@color/white"
+                            app:cornerRadius="20dp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -222,7 +239,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:strokeColor="@android:color/transparent"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -241,10 +261,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Heber, Choque"
+                            android:text="Carlos, Navarro"
+                            android:textColor="@color/black"
                             android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black" />
+                            android:textStyle="bold" />
 
                         <View
                             android:layout_width="14dp"

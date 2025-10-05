@@ -120,8 +120,8 @@
                             android:layout_marginTop="10dp"
                             app:cardCornerRadius="16dp"
                             app:cardElevation="2dp"
-                            app:strokeColor="@color/border_dim"
-                            app:strokeWidth="1dp">
+                            app:strokeWidth="0dp"
+                            app:strokeColor="@android:color/transparent">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -135,77 +135,76 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Enero"
-                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
                                     android:textSize="30sp"
-                                    android:textColor="@color/black" />
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
                                     android:text="No Socios : 129"
                                     android:textColor="@color/black"
-                                    android:layout_marginTop="8dp"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="8dp"
-                                    />
+                                    android:textSize="18sp" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
                                     android:text="Socios: 88"
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="8dp"/>
+                                    android:textSize="18sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
                                     android:text="total clientes: 217"
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="8dp"/>
+                                    android:textSize="18sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
                                     android:text="Monto cuotas: $2.640.000"
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="8dp"/>
+                                    android:textSize="18sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
                                     android:text="Monto Actividades: $500.000"
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="8dp"
-                                    />
+                                    android:textSize="18sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="16dp"
                                     android:text="Ingresos Totales: $3.140.000"
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:layout_marginBottom="16dp"/>
+                                    android:textSize="18sp" />
 
                                 <!-- Botón píldora centrado -->
                                 <TextView
                                     android:id="@+id/btnDescargar"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="14dp"
                                     android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="14dp"
                                     android:background="@drawable/bg_pill_light"
+                                    android:gravity="center"
+                                    android:paddingLeft="100dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingRight="100dp"
+                                    android:paddingBottom="10dp"
                                     android:text="Descargar"
                                     android:textColor="@color/bg_dark"
-                                    android:textStyle="bold"
                                     android:textSize="18sp"
-                                    android:paddingLeft="100dp"
-                                    android:paddingRight="100dp"
-                                    android:paddingTop="10dp"
-                                    android:paddingBottom="10dp"
-                                    android:gravity="center" />
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
