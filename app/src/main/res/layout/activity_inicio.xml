@@ -15,8 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:background="@color/blue_start"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        app:itemGravity="center"
         app:itemHorizontalTranslationEnabled="false"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav"
@@ -96,7 +95,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="10dp"
                 android:paddingVertical="16dp"
-                app:icon="@drawable/ic_home"
+                app:icon="@drawable/ic_expand"
                 app:iconGravity="end"
                 app:iconPadding="16dp"
                 />
@@ -135,7 +134,7 @@
                     app:backgroundTint="@color/bg_dark"
                     android:layout_marginBottom="10dp"
                     android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_home"
+                    app:icon="@drawable/ic_expand"
                     app:iconGravity="end"
                     app:iconPadding="16dp"
                     />
@@ -155,7 +154,7 @@
                     app:backgroundTint="@color/bg_dark"
                     android:layout_marginBottom="10dp"
                     android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_home"
+                    app:icon="@drawable/ic_expand"
                     app:iconGravity="end"
                     app:iconPadding="16dp"
                     />
@@ -175,7 +174,7 @@
                     app:backgroundTint="@color/bg_dark"
                     android:layout_marginBottom="10dp"
                     android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_home"
+                    app:icon="@drawable/ic_expand"
                     app:iconGravity="end"
                     app:iconPadding="16dp"
                     />

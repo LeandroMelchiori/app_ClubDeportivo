@@ -8,7 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class EditarUsuarioActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nuevo_usuario)
+        setContentView(R.layout.activity_editar_usuario)
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home

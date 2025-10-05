@@ -16,7 +16,7 @@ class VerMasActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ver_mas)
 
         findViewById<Button>(R.id.btnEditar).setOnClickListener {
-            startActivity(Intent(this, EditarActividadActivity::class.java))
+            startActivity(Intent(this, EditarUsuarioActivity::class.java))
         }
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)

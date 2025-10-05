@@ -6,6 +6,20 @@
     android:background="@color/bg_dark">
 
     <!-- Bottom bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        app:itemGravity="center"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
 
     <!-- Contenido -->
     <ScrollView
@@ -264,20 +278,6 @@
                         android:padding="10dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNav"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/blue_start"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                app:itemHorizontalTranslationEnabled="false"
-                app:itemIconSize="30dp"
-                app:itemIconTint="@color/black"
-                app:itemTextColor="@color/black"
-                app:labelVisibilityMode="labeled"
-                app:menu="@menu/menu_bottom_nav" />
 
         </LinearLayout>
     </ScrollView>

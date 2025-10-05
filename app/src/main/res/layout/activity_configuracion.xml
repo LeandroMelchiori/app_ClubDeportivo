@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        app:itemGravity="center"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
@@ -129,7 +128,7 @@
                 app:cornerRadius="18dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnUsuario2"
+                android:id="@+id/btnCerrarSesion"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
