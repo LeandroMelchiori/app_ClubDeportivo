@@ -59,7 +59,6 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -91,7 +90,7 @@
                     android:padding="0dp"
                     android:paddingVertical="10dp"
                     android:text="Vencimientos"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     app:backgroundTint="@color/blue_start" />
 
@@ -106,7 +105,7 @@
                     android:paddingVertical="10dp"
                     android:padding="0dp"
                     android:text="Socios"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     app:backgroundTint="@color/blue_start"
                     />
@@ -190,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="Sin Deuda"
+                        android:text="Vence hoy"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -198,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Último Pago : 19/09/2025"
+                        android:text="Último Pago : 28/08/2025"
                         android:textColor="@color/black" />
 
                     <!-- Acciones -->
@@ -214,7 +213,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:minHeight="48dp"
-                            android:text="Cuota"
+                            android:text="Pagar"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             app:backgroundTint="@android:color/holo_green_light"
@@ -281,7 +280,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Debe hace 67 días"
+                        android:text="Debe hace 2 días"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:layout_marginTop="6dp" />
@@ -289,7 +288,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Último Pago : 19/09/2025"
+                        android:text="Último Pago : 26/08/2025"
                         android:textColor="@color/black"
                         android:layout_marginTop="4dp" />
 

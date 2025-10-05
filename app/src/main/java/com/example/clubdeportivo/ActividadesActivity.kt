@@ -29,10 +29,10 @@ class ActividadesActivity : AppCompatActivity() {
                     startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
                     true
                 }
-                R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadoSociosActivity::class.java)) // o MainActivity
-                    true
-                }
+//                R.id.nav_listas -> {
+//                    startActivity(Intent(this, `plan B`.ListadoSociosActivity::class.java)) // o MainActivity
+//                    true
+//                }
                 else -> true
             }
         }
