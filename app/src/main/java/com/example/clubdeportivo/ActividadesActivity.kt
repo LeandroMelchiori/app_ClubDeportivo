@@ -29,11 +29,6 @@ class ActividadesActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_activity -> {
-                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
-                    true
-                }
-
                 R.id.nav_settings-> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
