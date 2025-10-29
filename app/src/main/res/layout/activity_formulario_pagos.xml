@@ -6,22 +6,6 @@
     android:background="@color/bg_dark"
     app:cardBackgroundColor="@color/card_dark">
 
-    <!-- BottomNav fijo -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemGravity="center"
-        android:background="@color/blue_start"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
-
     <!-- Contenido con scroll (el paddingBottom evita que lo tape el BottomNav) -->
     <ScrollView
         android:layout_width="match_parent"
@@ -214,5 +198,21 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <!-- BottomNav fijo -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemGravity="center"
+        android:background="@color/blue_start"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
 
 </RelativeLayout>

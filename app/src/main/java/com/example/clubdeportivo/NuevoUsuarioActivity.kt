@@ -13,6 +13,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
 
+        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

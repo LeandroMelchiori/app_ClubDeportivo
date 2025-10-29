@@ -5,24 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <!-- Bottom bar -->
-
-    <!-- Contenido scrollable -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blue_start"
-        app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
-
+    <!-- Contenido scrolleable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,6 +14,7 @@
         android:paddingBottom="16dp"
         android:background="@color/card_dark">
 
+        <!-- Contenedor gral -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,13 +23,14 @@
             android:paddingRight="20dp"
             android:paddingTop="40dp">
 
-            <!-- Encabezado: Bienvenida + perfil -->
+            <!-- Encabezado -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+                <!-- Texto bienvenida -->
                 <TextView
                     android:id="@+id/tvBienvenido"
                     android:layout_width="0dp"
@@ -56,6 +41,7 @@
                     android:textSize="32sp"
                     android:textStyle="bold" />
 
+                <!-- Icono usuario -->
                 <ImageView
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
@@ -88,7 +74,7 @@
 
             </LinearLayout>
 
-            <!-- Botones de listados de clientes -->
+            <!-- Botones de listados -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
@@ -138,12 +124,12 @@
                 android:background="@drawable/bg_input_gray"
                 android:text="Buscar"/>
 
+            <!-- Listados -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="80dp" >
-
 
                 <!-- Scroll vencimientos de hoy -->
                 <ScrollView
@@ -274,7 +260,6 @@
                         </LinearLayout>
                     </LinearLayout>
                 </ScrollView>
-
 
                 <!-- Scroll de socios -->
                 <ScrollView
@@ -635,7 +620,6 @@
                     </LinearLayout>
                 </ScrollView>
 
-
                 <!-- Scroll de no socios -->
                 <ScrollView
                     android:id="@+id/scrollNoSocios"
@@ -882,10 +866,24 @@
                 </ScrollView>
             </FrameLayout>
 
-
-
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- Bottom -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        app:itemGravity="center"
+        app:menu="@menu/menu_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        />
 
 </RelativeLayout>

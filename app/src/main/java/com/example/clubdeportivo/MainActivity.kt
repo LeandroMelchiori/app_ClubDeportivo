@@ -2,7 +2,6 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +14,10 @@ class MainActivity : AppCompatActivity() {
 
         val etUsuario = findViewById<EditText>(R.id.etUsuario)
         val etContraseña = findViewById<EditText>(R.id.etContraseña)
-        val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
 
-        findViewById<MaterialButton>(R.id.btnLogin).setOnClickListener {
+        // Logica inicio de sesion
+        btnLogin.setOnClickListener {
             val usuario = etUsuario.text.toString()
             val contraseña = etContraseña.text.toString()
 

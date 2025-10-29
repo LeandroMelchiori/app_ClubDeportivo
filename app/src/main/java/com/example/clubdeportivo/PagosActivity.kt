@@ -13,6 +13,7 @@ class PagosActivity : AppCompatActivity() {      // o MainActivity
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_pagos
 
+        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_activity -> {

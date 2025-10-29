@@ -22,6 +22,7 @@ class VerMasActivity : AppCompatActivity() {
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_listas
 
+        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

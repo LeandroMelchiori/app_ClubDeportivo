@@ -5,24 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <!-- Bottom bar -->
-
-    <!-- Contenido scrollable -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        android:background="@color/blue_start"
-        app:itemGravity="center"
-        app:itemHorizontalTranslationEnabled="false"
-        app:itemIconSize="30dp"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_nav" />
-
+    <!-- Contenido scrolleable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -196,7 +179,7 @@
                 </RadioGroup>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDescargar"
+                    android:id="@+id/btnPagar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -219,4 +202,19 @@
 
     </ScrollView>
 
+    <!-- Bottom -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:background="@color/blue_start"
+        app:itemGravity="center"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 </RelativeLayout>

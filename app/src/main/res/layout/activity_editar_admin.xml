@@ -6,8 +6,6 @@
     android:background="@color/bg_dark">
 
     <!-- Bottom bar -->
-
-    <!-- Contenido scrollable -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -23,6 +21,7 @@
         app:itemIconSize="30dp"
         />
 
+    <!-- Contenido scrollable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
