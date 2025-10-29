@@ -22,17 +22,19 @@ class MainActivity : AppCompatActivity() {
             val usuario = etUsuario.text.toString()
             val contraseña = etContraseña.text.toString()
 
-            if(usuario.isEmpty() || contraseña.isEmpty()){
-                Toast.makeText(this, "Por favor ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
-            }else if(usuario == "admin" && contraseña == "admin"
+            if (usuario.isEmpty() || contraseña.isEmpty()) {
+                Toast.makeText(this, "Por favor ingrese usuario y contraseña", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (usuario == "admin" && contraseña == "admin"
                 || usuario == "charlie" && contraseña == "charlie"
                 || usuario == "sacha" && contraseña == "sacha"
                 || usuario == "javo" && contraseña == "javo"
-                || usuario == "heber" && contraseña == "heber"){
+                || usuario == "heber" && contraseña == "heber"
+            ) {
                 val intent = Intent(this, InicioActivity::class.java)
                 intent.putExtra("usuario", usuario)
                 startActivity(intent)
-            }else{
+            } else {
                 Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }
         }

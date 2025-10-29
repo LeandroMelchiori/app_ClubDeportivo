@@ -10,24 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado: Bienvenida + perfil -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <!-- Texto bienvenida -->
                 <TextView
@@ -44,8 +44,8 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -54,138 +54,138 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold" />
 
             <!-- Nombre sección -->
             <TextView
                 android:id="@+id/tvPagosTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="5dp"
                 android:text="Actividades"
                 android:textColor="@color/text_primary"
                 android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="36dp" />
+                android:textStyle="bold" />
 
             <!-- Botón “Agregar actividad” -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAgregar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="20dp"
                 android:text="Agregar actividad"
                 android:textAllCaps="false"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
-                android:minWidth="0dp" android:minHeight="0dp"
-                app:cornerRadius="18dp"
                 app:backgroundTint="@color/blue_start"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:paddingVertical="20dp"/>
+                app:cornerRadius="18dp" />
 
             <!-- Barra de búsqueda -->
             <EditText
                 android:id="@+id/etBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Buscar"
-                android:textColor="@color/bg_dark"
-                android:textColorHint="#7A7A7A"
-                android:background="@drawable/bg_input_gray"
                 android:layout_marginTop="10dp"
-                android:inputType="text"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_input_gray"
+                android:hint="Buscar"
+                android:inputType="text"
                 android:minHeight="48dp"
                 android:paddingVertical="12dp"
-                />
+                android:textColor="@color/bg_dark"
+                android:textColorHint="#7A7A7A" />
 
             <!-- Tarjeta azul actividad -->
             <LinearLayout
                 android:id="@+id/cardActividad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_gradient_blue"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tvNombreAct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AcuaGYM"
+                    android:textColor="@color/black"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="Profesor: Heber Choque"
                     android:textColor="@color/black"
-                    android:layout_marginTop="8dp"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Día y horario:  Lunes 9hs"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Valor: $ 5000 ARS"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <!-- Botones Editar / Eliminar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="12dp"
-                    >
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnEditar"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/white"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingVertical="10dp"
                         android:text="Editar"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
                         android:textColor="@color/black"
-                        android:minHeight="0dp" android:minWidth="0dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_marginEnd="8dp"
-                        android:paddingVertical="10dp"
-                        />
+                        android:textSize="18sp" />
 
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnEliminar"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingVertical="10dp"
                         android:text="Eliminar"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:minHeight="0dp" android:minWidth="0dp"
-                        android:backgroundTint="@color/red"
-                        android:layout_marginStart="8dp"
-                        android:paddingVertical="10dp"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -203,12 +203,11 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

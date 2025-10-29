@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DatoAdapter(private val datos: List<String>):
-    RecyclerView.Adapter<DatoAdapter.ViewHolder>(){
+class DatoAdapter(private val datos: List<String>) :
+    RecyclerView.Adapter<DatoAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvItem: TextView = view.findViewById(R.id.tvItem)
     }
 

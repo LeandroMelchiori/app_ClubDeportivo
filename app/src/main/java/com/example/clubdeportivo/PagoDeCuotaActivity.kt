@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class PagoDeCuotaActivity : AppCompatActivity()  {
+class PagoDeCuotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pago_de_cuota)
@@ -31,7 +31,7 @@ class PagoDeCuotaActivity : AppCompatActivity()  {
                     true
                 }
 
-                R.id.nav_settings-> {
+                R.id.nav_settings -> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
@@ -45,6 +45,7 @@ class PagoDeCuotaActivity : AppCompatActivity()  {
                     startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
                     true
                 }
+
                 else -> true
             }
         }

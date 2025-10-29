@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_blue"
-    android:orientation="vertical"
     android:gravity="center"
-    >
+    android:orientation="vertical">
 
     <!-- Encabezado -->
     <TextView
@@ -15,10 +14,9 @@
         android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="CLUB DEPORTIVO"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        />
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <!-- Usuario -->
     <TextView
@@ -28,6 +26,7 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/etUsuario"
         android:layout_width="300dp"
@@ -49,6 +48,7 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
+
     <EditText
         android:id="@+id/etContraseña"
         android:layout_width="300dp"

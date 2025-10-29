@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
         <!-- Contenedor gral -->
         <LinearLayout
@@ -20,15 +20,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <!-- Texto bienvenida -->
                 <TextView
@@ -46,8 +46,8 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -56,20 +56,20 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_gradient_blue"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp">
+                android:orientation="vertical">
 
 
             </LinearLayout>
@@ -88,10 +88,10 @@
                     android:layout_width="115dp"
                     android:layout_height="55dp"
                     android:layout_gravity="start"
-                    android:padding="0dp"
                     android:background="@drawable/bg_chip_blue"
-                    app:backgroundTint="#0099FF"
-                    android:text="Vencimientos" />
+                    android:padding="0dp"
+                    android:text="Vencimientos"
+                    app:backgroundTint="#0099FF" />
 
                 <!-- Boton listar socios -->
                 <Button
@@ -99,21 +99,21 @@
                     android:layout_width="115dp"
                     android:layout_height="55dp"
                     android:layout_marginStart="10dp"
-                    android:padding="0dp"
                     android:background="@drawable/bg_chip_blue"
-                    app:backgroundTint="#0099FF"
-                    android:text="Socios" />
+                    android:padding="0dp"
+                    android:text="Socios"
+                    app:backgroundTint="#0099FF" />
 
                 <!-- Boton listar no socios -->
                 <Button
                     android:id="@+id/btnListNoSocios"
                     android:layout_width="115dp"
                     android:layout_height="55dp"
-                    android:padding="0dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/bg_chip_blue"
-                    app:backgroundTint="#0099FF"
-                    android:text="No Socios" />
+                    android:padding="0dp"
+                    android:text="No Socios"
+                    app:backgroundTint="#0099FF" />
             </LinearLayout>
 
             <!-- Buscar usuario por id segun la lista actual -->
@@ -122,14 +122,14 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_input_gray"
-                android:text="Buscar"/>
+                android:text="Buscar" />
 
             <!-- Listados -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="80dp" >
+                android:layout_marginBottom="80dp">
 
                 <!-- Scroll vencimientos de hoy -->
                 <ScrollView
@@ -148,19 +148,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -171,26 +171,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Garcia, Charly"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Garcia, Charly" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#123456789"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#123456789" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/red_user"/>
+                                    android:backgroundTint="@color/red_user" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -213,48 +214,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Vence hoy"
                                         android:textColor="@color/black"
-                                        android:text="Vence hoy"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 05/09/2025"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 05/09/2025"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton cuota -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/red_user"
+                                        android:padding="0dp"
+                                        android:text="Pagar"
                                         android:textColor="@color/white"
-                                        android:text="Pagar" />
+                                        app:backgroundTint="@color/red_user" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#D9D9D9"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="#D9D9D9" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -278,19 +279,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -301,26 +302,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Garza, Andres"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Garza, Andres" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#123456789"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#123456789" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/green_user"/>
+                                    android:backgroundTint="@color/green_user" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -343,48 +345,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Sin deuda"
                                         android:textColor="@color/black"
-                                        android:text="Sin deuda"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 28/08/2034"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 28/08/2034"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton cuota -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#4DCA4B"
+                                        android:padding="0dp"
+                                        android:text="Cuota"
                                         android:textColor="@color/black"
-                                        android:text="Cuota" />
+                                        app:backgroundTint="#4DCA4B" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#D9D9D9"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="#D9D9D9" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -393,19 +395,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -416,26 +418,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Choque, Heber"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Choque, Heber" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#987654321"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#987654321" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/red_user"/>
+                                    android:backgroundTint="@color/red_user" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -457,48 +460,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Debe hace 8,804 dias"
                                         android:textColor="@color/black"
-                                        android:text="Debe hace 8,804 dias"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 28/08/2001"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 28/08/2001"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton pagar -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/red_user"
+                                        android:padding="0dp"
+                                        android:text="Pagar"
                                         android:textColor="@color/white"
-                                        android:text="Pagar" />
+                                        app:backgroundTint="@color/red_user" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#D9D9D9"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="#D9D9D9" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -507,19 +510,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -530,26 +533,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Garcia, Charly"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Garcia, Charly" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#123456789"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#123456789" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/red_user"/>
+                                    android:backgroundTint="@color/red_user" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -572,48 +576,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Vence hoy"
                                         android:textColor="@color/black"
-                                        android:text="Vence hoy"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 05/09/2025"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 05/09/2025"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton cuota -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/red_user"
+                                        android:padding="0dp"
+                                        android:text="Pagar"
                                         android:textColor="@color/white"
-                                        android:text="Pagar" />
+                                        app:backgroundTint="@color/red_user" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#D9D9D9"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="#D9D9D9" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -637,19 +641,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -660,26 +664,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Grillo, Pepito"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Grillo, Pepito" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#123456789"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#123456789" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/white"/>
+                                    android:backgroundTint="@color/white" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -702,48 +707,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Sin deuda"
                                         android:textColor="@color/black"
-                                        android:text="Sin deuda"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 28/09/2025"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 28/09/2025"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton ser socio -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/white_button"
+                                        android:padding="0dp"
+                                        android:text="Ser Socio"
                                         android:textColor="@color/black"
-                                        android:text="Ser Socio" />
+                                        app:backgroundTint="@color/white_button" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/white_button"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="@color/white_button" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -752,19 +757,19 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
                             android:background="@drawable/bg_gradient_blue"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="15dp">
+                            android:orientation="vertical">
 
                             <!-- Nombre del cliente y estado de la cuenta -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
                                 <!-- Nombre e id de usuario -->
                                 <LinearLayout
@@ -775,26 +780,27 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
+                                        android:text="Navarro, Javier"
                                         android:textColor="@color/bg_dark"
                                         android:textSize="26sp"
-                                        android:textStyle="bold"
-                                        android:text="Navarro, Javier" />
+                                        android:textStyle="bold" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="20dp"
+                                        android:text="#384838232"
                                         android:textColor="@color/bg_dark"
-                                        android:textSize="16sp"
-                                        android:text="#384838232" />
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Estado de la cuota -->
                                 <View
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:layout_marginStart="10dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
                                     android:background="@drawable/bg_user_status"
-                                    android:backgroundTint="@color/white_button"/>
+                                    android:backgroundTint="@color/white_button" />
                             </LinearLayout>
 
                             <!-- Informacion y Botones -->
@@ -816,48 +822,48 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="10dp"
-                                        android:textSize="22sp"
+                                        android:text="Sin deuda"
                                         android:textColor="@color/black"
-                                        android:text="Sin deuda"/>
+                                        android:textSize="22sp" />
 
                                     <!-- Ultima fecha de pago -->
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
-                                        android:textSize="16sp"
+                                        android:text="Ultima pago: 28/08/2008"
                                         android:textColor="@color/black"
-                                        android:text="Ultima pago: 28/08/2008"/>
+                                        android:textSize="16sp" />
                                 </LinearLayout>
 
                                 <!-- Botones de accion -->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center_horizontal">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
 
                                     <!-- Boton pagar -->
                                     <Button
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="@color/white_button"
+                                        android:padding="0dp"
+                                        android:text="Ser Socio"
                                         android:textColor="@color/black"
-                                        android:text="Ser Socio" />
+                                        app:backgroundTint="@color/white_button" />
 
                                     <!-- Boton ver mas -->
                                     <Button
-                                        android:onClick="onVerMasClick"
                                         android:layout_width="80dp"
                                         android:layout_height="40dp"
                                         android:layout_marginTop="7dp"
-                                        android:padding="0dp"
                                         android:background="@drawable/bg_chip_blue"
-                                        app:backgroundTint="#D9D9D9"
+                                        android:onClick="onVerMasClick"
+                                        android:padding="0dp"
+                                        android:text="Ver mas"
                                         android:textColor="@color/black"
-                                        android:text="Ver mas" />
+                                        app:backgroundTint="#D9D9D9" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -878,12 +884,11 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

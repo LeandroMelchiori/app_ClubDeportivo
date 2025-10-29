@@ -19,8 +19,10 @@ class InicioActivity : AppCompatActivity() {
         tvBienvenida.text = "Bienvenido, $usuario"
 
         // Cartel emergente al iniciar la vista
-        Snackbar.make(findViewById(android.R.id.content),
-            "Sesion iniciada...", Snackbar.LENGTH_SHORT)
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            "Sesion iniciada...", Snackbar.LENGTH_SHORT
+        )
             .show()
 
         // Boton nuevo usuario
@@ -49,14 +51,16 @@ class InicioActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_settings-> {
+                R.id.nav_settings -> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
+
                 R.id.nav_listas -> {
                     startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
                     true
                 }
+
                 else -> true
             }
         }

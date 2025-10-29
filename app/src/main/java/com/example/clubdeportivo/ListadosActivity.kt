@@ -54,26 +54,28 @@ class ListadosActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_settings-> {
+                R.id.nav_settings -> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
 
-                R.id.nav_home-> {
+                R.id.nav_home -> {
                     startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
+
                 else -> true
             }
         }
     }
+
     fun onVerMasClick(v: View) {
         startActivity(Intent(this, VerMasActivity::class.java))
     }
 
     private fun mostrarScrollViewList(scrollMenu: ScrollView) {
         scrollVenc.visibility = View.GONE
-        scrollSoc.visibility  = View.GONE
+        scrollSoc.visibility = View.GONE
         scrollNoSoc.visibility = View.GONE
 
         scrollMenu.visibility = View.VISIBLE

@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingTop="20dp"
-        android:background="@color/card_dark">
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,8 +24,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <!-- Texto bienvenida -->
                 <TextView
@@ -41,9 +41,9 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:contentDescription="perfil"
                     android:src="@drawable/ic_person"
-                    app:tint="@color/text_primary"
-                    android:contentDescription="perfil"/>
+                    app:tint="@color/text_primary" />
             </LinearLayout>
 
             <TextView
@@ -51,17 +51,17 @@
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
                 android:text="Ingrese actividad:"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="18dp"/>
+                android:textStyle="bold" />
 
             <!-- Tarjeta azul con el formulario -->
             <com.google.android.material.card.MaterialCardView
@@ -71,9 +71,8 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeWidth="0dp"
                 app:strokeColor="@android:color/transparent"
-                >
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,127 +87,125 @@
                         android:layout_height="wrap_content"
                         android:text="Nombre Actividad:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <EditText
-                        android:importantForAutofill="no"
                         android:id="@+id/etNombreActividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="@drawable/bg_pill_light"
                         android:hint="AquaGYM"
-                        android:layout_marginTop="8dp"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"/>
+                        android:paddingRight="12dp" />
 
                     <!-- Campo: Nombre Prof -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
                         android:text="Nombre Prof:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_marginTop="14dp"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etNombreProfe"
-                        android:hint="Heber Choque"
-                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="Heber Choque"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"/>
+                        android:paddingRight="12dp" />
 
                     <!-- Campo: Día -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
                         android:text="Día:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_marginTop="14dp"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etDia"
-                        android:hint="Lunes"
-                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="Lunes"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        />
+                        android:paddingRight="12dp" />
 
                     <!-- Campo: Horario -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
                         android:text="Horario:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_marginTop="14dp"
-                        />
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etHorario"
-                        android:hint="9:00"
-                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="9:00"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"/>
+                        android:paddingRight="12dp" />
 
                     <!-- Campo: Duración -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
                         android:text="Duración:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="16sp"
-                        android:layout_marginTop="14dp"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etDuracion"
-                        android:hint="1 hora"
-                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="1 hora"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"/>
+                        android:paddingRight="12dp" />
 
                     <!-- Campo: Valor -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
                         android:text="Valor:"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_marginTop="14dp"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etValor"
-                        android:hint="5000"
-                        android:importantForAutofill="no"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_pill_light"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="30dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="5000"
+                        android:importantForAutofill="no"
                         android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:layout_marginBottom="30dp"/>
+                        android:paddingRight="12dp" />
 
                     <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton
@@ -218,13 +215,13 @@
                         android:layout_marginTop="18dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
+                        android:padding="10dp"
                         android:text="INGRESAR"
-                        android:textSize="24sp"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
+                        android:textSize="24sp"
                         app:backgroundTint="@color/white"
-                        app:cornerRadius="24dp"
-                        android:padding="10dp"/>
+                        app:cornerRadius="24dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -239,12 +236,11 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

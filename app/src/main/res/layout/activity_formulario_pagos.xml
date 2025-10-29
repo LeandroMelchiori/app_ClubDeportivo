@@ -11,23 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
-        android:paddingBottom="0dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:paddingBottom="0dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
             android:background="@color/card_dark"
-            >
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <!-- Contenedor centrado -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
                 <!-- Tarjeta oscura con elevación -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardPrincipal"
@@ -38,9 +36,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/card_dark"
                     app:cardUseCompatPadding="false"
+                    app:contentPadding="16dp"
                     app:strokeColor="@color/border_dim"
-                    app:strokeWidth="0dp"
-                    app:contentPadding="16dp">
+                    app:strokeWidth="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -51,8 +49,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <!-- Texto bienvenida -->
                             <TextView
@@ -69,8 +67,8 @@
                                 android:id="@+id/ivPerfil"
                                 android:layout_width="28dp"
                                 android:layout_height="28dp"
-                                android:src="@drawable/ic_person"
                                 android:contentDescription="Icono perfil"
+                                android:src="@drawable/ic_person"
                                 app:tint="@color/text_primary" />
                         </LinearLayout>
 
@@ -79,23 +77,23 @@
                             android:id="@+id/tvFecha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Jueves, 28 de Septiembre"
                             android:textColor="@color/text_secondary"
                             android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:textStyle="bold" />
 
                         <!-- Sección -->
                         <TextView
                             android:id="@+id/tvPagosTitulo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="30dp"
                             android:text="Pagos"
                             android:textColor="@color/text_primary"
                             android:textSize="26sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="30dp"
-                            android:layout_marginTop="16dp" />
+                            android:textStyle="bold" />
 
                         <!-- Bloque azul con bordes y aire -->
                         <com.google.android.material.card.MaterialCardView
@@ -105,8 +103,8 @@
                             android:layout_marginTop="10dp"
                             app:cardCornerRadius="16dp"
                             app:cardElevation="2dp"
-                            app:strokeWidth="0dp"
-                            app:strokeColor="@android:color/transparent">
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -206,14 +204,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemGravity="center"
         android:background="@color/blue_start"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
+        app:itemGravity="center"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

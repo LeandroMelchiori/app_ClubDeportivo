@@ -26,19 +26,21 @@ class PagosActivity : AppCompatActivity() {      // o MainActivity
                     true
                 }
 
-                R.id.nav_settings-> {
+                R.id.nav_settings -> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
 
-                R.id.nav_home-> {
+                R.id.nav_home -> {
                     startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
+
                 R.id.nav_listas -> {
                     startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
                     true
                 }
+
                 else -> true
             }
         }

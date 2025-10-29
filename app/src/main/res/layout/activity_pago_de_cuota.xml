@@ -10,172 +10,173 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="40dp">
-
-        <!-- Encabezado: Bienvenida + perfil -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
-            <!-- Texto bienvenida -->
-            <TextView
-                android:id="@+id/tvBienvenida"
-                android:layout_width="0dp"
+            <!-- Encabezado: Bienvenida + perfil -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bienvenido"
-                android:textColor="@color/blue_accent"
-                android:textSize="32sp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Texto bienvenida -->
+                <TextView
+                    android:id="@+id/tvBienvenida"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivPerfil"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/ivPerfil"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_person"
-                android:contentDescription="Icono perfil"
-                app:tint="@color/text_primary" />
-        </LinearLayout>
-
-        <!-- Fecha -->
-        <TextView
-            android:id="@+id/tvFecha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jueves, 28 de Septiembre"
-            android:textColor="@color/text_secondary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="4dp" />
-
-        <!-- Nombre sección -->
-        <TextView
-            android:id="@+id/tvActividadTitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pago cuota"
-            android:textColor="@color/text_primary"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="36dp" />
-
-        <!-- Botón “Agregar actividad” -->
-
-        <!-- Barra de búsqueda -->
-
-        <!-- Tarjeta azul actividad -->
-        <LinearLayout
-            android:id="@+id/cardActividad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_gradient_blue"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp">
-
+            <!-- Nombre sección -->
             <TextView
+                android:id="@+id/tvActividadTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pepe"
-                android:textColor="@color/black"
-                android:layout_marginTop="8dp"
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="5dp"
+                android:text="Pago cuota"
+                android:textColor="@color/text_primary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#191919"
-                android:textColor="@color/black"
-                android:layout_marginTop="0dp"
-                android:textSize="24dp"
-                android:layout_marginBottom="16dp"/>
+            <!-- Botón “Agregar actividad” -->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jueves 9hs"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+            <!-- Barra de búsqueda -->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Valor: $ 5000 ARS"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Metodo de pago:"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
-
-            <RadioGroup
-                android:id="@+id/radioGroup_MediosdePago"
+            <!-- Tarjeta azul actividad -->
+            <LinearLayout
+                android:id="@+id/cardActividad"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <RadioButton
-                    android:id="@+id/radio_Efectivo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Efectivo"/>
-
-                <RadioButton
-                    android:id="@+id/radio_transferencia"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Transferencia"/>
-
-                <RadioButton
-                    android:id="@+id/radio_tarjeta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tarjeta de credito"/>
-
-            </RadioGroup>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDescargar"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/bg_pill_light"
-                android:text="PAGAR"
-                android:textColor="@color/bg_dark"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:gravity="center"
-                app:backgroundTint="@color/white"/>
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_gradient_blue"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Pepe"
+                    android:textColor="@color/black"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="#191919"
+                    android:textColor="@color/black"
+                    android:textSize="24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Jueves 9hs"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Valor: $ 5000 ARS"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Metodo de pago:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_MediosdePago"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/radio_Efectivo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Efectivo" />
+
+                    <RadioButton
+                        android:id="@+id/radio_transferencia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transferencia" />
+
+                    <RadioButton
+                        android:id="@+id/radio_tarjeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tarjeta de credito" />
+
+                </RadioGroup>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDescargar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_pill_light"
+                    android:gravity="center"
+                    android:paddingLeft="100dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="100dp"
+                    android:paddingBottom="10dp"
+                    android:text="PAGAR"
+                    android:textColor="@color/bg_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/white" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
 
     <!-- Bottom bar -->
@@ -186,12 +187,11 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

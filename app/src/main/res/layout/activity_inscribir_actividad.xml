@@ -10,24 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado: Bienvenida + perfil -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <!-- Texto bienvenida -->
                 <TextView
@@ -44,8 +44,8 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -54,23 +54,23 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold" />
 
             <!-- Nombre sección -->
             <TextView
                 android:id="@+id/tvActividadTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="5dp"
                 android:text="Asignar Actividad"
                 android:textColor="@color/text_primary"
                 android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="36dp" />
+                android:textStyle="bold" />
 
             <!-- Botón “Agregar actividad” -->
 
@@ -79,79 +79,78 @@
                 android:id="@+id/etBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Lista No Socios"
-                android:textColor="@color/bg_dark"
-                android:textColorHint="#7A7A7A"
-                android:background="@drawable/bg_input_gray"
                 android:layout_marginTop="10dp"
-                android:inputType="text"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_input_gray"
+                android:hint="Lista No Socios"
+                android:inputType="text"
                 android:minHeight="48dp"
                 android:paddingVertical="12dp"
-                />
+                android:textColor="@color/bg_dark"
+                android:textColorHint="#7A7A7A" />
 
             <!-- Tarjeta azul actividad -->
             <LinearLayout
                 android:id="@+id/cardActividad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_gradient_blue"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tvNombreAct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AcuaGYM"
+                    android:textColor="@color/black"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="Pepe"
                     android:textColor="@color/white"
-                    android:layout_marginTop="8dp"
                     android:textSize="30dp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="#191919"
                     android:textColor="@color/white"
-                    android:layout_marginTop="8dp"
-                    android:textSize="24dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Jueves 9hs"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Valor: $ 5000 ARS"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Metodo de pago:"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="18sp" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup_MediosdePago"
@@ -163,19 +162,19 @@
                         android:id="@+id/radio_Efectivo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Efectivo"/>
+                        android:text="Efectivo" />
 
                     <RadioButton
                         android:id="@+id/radio_transferencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Transferencia"/>
+                        android:text="Transferencia" />
 
                     <RadioButton
                         android:id="@+id/radio_tarjeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tarjeta de credito"/>
+                        android:text="Tarjeta de credito" />
 
                 </RadioGroup>
 
@@ -183,19 +182,19 @@
                     android:id="@+id/btnPagar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="14dp"
                     android:background="@drawable/bg_pill_light"
+                    android:gravity="center"
+                    android:paddingLeft="100dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="100dp"
+                    android:paddingBottom="10dp"
                     android:text="PAGAR"
                     android:textColor="@color/bg_dark"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:paddingLeft="100dp"
-                    android:paddingRight="100dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:gravity="center"
-                    app:backgroundTint="@color/white"/>
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/white" />
 
             </LinearLayout>
 

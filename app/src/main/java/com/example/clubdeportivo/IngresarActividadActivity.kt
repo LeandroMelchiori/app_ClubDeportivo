@@ -16,7 +16,8 @@ class IngresarActividadActivity : AppCompatActivity() {
         tvBienvenida.text = "Bienvenido, $usuario"
 
         // Bottom
-        val bottom = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
+        val bottom =
+            findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_activity
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -30,19 +31,21 @@ class IngresarActividadActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_settings-> {
+                R.id.nav_settings -> {
                     startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
                     true
                 }
 
-                R.id.nav_home-> {
+                R.id.nav_home -> {
                     startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
                     true
                 }
+
                 R.id.nav_listas -> {
                     startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
                     true
                 }
+
                 else -> false
             }
         }
