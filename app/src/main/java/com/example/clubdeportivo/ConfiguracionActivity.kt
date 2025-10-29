@@ -2,6 +2,7 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
@@ -12,16 +13,28 @@ class ConfiguracionActivity : AppCompatActivity()  {
         setContentView(R.layout.activity_configuracion)
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-            bottom.selectedItemId = R.id.nav_settings
+        val btnSalir = findViewById<MaterialButton>(R.id.btnCerrarSesion)
 
+        // Mantiene seleccionado el icono de configuracion
+        bottom.selectedItemId = R.id.nav_settings
+
+        // Boton editar admin
         findViewById<MaterialButton>(R.id.btnEditar).setOnClickListener {
             startActivity(Intent(this, EditarAdminActivity::class.java))
         }
 
-        findViewById<MaterialButton>(R.id.btnCerrarSesion).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+        // Boton cerrar sesion
+        btnSalir.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Cerrar sesion")
+                .setMessage("¿Estas seguro que quieres cerrar sesion?")
+                .setPositiveButton("Si") { _, _ -> startActivity(Intent(this, MainActivity::class.java)) }
+                .setNegativeButton("No", null)
+                .show()
         }
 
+
+        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

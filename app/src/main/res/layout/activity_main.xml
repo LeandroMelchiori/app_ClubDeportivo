@@ -29,7 +29,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/etNombreActividad"
+        android:id="@+id/etUsuario"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -51,7 +51,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/etNombreProfe"
+        android:id="@+id/etContraseña"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -63,7 +63,7 @@
         android:paddingRight="12dp" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPepe"
+        android:id="@+id/btnLogin"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
