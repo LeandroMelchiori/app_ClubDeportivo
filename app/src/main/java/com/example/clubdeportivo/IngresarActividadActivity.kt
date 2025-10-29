@@ -2,6 +2,7 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class IngresarActividadActivity : AppCompatActivity() {
@@ -9,9 +10,14 @@ class IngresarActividadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ingresar_actividad)
 
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Bottom
         val bottom = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_activity
-
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

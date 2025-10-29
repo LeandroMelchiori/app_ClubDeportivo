@@ -27,25 +27,22 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Texto bienvenida -->
                 <TextView
-                    android:id="@+id/tvBienvenida"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido"
-                    android:textColor="@color/blue_accent"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_start"
                     android:textSize="32sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_person"
                     app:tint="@color/text_primary"
-                    android:contentDescription="perfil"
-                    />
-
+                    android:contentDescription="perfil"/>
             </LinearLayout>
 
             <TextView
@@ -58,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Configuración"
+                android:text="Ingrese Usuario:"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -73,61 +70,45 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                />
+                app:strokeWidth="0dp"
+                app:strokeColor="@android:color/transparent"
+                >
 
-            <!-- Botón “Configuración” -->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnNuevo"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:paddingVertical="16dp"
-                android:text="Nuevo administrador"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                app:backgroundTint="@color/blue_start"
-                app:cornerRadius="18dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_gradient_blue"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditar"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:paddingVertical="16dp"
-                android:text="Editar administrador"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                app:backgroundTint="@color/blue_start"
-                app:cornerRadius="18dp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCerrarSesion"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="120dp"
-                android:layout_marginBottom="10dp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:paddingVertical="16dp"
-                android:text="Cerrar Sesión"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                app:backgroundTint="#CA504B"
-                app:cornerRadius="18dp"
-                />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvLista"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <!-- Botón INGRESAR -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAgregar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="36dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="Agregar"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/white"
+                        app:cornerRadius="24dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>

@@ -3,6 +3,7 @@ package com.example.clubdeportivo
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,14 +16,20 @@ class VerMasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_mas)
 
-        findViewById<Button>(R.id.btnEditar).setOnClickListener {
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Boton editar
+        val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
+        btnEditar.setOnClickListener {
             startActivity(Intent(this, EditarUsuarioActivity::class.java))
         }
 
+        // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_listas
-
-        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

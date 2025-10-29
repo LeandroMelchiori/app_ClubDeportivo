@@ -2,6 +2,7 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,18 +13,19 @@ class ConfiguracionActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracion)
 
-        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        val btnSalir = findViewById<MaterialButton>(R.id.btnCerrarSesion)
-
-        // Mantiene seleccionado el icono de configuracion
-        bottom.selectedItemId = R.id.nav_settings
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        tvBienvenida.text = "Bienvenido, $usuario"
 
         // Boton editar admin
-        findViewById<MaterialButton>(R.id.btnEditar).setOnClickListener {
+        val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
+        btnEditar.setOnClickListener {
             startActivity(Intent(this, EditarAdminActivity::class.java))
         }
 
         // Boton cerrar sesion
+        val btnSalir = findViewById<MaterialButton>(R.id.btnCerrarSesion)
         btnSalir.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Cerrar sesion")
@@ -33,8 +35,8 @@ class ConfiguracionActivity : AppCompatActivity()  {
                 .show()
         }
 
-
         // Bottom
+        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
@@ -58,5 +60,6 @@ class ConfiguracionActivity : AppCompatActivity()  {
                 else -> true
             }
         }
+        bottom.selectedItemId = R.id.nav_settings
     }
 }

@@ -2,6 +2,7 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,16 +13,26 @@ class ActividadesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_actividades)
 
-        findViewById<MaterialButton>(R.id.btnAgregar).setOnClickListener {
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Boton agregar
+        val btnAgregar = findViewById<MaterialButton>(R.id.btnAgregar)
+        btnAgregar.setOnClickListener {
             startActivity(Intent(this, IngresarActividadActivity::class.java))
         }
-        findViewById<MaterialButton>(R.id.btnEditar).setOnClickListener {
+
+        //Boton editar
+        val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
+        btnEditar.setOnClickListener {
             startActivity(Intent(this, EditarActividadActivity::class.java))
         }
 
+        // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_activity
-
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

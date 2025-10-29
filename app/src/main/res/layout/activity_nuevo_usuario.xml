@@ -27,15 +27,16 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+                <!-- Texto bienvenida -->
                 <TextView
-
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
-                    android:textColor="@color/blue_start"
+                    android:text="Bienvenido"
+                    android:textColor="@color/blue_accent"
                     android:textSize="32sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="28dp"
@@ -55,12 +56,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingrese Usuario:"
+                android:text="Nuevo Usuario"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginTop="18dp"
-                android:layout_marginBottom="18dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <!-- Tarjeta azul con el formulario -->
             <com.google.android.material.card.MaterialCardView
@@ -235,7 +236,6 @@
                         android:layout_marginTop="14dp"/>
 
                     <EditText
-
                         android:hint="ejemplo@gmail.com"
                         android:importantForAutofill="no"
                         android:layout_width="match_parent"
@@ -247,14 +247,15 @@
 
                     <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnIngresar"
+                        android:id="@+id/btnRegistrar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="36dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
-                        android:text="INGRESAR"
+                        android:text="REGISTRAR USUARIO"
                         android:textSize="24sp"
+                        android:textStyle="bold"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
                         app:backgroundTint="@color/white"

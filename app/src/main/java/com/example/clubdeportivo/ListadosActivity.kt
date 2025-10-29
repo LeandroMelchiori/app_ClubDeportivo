@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,22 +21,27 @@ class ListadosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listados)
 
-        val botonVencimiento: Button = findViewById<Button>(R.id.btnListVencimientos)
-        val botonSocios: Button = findViewById<Button>(R.id.btnListSocios)
-        val botonNoSocios: Button = findViewById<Button>(R.id.btnListNoSocios)
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        tvBienvenida.text = "Bienvenido, $usuario"
 
+        // Scrollview listas
         scrollVenc = findViewById<ScrollView>(R.id.scrollVencimientos)
         scrollSoc = findViewById<ScrollView>(R.id.scrollSocios)
         scrollNoSoc = findViewById<ScrollView>(R.id.scrollNoSocios)
 
+        // Botones listas
+        val botonVencimiento: Button = findViewById<Button>(R.id.btnListVencimientos)
+        val botonSocios: Button = findViewById<Button>(R.id.btnListSocios)
+        val botonNoSocios: Button = findViewById<Button>(R.id.btnListNoSocios)
         botonVencimiento.setOnClickListener { mostrarScrollViewList(scrollVenc) }
         botonSocios.setOnClickListener { mostrarScrollViewList(scrollSoc) }
         botonNoSocios.setOnClickListener { mostrarScrollViewList(scrollNoSoc) }
 
+        // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_listas
-
-        // Bottom
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {

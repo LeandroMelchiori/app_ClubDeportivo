@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Variables
         val etUsuario = findViewById<EditText>(R.id.etUsuario)
         val etContraseña = findViewById<EditText>(R.id.etContraseña)
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
@@ -23,7 +24,11 @@ class MainActivity : AppCompatActivity() {
 
             if(usuario.isEmpty() || contraseña.isEmpty()){
                 Toast.makeText(this, "Por favor ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
-            }else if(usuario == "admin" && contraseña == "admin"){
+            }else if(usuario == "admin" && contraseña == "admin"
+                || usuario == "charlie" && contraseña == "charlie"
+                || usuario == "sacha" && contraseña == "sacha"
+                || usuario == "javo" && contraseña == "javo"
+                || usuario == "heber" && contraseña == "heber"){
                 val intent = Intent(this, InicioActivity::class.java)
                 intent.putExtra("usuario", usuario)
                 startActivity(intent)

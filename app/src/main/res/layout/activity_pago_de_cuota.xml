@@ -29,12 +29,13 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
+            <!-- Texto bienvenida -->
             <TextView
-                android:id="@+id/tvBienvenido"
+                android:id="@+id/tvBienvenida"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Bienvenido, Pepe"
+                android:text="Bienvenido"
                 android:textColor="@color/blue_accent"
                 android:textSize="32sp"
                 android:textStyle="bold" />
@@ -90,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pepe"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginTop="8dp"
                 android:textSize="30dp"
                 android:textStyle="bold"
@@ -100,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="#191919"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginTop="0dp"
                 android:textSize="24dp"
                 android:layout_marginBottom="16dp"/>

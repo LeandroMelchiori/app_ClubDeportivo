@@ -27,15 +27,16 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+                <!-- Texto bienvenida -->
                 <TextView
-                    android:id="@+id/tvBienvenido"
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
-                    android:textColor="@color/blue_start"
-                    android:textSize="26sp"
-                    android:textStyle="bold"/>
+                    android:text="Bienvenido"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="28dp"
