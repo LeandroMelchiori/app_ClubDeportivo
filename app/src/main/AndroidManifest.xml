@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClubDeportivo">
 
-        <!-- Vista de prueba -->
+<!--&lt;!&ndash;         Vista de prueba &ndash;&gt;-->
 <!--        <activity-->
 <!--            android:name=".pruebasActivity"-->
 <!--            android:exported="true">-->
@@ -21,7 +21,7 @@
 <!--        </activity>-->
 <!--        <activity android:name=".MainActivity" android:exported="false"/>-->
 
-        <!-- Vista posta -->
+<!--         Vista posta -->
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

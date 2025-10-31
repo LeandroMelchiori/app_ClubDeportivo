@@ -15,32 +15,12 @@ class pruebasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pruebas)
 
-        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_home
-
         val rvLista = findViewById<RecyclerView>(R.id.rvLista)
         rvLista.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
 
-        val datos = mutableListOf(
-            "Dato 1",
-            "Dato 2",
-            "Dato 3",
-            "Dato 4",
-            "Dato 1",
-            "Dato 2",
-            "Dato 3",
-            "Dato 4",
-            "Dato 1",
-            "Dato 2",
-            "Dato 3",
-            "Dato 4",
-            "Dato 1",
-            "Dato 2",
-            "Dato 3",
-            "Dato 4",
-        )
-
-        val adapter = DatoAdapter(datos)
+        val dbHelper = DBHelper(this)
+        val datos = dbHelper.obtenerProductos().toMutableList()
+        val adapter = DatoAdapter(datos, dbHelper)
         rvLista.adapter = adapter
 
         val btnAgregar = findViewById<MaterialButton>(R.id.btnAgregar)
@@ -53,14 +33,19 @@ class pruebasActivity : AppCompatActivity() {
                 .setView(input)
                 .setPositiveButton("Agregar") { _, _ ->
                     val nuevoDato = input.text.toString()
-                    datos.add(nuevoDato)
-                    adapter.notifyItemInserted(datos.size - 1)
+                    if(nuevoDato.isNotEmpty()){
+                        dbHelper.insertarProducto(nuevoDato)
+                        datos.add(nuevoDato)
+                        adapter.notifyItemInserted(datos.size - 1)
+                    }
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
 
         // Bottom
+        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottom.selectedItemId = R.id.nav_home
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
@@ -91,6 +76,5 @@ class pruebasActivity : AppCompatActivity() {
                 else -> true
             }
         }
-
     }
 }

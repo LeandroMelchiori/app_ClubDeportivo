@@ -21,20 +21,21 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             val usuario = etUsuario.text.toString()
             val contraseña = etContraseña.text.toString()
-
+            // Validacion campos en blanco
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 Toast.makeText(this, "Por favor ingrese usuario y contraseña", Toast.LENGTH_SHORT)
-                    .show()
-            } else if (usuario == "admin" && contraseña == "admin"
+                    .show() }
+            // Validacion usuario correcto
+            else if (usuario == "admin" && contraseña == "admin"
                 || usuario == "charlie" && contraseña == "charlie"
                 || usuario == "sacha" && contraseña == "sacha"
                 || usuario == "javo" && contraseña == "javo"
-                || usuario == "heber" && contraseña == "heber"
-            ) {
+                || usuario == "heber" && contraseña == "heber") {
                 val intent = Intent(this, InicioActivity::class.java)
                 intent.putExtra("usuario", usuario)
-                startActivity(intent)
-            } else {
+                startActivity(intent) }
+            // Usuario o contraseña incorrectos
+            else {
                 Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }
         }

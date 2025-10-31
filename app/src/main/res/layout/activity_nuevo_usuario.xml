@@ -46,14 +46,18 @@
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
+            <!-- Fecha hoy -->
             <TextView
+                android:id="@+id/tvFechaHoy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="24sp" />
 
+            <!-- Tipo Formulario -->
             <TextView
+                android:id="@+id/tvTipoFormulario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -74,7 +78,7 @@
                 app:strokeColor="@android:color/transparent"
                 app:strokeWidth="0dp">
 
-
+                <!-- Formulario -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -82,8 +86,9 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Campo: Nombre Actividad -->
+                    <!-- Campo: Nombre -->
                     <TextView
+                        android:id="@+id/tvNombre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre:"
@@ -92,6 +97,7 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etNombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -101,8 +107,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
-                    <!-- Campo: Nombre Prof -->
+                    <!-- Campo: Apellido -->
                     <TextView
+                        android:id="@+id/tvApellido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -112,7 +119,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-
+                        android:id="@+id/etApellido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -124,6 +131,7 @@
 
                     <!-- Campo: Día -->
                     <TextView
+                        android:id="@+id/tvFecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -133,6 +141,7 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etFecha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -142,8 +151,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
-                    <!-- Campo: Horario -->
+                    <!-- Campo: Edad -->
                     <TextView
+                        android:id="@+id/tvEdad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -153,6 +163,7 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etEdad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -162,8 +173,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
-                    <!-- Campo: Duración -->
+                    <!-- Campo: DNI -->
                     <TextView
+                        android:id="@+id/tvDNI"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -173,7 +185,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-
+                        android:id="@+id/etDNI"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -183,7 +195,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
+                    <!-- Campo: Direccion -->
                     <TextView
+                        android:id="@+id/tvDireccion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -193,7 +207,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-
+                        android:id="@+id/etDireccion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -203,7 +217,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
+                    <!-- Campo: Teléfono -->
                     <TextView
+                        android:id="@+id/tvTelefono"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -213,7 +229,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-
+                        android:id="@+id/etTelefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -223,7 +239,9 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
+                    <!-- Campo: Email -->
                     <TextView
+                        android:id="@+id/tvEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -233,6 +251,7 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -260,7 +279,6 @@
                         app:cornerRadius="24dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </ScrollView>
 
@@ -278,5 +296,4 @@
         app:itemTextColor="@color/black"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav" />
-
 </RelativeLayout>

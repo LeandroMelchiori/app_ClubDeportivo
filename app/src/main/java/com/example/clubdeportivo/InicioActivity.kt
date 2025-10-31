@@ -32,7 +32,7 @@ class InicioActivity : AppCompatActivity() {
         }
 
         // Botón Inscribir actividad
-        val btnInscribir = findViewById<MaterialButton>(R.id.btnInscribir)
+        val btnInscribir = findViewById<MaterialButton>(R.id.btnInscribir1)
         btnInscribir.setOnClickListener {
             startActivity(Intent(this, InscribirActividadActivity::class.java))
         }

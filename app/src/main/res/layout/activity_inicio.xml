@@ -81,27 +81,28 @@
                 app:iconGravity="end"
                 app:iconPadding="16dp" />
 
-
+            <!-- Contenedor activdades -->
             <LinearLayout
+                android:id="@+id/llActividades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingRight="20dp">
 
-
+                <!-- Titulo -->
                 <TextView
+                    android:id="@+id/tvActividades"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
                     android:text="Actividades del dia.."
                     android:textColor="@color/text_secondary"
-                    android:textSize="24sp"
+                    android:textSize="24sp" />
 
-                    />
-
+                <!-- Actividades 1 -->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInscribir"
+                    android:id="@+id/btnInscribir1"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -119,8 +120,9 @@
                     app:iconGravity="end"
                     app:iconPadding="16dp" />
 
+                <!-- Actividad 2 -->
                 <com.google.android.material.button.MaterialButton
-
+                    android:id="@+id/btnInscribir2"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -138,8 +140,9 @@
                     app:iconGravity="end"
                     app:iconPadding="16dp" />
 
+                <!-- Actividad 3 -->
                 <com.google.android.material.button.MaterialButton
-
+                    android:id="@+id/btnInscribir3"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -156,11 +159,8 @@
                     app:icon="@drawable/ic_expand"
                     app:iconGravity="end"
                     app:iconPadding="16dp" />
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
     <!-- Bottom -->

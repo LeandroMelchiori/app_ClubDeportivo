@@ -62,7 +62,7 @@
 
             <!-- Nombre sección -->
             <TextView
-                android:id="@+id/tvActividadTitulo"
+                android:id="@+id/tvTipoFormulario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
@@ -72,7 +72,6 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <!-- Botón “Agregar actividad” -->
 
             <!-- Barra de búsqueda -->
             <EditText
@@ -100,6 +99,7 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <!-- Actividad -->
                 <TextView
                     android:id="@+id/tvNombreAct"
                     android:layout_width="wrap_content"
@@ -109,26 +109,32 @@
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
+                <!-- Usuario -->
                 <TextView
+                    android:id="@+id/tvNombreUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="Pepe"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="30dp"
                     android:textStyle="bold" />
 
+                <!-- ID Usuario -->
                 <TextView
+                    android:id="@+id/tvIdUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="#191919"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="24dp" />
 
+                <!-- Horario -->
                 <TextView
+                    android:id="@+id/tvHorario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -136,7 +142,9 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <!-- Precio -->
                 <TextView
+                    android:id="@+id/tvValor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -144,7 +152,9 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <!-- Precio -->
                 <TextView
+                    android:id="@+id/tvMedioPago"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -152,32 +162,37 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <!-- Medios de pago -->
                 <RadioGroup
-                    android:id="@+id/radioGroup_MediosdePago"
+                    android:id="@+id/rgMedioPago"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <!-- Efectivo -->
                     <RadioButton
-                        android:id="@+id/radio_Efectivo"
+                        android:id="@+id/rbEfectivo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Efectivo" />
 
+                    <!-- Transferencia -->
                     <RadioButton
-                        android:id="@+id/radio_transferencia"
+                        android:id="@+id/rbTransferencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Transferencia" />
 
+                    <!-- Tarjeta -->
                     <RadioButton
-                        android:id="@+id/radio_tarjeta"
+                        android:id="@+id/rbTarjeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tarjeta de credito" />
 
                 </RadioGroup>
 
+                <!-- Boton pagar -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPagar"
                     android:layout_width="wrap_content"
@@ -195,14 +210,11 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:backgroundTint="@color/white" />
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
-    <!-- Bottom -->
+    <!-- Bottom nav -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"

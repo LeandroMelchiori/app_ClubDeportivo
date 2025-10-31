@@ -93,6 +93,7 @@
 
                     <!-- nombre del cliente -->
                     <TextView
+                        android:id="@+id/tvNombreUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -102,6 +103,7 @@
 
                     <!-- Fecha de nacimiento -->
                     <TextView
+                        android:id="@+id/tvFechaNacimiento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -111,6 +113,7 @@
 
                     <!-- Edad -->
                     <TextView
+                        android:id="@+id/tvEdad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -120,6 +123,7 @@
 
                     <!-- Direcccion -->
                     <TextView
+                        android:id="@+id/tvDireccion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -129,6 +133,7 @@
 
                     <!-- DNI -->
                     <TextView
+                        android:id="@+id/tvDNI"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -138,6 +143,7 @@
 
                     <!-- Telefono -->
                     <TextView
+                        android:id="@+id/tvTelefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -147,6 +153,7 @@
 
                     <!-- Botones -->
                     <LinearLayout
+                        android:id="@+id/llBotones"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
@@ -169,6 +176,7 @@
 
                         <!-- Eliminar cliente -->
                         <Button
+                            android:id="@+id/btnEliminar"
                             android:layout_width="100dp"
                             android:layout_height="40dp"
                             android:layout_marginHorizontal="20dp"
@@ -180,11 +188,7 @@
                             app:backgroundTint="@color/red" />
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
-
 </RelativeLayout>

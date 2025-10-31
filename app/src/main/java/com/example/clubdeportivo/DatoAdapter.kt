@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 
-class DatoAdapter(private val datos: List<String>) :
-    RecyclerView.Adapter<DatoAdapter.ViewHolder>() {
+class DatoAdapter(
+    private val datos: MutableList<String>,
+    private val dbHelper: DBHelper
+) : RecyclerView.Adapter<DatoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvItem: TextView = view.findViewById(R.id.tvItem)
@@ -20,7 +23,21 @@ class DatoAdapter(private val datos: List<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvItem.text = datos[position]
+        val nombre = datos[position]
+        holder.tvItem.text = nombre
+        holder.itemView.setOnLongClickListener {
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Eliminar producto")
+                .setMessage("¿Estás seguro de que deseas eliminar este producto?")
+                .setPositiveButton("Si") { _, _ ->
+                    dbHelper.eliminarProducto(nombre)
+                    datos.removeAt(position)
+                    notifyItemRemoved(position)
+                }
+                .setNegativeButton("No", null)
+                .show()
+            true
+        }
     }
 
     override fun getItemCount() = datos.size

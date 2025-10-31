@@ -46,14 +46,18 @@
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
+            <!-- Fecha hoy -->
             <TextView
+                android:id="@+id/tvFechaHoy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
+            <!-- Texto tipo formulario -->
             <TextView
+                android:id="@+id/tvTipoFormulario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -83,6 +87,7 @@
 
                     <!-- Campo: Nombre Actividad -->
                     <TextView
+                        android:id="@+id/tvNombreActividad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre Actividad:"
@@ -103,6 +108,7 @@
 
                     <!-- Campo: Nombre Prof -->
                     <TextView
+                        android:id="@+id/tvNombreProfe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -124,6 +130,7 @@
 
                     <!-- Campo: Día -->
                     <TextView
+                        android:id="@+id/tvDia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -145,6 +152,7 @@
 
                     <!-- Campo: Horario -->
                     <TextView
+                        android:id="@+id/tvHorario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -166,6 +174,7 @@
 
                     <!-- Campo: Duración -->
                     <TextView
+                        android:id="@+id/tvDuracion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -187,6 +196,7 @@
 
                     <!-- Campo: Valor -->
                     <TextView
+                        android:id="@+id/tvValor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -224,7 +234,6 @@
                         app:cornerRadius="24dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </ScrollView>
 

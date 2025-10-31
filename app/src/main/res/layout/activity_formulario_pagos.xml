@@ -14,7 +14,6 @@
         android:fillViewport="true"
         android:paddingBottom="0dp">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -190,11 +189,9 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
@@ -212,5 +209,4 @@
         app:itemTextColor="@color/black"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav" />
-
 </RelativeLayout>
