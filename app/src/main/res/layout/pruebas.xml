@@ -28,6 +28,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -79,22 +80,169 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvLista"
+                    <!-- Campo: Nombre -->
+                    <TextView
+                        android:id="@+id/tvNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etNombre"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="Heber"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: Apellido -->
+                    <TextView
+                        android:id="@+id/tvApellido"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Apellido:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etApellido"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="Choque"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: Día -->
+                    <TextView
+                        android:id="@+id/tvFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Fecha de Naciomiento:"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etFecha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="01/01/2030"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: DNI -->
+                    <TextView
+                        android:id="@+id/tvDNI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="DNI:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etDNI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="12345678"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: Direccion -->
+                    <TextView
+                        android:id="@+id/tvDireccion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Dirección:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="falsa 123"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: Teléfono -->
+                    <TextView
+                        android:id="@+id/tvTelefono"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Teléfono:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etTelefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="1122334455"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+
+                    <!-- Campo: Email -->
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="Email:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill_light"
+                        android:hint="ejemplo@gmail.com"
+                        android:importantForAutofill="no"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
 
                     <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAgregar"
+                        android:id="@+id/btnRegistrar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="36dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:padding="10dp"
-                        android:text="Agregar"
+                        android:text="REGISTRAR USUARIO"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
                         android:textSize="24sp"

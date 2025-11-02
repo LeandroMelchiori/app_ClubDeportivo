@@ -10,24 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClubDeportivo">
 
-<!--&lt;!&ndash;         Vista de prueba &ndash;&gt;-->
-<!--        <activity-->
-<!--            android:name=".pruebasActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-<!--        <activity android:name=".MainActivity" android:exported="false"/>-->
-
-<!--         Vista posta -->
-        <activity android:name=".MainActivity" android:exported="true">
+<!--         Vista de prueba -->
+        <activity
+            android:name=".pruebasActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" android:exported="false"/>
+
+<!--&lt;!&ndash;         Vista posta &ndash;&gt;-->
+<!--        <activity android:name=".MainActivity" android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <activity android:name=".ActividadesActivity" android:exported="false"/>
         <activity android:name=".IngresarActividadActivity" android:exported="false"/>
