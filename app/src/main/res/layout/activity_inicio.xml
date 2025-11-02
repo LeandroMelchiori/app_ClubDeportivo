@@ -100,65 +100,13 @@
                     android:textColor="@color/text_secondary"
                     android:textSize="24sp" />
 
-                <!-- Actividades 1 -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInscribir1"
-                    android:layout_width="350dp"
+                <LinearLayout
+                    android:id="@+id/contenedorActividadesHoy"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:paddingVertical="16dp"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    app:backgroundTint="@color/bg_dark"
-                    app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp" />
+                    android:orientation="vertical"
+                    android:paddingTop="6dp" />
 
-                <!-- Actividad 2 -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInscribir2"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:paddingVertical="16dp"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    app:backgroundTint="@color/bg_dark"
-                    app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp" />
-
-                <!-- Actividad 3 -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInscribir3"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:paddingVertical="16dp"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    app:backgroundTint="@color/bg_dark"
-                    app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

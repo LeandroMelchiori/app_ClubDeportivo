@@ -1,13 +1,9 @@
 package com.example.clubdeportivo
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteDatabase.deleteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-
-// App_Clubdeportivo-Sacha/app/src/main/java/com/example/clubdeportivo/DBHelper.kt
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 2) {
 
     override fun onConfigure(db: SQLiteDatabase) {
@@ -132,32 +128,137 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // seedFromAsset(db, context, "sql/club_deportivo_inserts.sql")
     }
 
-    // Eliminar producto
     fun eliminarProducto(nombre: String){
         val db = writableDatabase
         db.delete("prueba", "nombre = ?", arrayOf(nombre))
     }
 
-    // Insertar producto
-    fun insertarProducto(nombre: String){
-        val db = writableDatabase
-        val values = ContentValues()
-        values.put("nombre", nombre)
-        db.insert("productos", null, values)
-    }
 
-    // Listar productos
-    fun obtenerProductos(): List<String> {
+
+    // Funcion actividades del dia
+
+    // Modelo para la tarjeta
+    data class NoSocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimaPago: String? // puede ser null si nunca pagó
+    )
+    data class VencimientoCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val fechaVenc: String,
+        val ultimoPago: String?   // puede ser null
+    )
+    data class SocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimoPago: String?   // puede ser null
+    )
+
+
+    // ------- Querys -------
+
+    // Vencimientos para una fecha (formato "YYYY-MM-DD")
+    fun obtenerNoSocios(): List<NoSocioCard> {
+        val lista = mutableListOf<NoSocioCard>()
         val db = readableDatabase
-        val lista = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT * FROM productos", null)
-        if(cursor.moveToFirst()){
-            do {
-                val nombre = cursor.getString(1)
-                lista.add(nombre)
-            } while (cursor.moveToNext())
-        }
 
+        val sql = """
+        SELECT n.nombre, n.apellido, n.dni, MAX(p.fecha_pago) AS ultima_pago
+        FROM no_socios n
+        LEFT JOIN pagos_actividad p ON p.dni_nosocio = n.dni
+        GROUP BY n.dni, n.nombre, n.apellido
+        ORDER BY n.apellido, n.nombre
+    """.trimIndent()
+
+        val c = db.rawQuery(sql, null)
+        if (c.moveToFirst()) {
+            do {
+                val nombre = c.getString(0)
+                val apellido = c.getString(1)
+                val dni = c.getString(2)
+                val ultima = if (!c.isNull(3)) c.getString(3) else null
+                lista.add(NoSocioCard(nombre, apellido, dni, ultima))
+            } while (c.moveToNext())
+        }
+        c.close(); db.close()
+        return lista
+    }
+    fun obtenerSocios(): List<SocioCard> {
+        val lista = mutableListOf<SocioCard>()
+        val db = readableDatabase
+        val sql = """
+        SELECT s.nombre, s.apellido, s.dni, MAX(c.fechaPago) AS ultimo_pago
+        FROM socios s
+        LEFT JOIN cuotas c ON c.idSocio = s.idSocio
+        GROUP BY s.idSocio, s.nombre, s.apellido, s.dni
+        ORDER BY s.apellido, s.nombre
+    """.trimIndent()
+        val c = db.rawQuery(sql, null)
+        if (c.moveToFirst()) {
+            do {
+                val nombre = c.getString(0)
+                val apellido = c.getString(1)
+                val dni = c.getString(2)
+                val ultimo = if (!c.isNull(3)) c.getString(3) else null
+                lista.add(SocioCard(nombre, apellido, dni, ultimo))
+            } while (c.moveToNext())
+        }
+        c.close(); db.close()
+        return lista
+    }
+    fun obtenerVencimientos(fecha: String): List<VencimientoCard> {
+        val lista = mutableListOf<VencimientoCard>()
+        val db = readableDatabase
+        val sql = """
+        SELECT s.nombre, s.apellido, s.dni, c.fechaVencimiento,
+               (SELECT MAX(c2.fechaPago) FROM cuotas c2 WHERE c2.idSocio = s.idSocio) AS ultimo_pago
+        FROM cuotas c
+        JOIN socios s ON s.idSocio = c.idSocio
+        WHERE c.fechaVencimiento = ?
+        ORDER BY s.apellido, s.nombre
+    """.trimIndent()
+        val c = db.rawQuery(sql, arrayOf(fecha))
+        if (c.moveToFirst()) {
+            do {
+                val nombre = c.getString(0)
+                val apellido = c.getString(1)
+                val dni = c.getString(2)
+                val fv = c.getString(3)
+                val ultimo = if (!c.isNull(4)) c.getString(4) else null
+                lista.add(VencimientoCard(nombre, apellido, dni, fv, ultimo))
+            } while (c.moveToNext())
+        }
+        c.close(); db.close()
+        return lista
+    }
+    fun obtenerActividadesDelDia(dia: Int): List<InicioActivity.ActividadHoy> {
+        val lista = mutableListOf<InicioActivity.ActividadHoy>()
+        val db = readableDatabase
+        val sql = """
+        SELECT a.nombre, a.precio, d.hora_inicio, d.hora_fin
+        FROM actividades a
+        JOIN dias_horarios d ON a.id_actividad = d.id_actividad
+        WHERE d.dia = ?
+        ORDER BY d.hora_inicio
+    """.trimIndent()
+
+        fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
+
+        val c = db.rawQuery(sql, arrayOf(dia.toString()))
+        if (c.moveToFirst()) {
+            do {
+                val nombre = c.getString(0)
+                val precio = c.getDouble(1)
+                val hIni = hhmm(c.getInt(2))
+                val hFin = hhmm(c.getInt(3))
+                lista.add(InicioActivity.ActividadHoy(nombre, hIni, hFin, precio))
+            } while (c.moveToNext())
+        }
+        c.close(); db.close()
         return lista
     }
 
@@ -174,4 +275,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Vuelve a crear todo
         onCreate(db)
     }
+
+
 }

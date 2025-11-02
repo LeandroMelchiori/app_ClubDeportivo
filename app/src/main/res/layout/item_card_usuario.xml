@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_gradient_blue"
+    android:layout_margin="10dp"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Heber, Choque"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/tvDni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#19191919"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sin deuda"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvUltimoPago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Último pago: 19/09/2025"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="2dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnAccion"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Pagar"
+            android:backgroundTint="#E74C3C"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/btnVerMas"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Ver más"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#ECECEC"
+            android:textColor="#000000"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+</LinearLayout>

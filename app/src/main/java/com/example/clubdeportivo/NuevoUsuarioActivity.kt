@@ -141,7 +141,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
         }
     }
 
-    // Metodo para normalizar la fecha de nacimiento
+    // Metodo para normalizar la fecha
     private fun normalizarFecha(input: String): String? {
         if (input.isBlank()) return null
         return try {
