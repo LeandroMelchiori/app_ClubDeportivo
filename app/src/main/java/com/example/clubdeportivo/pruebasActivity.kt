@@ -19,8 +19,8 @@ import java.util.Date
 import java.util.Locale
 
 class pruebasActivity : AppCompatActivity() {
-
     private lateinit var db: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pruebas)

@@ -18,13 +18,6 @@ class InicioActivity : AppCompatActivity() {
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
 
-        // Cartel emergente al iniciar la vista
-        Snackbar.make(
-            findViewById(android.R.id.content),
-            "Sesion iniciada...", Snackbar.LENGTH_SHORT
-        )
-            .show()
-
         // Boton nuevo usuario
         val btnUsuario = findViewById<MaterialButton>(R.id.btnUsuario)
         btnUsuario.setOnClickListener {

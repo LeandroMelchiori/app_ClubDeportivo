@@ -87,7 +87,7 @@
 
                     <!-- Campo: Nombre Actividad -->
                     <TextView
-                        android:id="@+id/tvNombreActividad"
+                        android:id="@+id/tvActividad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre Actividad:"
@@ -95,20 +95,16 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etNombreActividad"
+                    <Spinner
+                        android:id="@+id/spActividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="AquaGYM"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
+                        android:background="@drawable/bg_pill_light" />
 
                     <!-- Campo: Nombre Prof -->
                     <TextView
-                        android:id="@+id/tvNombreProfe"
+                        android:id="@+id/tvProfesor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -117,16 +113,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etNombreProfe"
+                    <Spinner
+                        android:id="@+id/spProfesor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="Heber Choque"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
+                        android:background="@drawable/bg_pill_light" />
 
                     <!-- Campo: Día -->
                     <TextView
@@ -139,20 +131,16 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etDia"
+                    <!-- Campo: Horario -->
+                    <Spinner
+                        android:id="@+id/spDia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="Lunes"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
+                        android:background="@drawable/bg_pill_light" />
 
-                    <!-- Campo: Horario -->
                     <TextView
-                        android:id="@+id/tvHorario"
+                        android:id="@+id/tvHoraInicio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -161,61 +149,31 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etHorario"
+                    <Spinner
+                        android:id="@+id/spHoraInicio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="9:00"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
+                        android:background="@drawable/bg_pill_light" />
 
-                    <!-- Campo: Duración -->
+                    <!-- Campo: Hora Fin -->
                     <TextView
-                        android:id="@+id/tvDuracion"
+                        android:id="@+id/tvHoraFin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="Duración:"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/etDuracion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="1 hora"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
-
-                    <!-- Campo: Valor -->
-                    <TextView
-                        android:id="@+id/tvValor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="Valor:"
+                        android:text="Hora fin:"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etValor"
+                    <Spinner
+                        android:id="@+id/spHoraFin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="30dp"
                         android:background="@drawable/bg_pill_light"
-                        android:hint="5000"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
+                        android:layout_marginBottom="20dp"/>
 
                     <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton

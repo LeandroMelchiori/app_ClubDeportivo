@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,9 @@ class MainActivity : AppCompatActivity() {
                 || usuario == "heber" && contraseña == "heber") {
                 val intent = Intent(this, InicioActivity::class.java)
                 intent.putExtra("usuario", usuario)
-                startActivity(intent) }
+                startActivity(intent)
+                Toast.makeText(this, "Sesion iniciada...", Toast.LENGTH_LONG).show()
+            }
             // Usuario o contraseña incorrectos
             else {
                 Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()

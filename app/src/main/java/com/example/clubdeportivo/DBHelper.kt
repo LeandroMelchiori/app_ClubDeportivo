@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 
 // App_Clubdeportivo-Sacha/app/src/main/java/com/example/clubdeportivo/DBHelper.kt
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
+class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 2) {
 
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
@@ -113,12 +113,20 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             CREATE TABLE dias_horarios (
               id_dia_horario INTEGER PRIMARY KEY AUTOINCREMENT,
               id_actividad INTEGER,
-              dia TEXT NOT NULL,
-              hora_inicio TEXT NOT NULL,
-              hora_fin TEXT NOT NULL,
-              FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad) ON DELETE CASCADE
+              dia            INTEGER NOT NULL CHECK(dia BETWEEN 0 AND 6), -- 0=Dom ... 6=Sáb
+              hora_inicio INTEGER NOT NULL,  -- 18:30 -> 18*60+30 = 1110
+              hora_fin    INTEGER NOT NULL,
+              FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
+              CONSTRAINT chk_rango CHECK (hora_fin > hora_inicio),
+              CONSTRAINT unq_slot UNIQUE (id_actividad, dia, hora_inicio, hora_fin)
             );
         """.trimIndent())
+
+        db.execSQL("""
+            CREATE INDEX IF NOT EXISTS idx_dh_dia_hora
+            ON dias_horarios(dia, hora_inicio);
+            """.trimIndent())
+
 
         // Opcional: sembrar datos iniciales leyendo un .sql de assets (ver paso 2).
         // seedFromAsset(db, context, "sql/club_deportivo_inserts.sql")
@@ -155,11 +163,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
     // Actualizar tablas
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.beginTransaction()
-        try {
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
-        }
+        db.execSQL("DROP TABLE IF EXISTS dias_horarios")
+        db.execSQL("DROP TABLE IF EXISTS actividad_profesores")
+        db.execSQL("DROP TABLE IF EXISTS pagos_actividad")
+        db.execSQL("DROP TABLE IF EXISTS cuotas")
+        db.execSQL("DROP TABLE IF EXISTS profesores")
+        db.execSQL("DROP TABLE IF EXISTS socios")
+        db.execSQL("DROP TABLE IF EXISTS no_socios")
+        db.execSQL("DROP TABLE IF EXISTS actividades")
+        // Vuelve a crear todo
+        onCreate(db)
     }
 }
