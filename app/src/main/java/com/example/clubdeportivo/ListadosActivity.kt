@@ -30,11 +30,11 @@ class ListadosActivity : AppCompatActivity() {
 
         btnElegirFecha = findViewById(R.id.btnElegirFecha)
         btnElegirFecha.setOnClickListener {
-            val hoy = java.time.LocalDate.now()
-            val dlg = android.app.DatePickerDialog(
+            val hoy = LocalDate.now()
+            val dlg = DatePickerDialog(
                 this,
                 { _, y, m, d ->
-                    val sel = java.time.LocalDate.of(y, m + 1, d).toString()
+                    val sel = LocalDate.of(y, m + 1, d).toString()
                     val db2 = DBHelper(this)
                     renderVencimientos(db2.obtenerVencimientos(sel))
                     mostrarScrollViewList(scrollVencimientos)
@@ -171,12 +171,17 @@ class ListadosActivity : AppCompatActivity() {
 
             item.findViewById<TextView>(R.id.tvNombre).text = "${ns.apellido}, ${ns.nombre}"
             item.findViewById<TextView>(R.id.tvDni).text = "#${ns.dni}"
-            item.findViewById<TextView>(R.id.tvEstado).text = "Sin deuda"  // podés cambiarlo si querés otra lógica
+            item.findViewById<TextView>(R.id.tvEstado).text = "Activo"  // podés cambiarlo si querés otra lógica
             item.findViewById<TextView>(R.id.tvUltimoPago).text =
                 "Ultima pago: ${ns.ultimaPago ?: "-"}"
 
             item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
-                // TODO: navegar a pantalla de alta de socio + precargar DNI
+                intent = Intent(this, PagoDeCuotaActivity::class.java)
+                intent.putExtra("dni", ns.dni)
+                intent.putExtra("nombre", "${ns.apellido}, ${ns.nombre}")
+                intent.putExtra("tipoOperacion", "Ser socio")
+                intent.putExtra("precio", "30000")
+                startActivity(Intent(intent))
             }
             item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
                 onVerMasClick(it)

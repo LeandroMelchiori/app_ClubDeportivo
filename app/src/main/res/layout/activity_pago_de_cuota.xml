@@ -62,7 +62,7 @@
 
             <!-- Nombre sección -->
             <TextView
-                android:id="@+id/tvActividadTitulo"
+                android:id="@+id/tvTipoOperacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
@@ -88,6 +88,7 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/tvNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -98,6 +99,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvDni"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
@@ -107,14 +109,7 @@
                     android:textSize="24dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Jueves 9hs"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
+                    android:id="@+id/tvPrecio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -123,6 +118,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/tvMetodoPago"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -131,25 +127,25 @@
                     android:textSize="18sp" />
 
                 <RadioGroup
-                    android:id="@+id/radioGroup_MediosdePago"
+                    android:id="@+id/rgMediosdePago"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <RadioButton
-                        android:id="@+id/radio_Efectivo"
+                        android:id="@+id/rbEfectivo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Efectivo" />
 
                     <RadioButton
-                        android:id="@+id/radio_transferencia"
+                        android:id="@+id/rbTransferencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Transferencia" />
 
                     <RadioButton
-                        android:id="@+id/radio_tarjeta"
+                        android:id="@+id/rbTarjeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tarjeta de credito" />
@@ -157,7 +153,7 @@
                 </RadioGroup>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDescargar"
+                    android:id="@+id/btnPagar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

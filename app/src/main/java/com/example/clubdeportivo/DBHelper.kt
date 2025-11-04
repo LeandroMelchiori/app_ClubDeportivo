@@ -1,8 +1,10 @@
 package com.example.clubdeportivo
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 2) {
 
@@ -127,17 +129,26 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Opcional: sembrar datos iniciales leyendo un .sql de assets (ver paso 2).
         // seedFromAsset(db, context, "sql/club_deportivo_inserts.sql")
     }
+    // Actualizar tablas
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS dias_horarios")
+        db.execSQL("DROP TABLE IF EXISTS actividad_profesores")
+        db.execSQL("DROP TABLE IF EXISTS pagos_actividad")
+        db.execSQL("DROP TABLE IF EXISTS cuotas")
+        db.execSQL("DROP TABLE IF EXISTS profesores")
+        db.execSQL("DROP TABLE IF EXISTS socios")
+        db.execSQL("DROP TABLE IF EXISTS no_socios")
+        db.execSQL("DROP TABLE IF EXISTS actividades")
+        // Vuelve a crear todo
+        onCreate(db)
+    }
 
     fun eliminarProducto(nombre: String){
         val db = writableDatabase
         db.delete("prueba", "nombre = ?", arrayOf(nombre))
     }
 
-
-
-    // Funcion actividades del dia
-
-    // Modelo para la tarjeta
+    // Modelos de datos
     data class NoSocioCard(
         val nombre: String,
         val apellido: String,
@@ -160,12 +171,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
 
     // ------- Querys -------
-
-    // Vencimientos para una fecha (formato "YYYY-MM-DD")
     fun obtenerNoSocios(): List<NoSocioCard> {
         val lista = mutableListOf<NoSocioCard>()
         val db = readableDatabase
-
         val sql = """
         SELECT n.nombre, n.apellido, n.dni, MAX(p.fecha_pago) AS ultima_pago
         FROM no_socios n
@@ -173,7 +181,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         GROUP BY n.dni, n.nombre, n.apellido
         ORDER BY n.apellido, n.nombre
     """.trimIndent()
-
         val c = db.rawQuery(sql, null)
         if (c.moveToFirst()) {
             do {
@@ -187,6 +194,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         c.close(); db.close()
         return lista
     }
+
+    // Listados
     fun obtenerSocios(): List<SocioCard> {
         val lista = mutableListOf<SocioCard>()
         val db = readableDatabase
@@ -262,19 +271,105 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         return lista
     }
 
-    // Actualizar tablas
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS dias_horarios")
-        db.execSQL("DROP TABLE IF EXISTS actividad_profesores")
-        db.execSQL("DROP TABLE IF EXISTS pagos_actividad")
-        db.execSQL("DROP TABLE IF EXISTS cuotas")
-        db.execSQL("DROP TABLE IF EXISTS profesores")
-        db.execSQL("DROP TABLE IF EXISTS socios")
-        db.execSQL("DROP TABLE IF EXISTS no_socios")
-        db.execSQL("DROP TABLE IF EXISTS actividades")
-        // Vuelve a crear todo
-        onCreate(db)
+    // Data class que representa los datos de un "No Socio"
+    data class NoSocioDTO(
+        val dni: Int,
+        val nombre: String,
+        val apellido: String,
+        val telefono: String,
+        val direccion: String,
+        val email: String,
+        val fichaMedica: String
+    )
+
+    fun obtenerNoSocioPorDni(dni: String): NoSocioDTO? {
+        // Obtener la base de datos en modo lectura
+        val db = this.readableDatabase
+
+        // Consultar la tabla "no_socios" filtrando por DNI
+        val cursor = db.query(
+            "no_socios",
+            null,                   // Seleccionar todas las columnas
+            "dni = ?",              // Cláusula WHERE para el DNI
+            arrayOf(dni),           // Argumentos de la cláusula WHERE
+            null, null, null        // groupBy, having, orderBy (no aplican aquí)
+        )
+
+        var noSocio: NoSocioDTO? = null
+        if (cursor.moveToFirst()) {
+            // Extraer valores de cada columna del cursor
+            val dniValue = cursor.getInt(cursor.getColumnIndexOrThrow("dni"))
+            val nombreValue      = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val apellidoValue    = cursor.getString(cursor.getColumnIndexOrThrow("apellido"))
+            val telefonoValue    = cursor.getString(cursor.getColumnIndexOrThrow("telefono"))
+            val direccionValue   = cursor.getString(cursor.getColumnIndexOrThrow("direccion"))
+            val emailValue       = cursor.getString(cursor.getColumnIndexOrThrow("email"))
+            val fichaMedicaValue = cursor.getString(cursor.getColumnIndexOrThrow("ficha_medica"))
+
+            // Crear un objeto NoSocioDTO con los datos obtenidos
+            noSocio = NoSocioDTO(
+                dni       = dniValue,
+                nombre    = nombreValue,
+                apellido  = apellidoValue,
+                telefono  = telefonoValue,
+                direccion = direccionValue,
+                email     = emailValue,
+                fichaMedica = fichaMedicaValue
+            )
+        }
+        // Cerrar el cursor para liberar recursos
+        cursor.close()
+
+        return noSocio
     }
 
+    fun hacerSocioDesdeNoSocio(
+        dni: String,
+        monto: Double,
+        formaPago: String,
+        fechaPago: String // "YYYY-MM-DD"
+    ): Long {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            // 1) Traer datos del no socio
+            val ns = obtenerNoSocioPorDni(dni) ?: throw IllegalArgumentException("No existe No Socio con ese DNI")
 
+            // 2) Insertar en socios
+            val cvSocio = ContentValues().apply {
+                put("nombre", ns.nombre)
+                put("apellido", ns.apellido)
+                put("dni", ns.dni)
+                put("telefono", ns.telefono)
+                put("direccion", ns.direccion)
+                put("fecha_inscripcion", fechaPago) // alta hoy
+                put("ficha_medica", ns.fichaMedica)
+                put("email", ns.email)
+                put("activo", 1)
+                put("carnet", 1)  // o 0 si no corresponde
+            }
+            val idSocio = db.insertOrThrow("socios", null, cvSocio)
+
+            // 3) Registrar cuota inicial pagada
+            val fechaVenc = LocalDate.parse(fechaPago).plusMonths(1).toString()
+            val cvCuota = ContentValues().apply {
+                put("idSocio", idSocio)
+                put("monto", monto)
+                put("fechaPago", fechaPago)
+                put("formaPago", formaPago)
+                put("estadoDelPago", 1) // 1=pagado
+                put("fechaVencimiento", fechaVenc)
+            }
+            db.insertOrThrow("cuotas", null, cvCuota)
+
+            // 4) Eliminar del padrón de no socios
+            db.delete("no_socios", "dni = ?", arrayOf(dni))
+
+            db.setTransactionSuccessful()
+            return idSocio
+        } finally {
+            db.endTransaction()
+            db.close()
+        }
+    }
 }
