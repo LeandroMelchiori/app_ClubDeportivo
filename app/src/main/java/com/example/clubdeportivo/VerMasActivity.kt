@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.clubdeportivo.DBHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
@@ -16,10 +17,33 @@ class VerMasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_mas)
 
+        // DB Helper
+        val db = DBHelper(this)
+
         // Recupera el nombre de usuario del intent y lo muestra
-        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        val admin = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
-        tvBienvenida.text = "Bienvenido, $usuario"
+        tvBienvenida.text = "Bienvenido, $admin"
+
+        // Recupera dni del intent y busca a la persona en la BBDD
+        val dniUsuario = intent.getStringExtra("dni") ?: "dni"
+        val usuario = db.obtenerPersonaPorDni(dniUsuario)
+
+        //Inicializar vistas
+        val tvNombreCompleto = findViewById<TextView>(R.id.tvNombreUsuario)
+        val tvDNI = findViewById<TextView>(R.id.tvDNI)
+        val tvEmail = findViewById<TextView>(R.id.tvEmail)
+        val tvDireccion = findViewById<TextView>(R.id.tvDireccion)
+        val tvTelefono = findViewById<TextView>(R.id.tvTelefono)
+        val tvFechaNacimiento = findViewById<TextView>(R.id.tvFechaNacimiento)
+
+        // Reemplaza datos en las view
+        tvNombreCompleto.text = "${usuario?.nombre}, ${usuario?.apellido} "
+        tvDNI.text = "DNI: ${usuario?.dni}"
+        tvTelefono.text = "Telefono: ${usuario?.telefono}"
+        tvDireccion.text = "Domicilio: ${usuario?.direccion}"
+        tvFechaNacimiento.text = "Fecha de nacimiento: ${usuario?.fecha_nac}"
+        tvEmail.text = "Email: ${usuario?.email}"
 
         // Boton editar
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)

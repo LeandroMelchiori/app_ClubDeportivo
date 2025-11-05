@@ -2,11 +2,12 @@ package com.example.clubdeportivo
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.time.LocalDate
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 2) {
+class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
 
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
@@ -31,11 +32,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 dni TEXT NOT NULL UNIQUE,
                 fecha_nac TEXT NOT NULL,
                 telefono TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
                 direccion TEXT NOT NULL,
                 fecha_inscripcion TEXT NOT NULL DEFAULT (date('now')),
-                activo           INTEGER NOT NULL DEFAULT 1,     -- ← default 1
                 ficha_medica     INTEGER NOT NULL DEFAULT 1,     -- ← default 1
-                email TEXT
+                activo           INTEGER NOT NULL DEFAULT 1     -- ← default 1
                 );
             """.trimIndent())
 
@@ -46,11 +47,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 nombre TEXT NOT NULL,
                 apellido TEXT NOT NULL,
                 dni TEXT NOT NULL UNIQUE,
+                fecha_nac TEXT NOT NULL,
                 telefono TEXT NOT NULL,
                 direccion TEXT NOT NULL,
                 fecha_inscripcion TEXT NOT NULL,
                 ficha_medica INTEGER NOT NULL,
-                email TEXT,
+                email TEXT NOT NULL UNIQUE,
                 activo INTEGER NOT NULL,
                 carnet INTEGER NOT NULL
                 );
@@ -61,11 +63,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
               dni TEXT PRIMARY KEY,
               nombre TEXT NOT NULL,
               apellido TEXT NOT NULL,
-              telefono TEXT,
-              direccion TEXT,
-              fecha_inscripcion TEXT,
-              ficha_medica INTEGER,
-              email TEXT,
+              fecha_nac TEXT NOT NULL,
+              telefono TEXT NOT NULL,
+              direccion TEXT NOT NULL,
+              fecha_inscripcion TEXT NOT NULL,
+              ficha_medica INTEGER NOT NULL,
+              email TEXT NOT NULL,
               activo INTEGER,
               titulo TEXT
             );
@@ -148,29 +151,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         db.delete("prueba", "nombre = ?", arrayOf(nombre))
     }
 
-    // Modelos de datos
-    data class NoSocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimaPago: String? // puede ser null si nunca pagó
-    )
-    data class VencimientoCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val fechaVenc: String,
-        val ultimoPago: String?   // puede ser null
-    )
-    data class SocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimoPago: String?   // puede ser null
-    )
-
-
     // ------- Querys -------
+    // Listados
     fun obtenerNoSocios(): List<NoSocioCard> {
         val lista = mutableListOf<NoSocioCard>()
         val db = readableDatabase
@@ -194,8 +176,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         c.close(); db.close()
         return lista
     }
-
-    // Listados
     fun obtenerSocios(): List<SocioCard> {
         val lista = mutableListOf<SocioCard>()
         val db = readableDatabase
@@ -272,6 +252,26 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
     }
 
     // Data class que representa los datos de un "No Socio"
+    // Modelos de datos
+    data class NoSocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimaPago: String? // puede ser null si nunca pagó
+    )
+    data class VencimientoCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val fechaVenc: String,
+        val ultimoPago: String?   // puede ser null
+    )
+    data class SocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimoPago: String?   // puede ser null
+    )
     data class NoSocioDTO(
         val dni: Int,
         val nombre: String,
@@ -279,8 +279,80 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val telefono: String,
         val direccion: String,
         val email: String,
+        val fecha_nac: String,
         val fichaMedica: String
     )
+
+    // DTO unificado (hacélo nullable donde tu esquema lo requiera)
+    data class PersonaDTO(
+        val dni: String,                // usá String para no perder ceros a la izquierda
+        val nombre: String?,
+        val apellido: String?,
+        val telefono: String?,
+        val direccion: String?,
+        val email: String?,
+        val fecha_nac: String?,         // o el tipo que uses
+        val fichaMedica: String?,       // puede no existir en socios → null
+        val esSocio: Boolean,           // true = vino de "socios", false = "no_socios"
+
+    )
+
+    // Helper para leer columnas opcionales sin crashear si no existen
+    private fun Cursor.getStringOrNull(col: String): String? {
+        val idx = getColumnIndex(col)
+        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
+    }
+
+    fun obtenerPersonaPorDni(dni: String): PersonaDTO? {
+        val db = this.readableDatabase
+
+        // 1) intentar en "socios"
+        db.query(
+            "socios",
+            null,
+            "dni = ?",
+            arrayOf(dni), // si en tu tabla está como INTEGER igual funciona; SQLite compara por valor
+            null, null, null
+        ).use { c ->
+            if (c.moveToFirst()) {
+                return PersonaDTO(
+                    dni          = c.getStringOrNull("dni") ?: dni,
+                    nombre       = c.getStringOrNull("nombre"),
+                    apellido     = c.getStringOrNull("apellido"),
+                    telefono     = c.getStringOrNull("telefono"),
+                    direccion    = c.getStringOrNull("direccion"),
+                    email        = c.getStringOrNull("email"),
+                    fecha_nac    = c.getStringOrNull("fecha_nac"),
+                    fichaMedica  = c.getStringOrNull("ficha_medica"), // si no existe → null
+                    esSocio      = true,
+                )
+            }
+        }
+
+        // 2) si no está en socios, intentar en "no_socios"
+        db.query(
+            "no_socios",
+            null,
+            "dni = ?",
+            arrayOf(dni),
+            null, null, null
+        ).use { c ->
+            if (c.moveToFirst()) {
+                return PersonaDTO(
+                    dni          = c.getStringOrNull("dni") ?: dni,
+                    nombre       = c.getStringOrNull("nombre"),
+                    apellido     = c.getStringOrNull("apellido"),
+                    telefono     = c.getStringOrNull("telefono"),
+                    direccion    = c.getStringOrNull("direccion"),
+                    email        = c.getStringOrNull("email"),
+                    fecha_nac    = c.getStringOrNull("fecha_nac"),
+                    fichaMedica  = c.getStringOrNull("ficha_medica"),
+                    esSocio      = false,
+                )
+            }
+        }
+        return null
+    }
 
     fun obtenerNoSocioPorDni(dni: String): NoSocioDTO? {
         // Obtener la base de datos en modo lectura
@@ -304,6 +376,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             val telefonoValue    = cursor.getString(cursor.getColumnIndexOrThrow("telefono"))
             val direccionValue   = cursor.getString(cursor.getColumnIndexOrThrow("direccion"))
             val emailValue       = cursor.getString(cursor.getColumnIndexOrThrow("email"))
+            val fechaNacValue = cursor.getString(cursor.getColumnIndexOrThrow("fecha_nac"))
             val fichaMedicaValue = cursor.getString(cursor.getColumnIndexOrThrow("ficha_medica"))
 
             // Crear un objeto NoSocioDTO con los datos obtenidos
@@ -314,6 +387,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 telefono  = telefonoValue,
                 direccion = direccionValue,
                 email     = emailValue,
+                fecha_nac = fechaNacValue,
                 fichaMedica = fichaMedicaValue
             )
         }
@@ -340,6 +414,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 put("nombre", ns.nombre)
                 put("apellido", ns.apellido)
                 put("dni", ns.dni)
+                put("fecha_nac", ns.fecha_nac)
                 put("telefono", ns.telefono)
                 put("direccion", ns.direccion)
                 put("fecha_inscripcion", fechaPago) // alta hoy

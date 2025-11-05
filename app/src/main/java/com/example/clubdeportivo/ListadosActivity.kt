@@ -136,10 +136,13 @@ class ListadosActivity : AppCompatActivity() {
             item.findViewById<TextView>(R.id.tvUltimoPago).text = if (s.ultimoPago != null) "Último pago: ${s.ultimoPago}" else "Sin pagos registrados"
             item.findViewById<Button>(R.id.btnAccion).text = "Cuota"
             item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
-                // TODO: navegar a un PagoSocioActivity con el DNI
+                //
             }
-            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener { onVerMasClick(it) }
-            contenedorSocios.addView(item)
+            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
+                intent = Intent(this, VerMasActivity::class.java)
+                intent.putExtra("dni", s.dni)
+                startActivity(intent)
+            }
         }
     }
     private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) {
@@ -184,7 +187,9 @@ class ListadosActivity : AppCompatActivity() {
                 startActivity(Intent(intent))
             }
             item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
-                onVerMasClick(it)
+                intent = Intent(this, VerMasActivity::class.java)
+                intent.putExtra("dni", ns.dni)
+                startActivity(intent)
             }
 
             contenedor.addView(item)

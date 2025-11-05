@@ -101,23 +101,23 @@
                         android:textColor="@color/black"
                         android:textSize="30sp" />
 
+                    <!-- DNI -->
+                    <TextView
+                        android:id="@+id/tvDNI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="DNI:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
                     <!-- Fecha de nacimiento -->
                     <TextView
                         android:id="@+id/tvFechaNacimiento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Fecha de nacimiento: 31/02/1958"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <!-- Edad -->
-                    <TextView
-                        android:id="@+id/tvEdad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Edad: 67 años"
+                        android:text="Fecha de nacimiento:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
@@ -131,23 +131,23 @@
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
-                    <!-- DNI -->
-                    <TextView
-                        android:id="@+id/tvDNI"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="DNI: 11223344"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
                     <!-- Telefono -->
                     <TextView
                         android:id="@+id/tvTelefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Telefono: 11XXXX-XXXX"
+                        android:text="Telefono: "
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <!-- Email -->
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Heber hace el manual gato"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
