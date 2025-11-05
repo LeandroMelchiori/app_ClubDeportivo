@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvNombre"
+        android:id="@+id/tvNombreActividad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AcuaGYM"

@@ -30,7 +30,6 @@ class DatoAdapter(
                 .setTitle("Eliminar producto")
                 .setMessage("¿Estás seguro de que deseas eliminar este producto?")
                 .setPositiveButton("Si") { _, _ ->
-                    dbHelper.eliminarProducto(nombre)
                     datos.removeAt(position)
                     notifyItemRemoved(position)
                 }
