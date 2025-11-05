@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.time.LocalDate
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
+class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 3) {
 
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)

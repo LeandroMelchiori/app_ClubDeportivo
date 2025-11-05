@@ -67,8 +67,8 @@ class ListadosActivity : AppCompatActivity() {
 
         // Listado no socios
         val tarjetas = db.obtenerNoSocios()
-        renderNoSocios(tarjetas)              // lo pintamos de una
-        mostrarScrollViewList(scrollNoSocios)    // opcional: que se muestre de entrada
+        renderNoSocios(tarjetas)
+        mostrarScrollViewList(scrollNoSocios)    // se muestra de entrada
 
         // Listado socios
         renderSocios(db.obtenerSocios())
@@ -143,6 +143,7 @@ class ListadosActivity : AppCompatActivity() {
                 intent.putExtra("dni", s.dni)
                 startActivity(intent)
             }
+            contenedorSocios.addView(item)
         }
     }
     private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) {
@@ -160,7 +161,11 @@ class ListadosActivity : AppCompatActivity() {
             item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
                 // TODO: abrir flujo de pago de cuota
             }
-            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener { onVerMasClick(it) }
+            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
+                intent = Intent(this, VerMasActivity::class.java)
+                intent.putExtra("dni", v.dni)
+                startActivity(intent)
+            }
             contenedorVencimientos.addView(item)
         }
     }
