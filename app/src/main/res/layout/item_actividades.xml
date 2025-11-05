@@ -10,59 +10,64 @@
         android:id="@+id/tvNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Heber, Choque"
-        android:textSize="18sp"
+        android:text="AcuaGYM"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/tvDni"
+        android:id="@+id/tvProfesor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="#19191919"
+        android:text="Profesor: Heber Choque"
         android:textColor="@android:color/black"
-        android:textSize="14sp"/>
+        android:textSize="20sp"/>
+
 
     <TextView
-        android:id="@+id/tvEstado"
+        android:id="@+id/tvHorarios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sin deuda"
+        android:text="Dia y horario: Lunes 9hs"
+        android:textSize="20sp"
         android:textColor="@android:color/black"
         android:layout_marginTop="4dp"/>
 
     <TextView
-        android:id="@+id/tvUltimoPago"
+        android:id="@+id/tvPrecio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Último pago: 19/09/2025"
+        android:text="Valor: $5000 ARS"
+        android:textSize="20sp"
         android:textColor="@android:color/black"
         android:layout_marginTop="2dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
+        android:gravity="start"
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/btnAccion"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Pagar"
-            android:backgroundTint="#E74C3C"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"/>
+            android:id="@+id/btnEditar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="Editar"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
 
         <Button
-            android:id="@+id/btnVerMas"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Ver más"
+            android:id="@+id/btnEliminar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="Eliminar"
             android:layout_marginStart="8dp"
-            android:backgroundTint="#ECECEC"
+            android:backgroundTint="@color/red"
             android:textColor="#000000"
-            android:textSize="14sp"/>
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </LinearLayout>
