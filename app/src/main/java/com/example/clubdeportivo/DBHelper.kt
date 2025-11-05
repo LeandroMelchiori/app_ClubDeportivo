@@ -14,6 +14,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         db.execSQL("PRAGMA foreign_keys=ON")
     }
 
+    // ----------------------------------- CRUD -----------------------------------------
     // Crear tablas
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
@@ -179,7 +180,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Opcional: sembrar datos iniciales leyendo un .sql de assets (ver paso 2).
         // seedFromAsset(db, context, "sql/club_deportivo_inserts.sql")
     }
-
     // Actualizar tablas
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS dias_horarios")
@@ -193,8 +193,66 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Vuelve a crear todo
         onCreate(db)
     }
+    // ----------------------------------------------------------------------------------
 
-    // ------- Querys -------
+    // Modelos de datos
+    data class NoSocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimaPago: String? // puede ser null si nunca pagó
+    )
+    data class VencimientoCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val fechaVenc: String,
+        val ultimoPago: String?   // puede ser null
+    )
+    data class SocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimoPago: String?   // puede ser null
+    )
+    data class NoSocioDTO(
+        val dni: Int,
+        val nombre: String,
+        val apellido: String,
+        val telefono: String,
+        val direccion: String,
+        val email: String,
+        val fecha_nac: String,
+        val fichaMedica: String
+    )
+    data class PersonaDTO(
+        val dni: String,                // usá String para no perder ceros a la izquierda
+        val nombre: String?,
+        val apellido: String?,
+        val telefono: String?,
+        val direccion: String?,
+        val email: String?,
+        val fecha_nac: String?,         // o el tipo que uses
+        val fichaMedica: String?,       // puede no existir en socios → null
+        val esSocio: Boolean,           // true = vino de "socios", false = "no_socios"
+
+    )
+    data class ActividadCard(
+        val id: Int,
+        val nombre: String,
+        val precio: Double,
+        val profesores: String?, // puede ser null si no asignaste
+        val horarios: String?    // puede ser null si no cargaste horarios
+    )
+
+    // Helper para leer columnas opcionales sin crashear si no existen
+    private fun Cursor.getStringOrNull(col: String): String? {
+        val idx = getColumnIndex(col)
+        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
+    }
+
+    // ----------------------------------- Querys -----------------------------------
+
     // Listados
     fun obtenerNoSocios(): List<NoSocioCard> {
         val lista = mutableListOf<NoSocioCard>()
@@ -293,56 +351,56 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         c.close(); db.close()
         return lista
     }
+    fun obtenerActividades(): List<ActividadCard> {
+        val db = readableDatabase
+        val sql = """
+        SELECT 
+            a.id_actividad,
+            a.nombre,
+            a.precio,
+            -- Profesores como "Apellido Nombre / Apellido Nombre"
+            (SELECT GROUP_CONCAT(p.apellido || ' ' || p.nombre, ' / ')
+             FROM actividad_profesores ap 
+             JOIN profesores p ON p.dni = ap.dni_profesor
+             WHERE ap.id_actividad = a.id_actividad
+            ) AS profesores,
+            -- Horarios como "Lun 18:00-19:00 · Mié 18:00-19:00"
+            (SELECT GROUP_CONCAT(
+                (CASE d.dia 
+                    WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar' 
+                    WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie' 
+                    ELSE 'Sáb' END) || ' ' ||
+                printf('%02d:%02d', d.hora_inicio/60, d.hora_inicio%60) || '-' ||
+                printf('%02d:%02d', d.hora_fin/60, d.hora_fin%60),
+            ' · ')
+             FROM dias_horarios d
+             WHERE d.id_actividad = a.id_actividad
+             ORDER BY d.dia, d.hora_inicio
+            ) AS horarios
+        FROM actividades a
+        ORDER BY a.nombre;
+    """.trimIndent()
 
-    // Modelos de datos
-    data class NoSocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimaPago: String? // puede ser null si nunca pagó
-    )
-    data class VencimientoCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val fechaVenc: String,
-        val ultimoPago: String?   // puede ser null
-    )
-    data class SocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimoPago: String?   // puede ser null
-    )
-    data class NoSocioDTO(
-        val dni: Int,
-        val nombre: String,
-        val apellido: String,
-        val telefono: String,
-        val direccion: String,
-        val email: String,
-        val fecha_nac: String,
-        val fichaMedica: String
-    )
-    data class PersonaDTO(
-        val dni: String,                // usá String para no perder ceros a la izquierda
-        val nombre: String?,
-        val apellido: String?,
-        val telefono: String?,
-        val direccion: String?,
-        val email: String?,
-        val fecha_nac: String?,         // o el tipo que uses
-        val fichaMedica: String?,       // puede no existir en socios → null
-        val esSocio: Boolean,           // true = vino de "socios", false = "no_socios"
-
-    )
-
-
-    // Helper para leer columnas opcionales sin crashear si no existen
-    private fun Cursor.getStringOrNull(col: String): String? {
-        val idx = getColumnIndex(col)
-        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
+        val lista = mutableListOf<ActividadCard>()
+        val c = db.rawQuery(sql, null)
+        if (c.moveToFirst()) {
+            do {
+                lista.add(
+                    ActividadCard(
+                        id = c.getInt(0),
+                        nombre = c.getString(1),
+                        precio = c.getDouble(2),
+                        profesores = if (!c.isNull(3)) c.getString(3) else null,
+                        horarios = if (!c.isNull(4)) c.getString(4) else null
+                    )
+                )
+            } while (c.moveToNext())
+        }
+        c.close(); db.close()
+        return lista
     }
+
+    // Busquedas
     fun obtenerPersonaPorDni(dni: String): PersonaDTO? {
         val db = this.readableDatabase
 

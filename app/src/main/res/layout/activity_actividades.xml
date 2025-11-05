@@ -104,92 +104,13 @@
                 android:textColor="@color/bg_dark"
                 android:textColorHint="#7A7A7A" />
 
-            <!-- Tarjeta azul actividad -->
             <LinearLayout
-                android:id="@+id/cardActividad"
+                android:id="@+id/contenedorActividades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/bg_gradient_blue"
                 android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:id="@+id/tvNombreAct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AcuaGYM"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Profesor: Heber Choque"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Día y horario:  Lunes 9hs"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Valor: $ 5000 ARS"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <!-- Botones Editar / Eliminar -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnEditar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:paddingVertical="10dp"
-                        android:text="Editar"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnEliminar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:paddingVertical="10dp"
-                        android:text="Eliminar"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
 
         </LinearLayout>
 

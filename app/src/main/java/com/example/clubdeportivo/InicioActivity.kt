@@ -36,12 +36,6 @@ class InicioActivity : AppCompatActivity() {
             startActivity(Intent(this, NuevoUsuarioActivity::class.java))
         }
 
-        // Botón Inscribir actividad
-//        val btnInscribir = findViewById<MaterialButton>(R.id.btnInscribir1)
-//        btnInscribir.setOnClickListener {
-//            startActivity(Intent(this, InscribirActividadActivity::class.java))
-//        }
-
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
