@@ -9,6 +9,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,9 +17,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class ListadosActivity : AppCompatActivity() {
-
-    // Tipo de view
-
+    private lateinit var db: DBHelper
+    private lateinit var hoyISO: String
     private lateinit var rvNoSocios: RecyclerView
     private lateinit var rvSocios: RecyclerView
     private lateinit var rvVenc: RecyclerView
@@ -26,9 +26,17 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var socioAdapter: SocioAdapter
     private lateinit var vencimientoAdapter: VencimientoAdapter
     lateinit var btnElegirFecha: Button
+    private lateinit var verMasLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // DB Helper
+        verMasLauncher = registerForActivityResult(
+            androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                refreshVisibleList()
+            }
+        }
         val db = DBHelper(this)
 
         super.onCreate(savedInstanceState)
@@ -80,6 +88,7 @@ class ListadosActivity : AppCompatActivity() {
         rvNoSocios.setHasFixedSize(true)
         rvSocios.setHasFixedSize(true)
         rvVenc.setHasFixedSize(true)
+
 
         // Listados
         renderNoSocios(db.obtenerNoSocios())
@@ -135,4 +144,23 @@ class ListadosActivity : AppCompatActivity() {
     private fun renderSocios(lista: List<DBHelper.SocioCard>)     = socioAdapter.submitList(lista)
     private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) = vencimientoAdapter.submitList(lista)
 
+    private fun refreshVisibleList() {
+        val rvSocios        = findViewById<RecyclerView>(R.id.rvSocios)
+        val rvNoSocios      = findViewById<RecyclerView>(R.id.rvNoSocios)
+        val rvVencimientos  = findViewById<RecyclerView>(R.id.rvVencimientos)
+
+        when {
+            rvSocios.visibility == View.VISIBLE ->
+                renderSocios(db.obtenerSocios())
+
+            rvNoSocios.visibility == View.VISIBLE ->
+                renderNoSocios(db.obtenerNoSocios())
+
+            rvVencimientos.visibility == View.VISIBLE ->
+                renderVencimientos(db.obtenerVencimientos(hoyISO))
+
+            else ->
+                renderNoSocios(db.obtenerNoSocios()) // fallback
+        }
+    }
 }

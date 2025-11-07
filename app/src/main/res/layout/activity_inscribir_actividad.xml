@@ -74,17 +74,17 @@
 
 
             <!-- Barra de búsqueda -->
-            <EditText
+            <SearchView
                 android:id="@+id/etBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:queryHint="Buscar persona por DNI"
                 android:background="@drawable/bg_input_gray"
-                android:hint="Lista No Socios"
                 android:inputType="text"
                 android:minHeight="48dp"
-                android:paddingVertical="12dp"
+                android:paddingVertical="5dp"
                 android:textColor="@color/bg_dark"
                 android:textColorHint="#7A7A7A" />
 
@@ -99,16 +99,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Actividad -->
-                <TextView
-                    android:id="@+id/tvNombreAct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AcuaGYM"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
                 <!-- Usuario -->
                 <TextView
                     android:id="@+id/tvNombreUsuario"
@@ -118,7 +108,7 @@
                     android:layout_marginBottom="8dp"
                     android:text="Pepe"
                     android:textColor="@color/black"
-                    android:textSize="30dp"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
                 <!-- ID Usuario -->
@@ -126,11 +116,23 @@
                     android:id="@+id/tvIdUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="16dp"
                     android:text="#191919"
                     android:textColor="@color/black"
-                    android:textSize="24dp" />
+                    android:textSize="18dp" />
+
+                <!-- Actividad -->
+                <TextView
+                    android:id="@+id/tvNombreActividad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="Actividad:"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
 
                 <!-- Horario -->
                 <TextView
@@ -144,7 +146,7 @@
 
                 <!-- Precio -->
                 <TextView
-                    android:id="@+id/tvValor"
+                    android:id="@+id/tvPrecio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -174,21 +176,25 @@
                         android:id="@+id/rbEfectivo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Efectivo" />
+                        android:text="Efectivo"
+                        android:textSize="14sp"/>
 
                     <!-- Transferencia -->
                     <RadioButton
                         android:id="@+id/rbTransferencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Transferencia" />
+                        android:text="Transferencia"
+                        android:textSize="14sp"/>
 
                     <!-- Tarjeta -->
                     <RadioButton
                         android:id="@+id/rbTarjeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tarjeta de credito" />
+                        android:text="Tarjeta de credito"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="14sp"/>
 
                 </RadioGroup>
 
@@ -207,7 +213,7 @@
                     android:paddingBottom="10dp"
                     android:text="PAGAR"
                     android:textColor="@color/bg_dark"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     app:backgroundTint="@color/white" />
             </LinearLayout>

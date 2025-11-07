@@ -15,6 +15,16 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 class InicioActivity : AppCompatActivity() {
+    data class ActividadHoy(
+        val id: Int,
+        val nombre: String,
+        val dia: Int,
+        val horaInicio: String,
+        val horaFin: String,
+        val precio: Double
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
@@ -22,7 +32,10 @@ class InicioActivity : AppCompatActivity() {
         // Dia de la semana
         val db = DBHelper(this)
         val diaHoy = LocalDate.now().dayOfWeek.value % 7  // Lunes=1 ... Domingo=7 → ajustamos a 0–6
+
         val actividades = db.obtenerActividadesDelDia(diaHoy) // devuelve List<ActividadHoy>
+
+        // Renderiza la lista de actividades del día
         renderActividadesHoy(actividades)
 
         // Recupera el nombre de usuario del intent y lo muestra
@@ -66,13 +79,6 @@ class InicioActivity : AppCompatActivity() {
         }
     }
 
-    data class ActividadHoy(
-        val nombre: String,
-        val horaInicio: String,
-        val horaFin: String,
-        val precio: Double
-    )
-
     // Renderiza la lista de actividades del día con el item de tarjeta
     private fun renderActividadesHoy(actividades: List<ActividadHoy>) {
         val contenedor = findViewById<LinearLayout>(R.id.contenedorActividadesHoy)
@@ -80,30 +86,26 @@ class InicioActivity : AppCompatActivity() {
 
         val inflater = LayoutInflater.from(this)
 
+        // Actividades del día
         actividades.forEach { act ->
             val view = inflater.inflate(R.layout.item_actividad_hoy, contenedor, false)
-
             val tvTitulo  = view.findViewById<TextView>(R.id.tvTitulo)
             val ivIcono   = view.findViewById<ImageView>(R.id.ivIcono)
             val btnAccion = view.findViewById<ImageButton>(R.id.btnAccion)
-
-            // Texto igual a tus tarjetas de abajo: "09:00 - AcuaGym"
             tvTitulo.text = "${act.horaInicio} - ${act.nombre}"
 
-            // (opcional) si querés mostrar fin o precio:
-            // tvTitulo.text = "${act.horaInicio}–${act.horaFin} • ${act.nombre} ($${"%.0f".format(act.precio)})"
-
-            // (opcional) ícono propio
-            // ivIcono.setImageResource(R.drawable.ic_clock)
-
-            // (opcional) acción del botón
             btnAccion.setOnClickListener {
-                // TODO: navegar a detalle / inscribir, etc.
+                intent = Intent(this, InscribirActividadActivity::class.java)
+                intent.putExtra("idActividad", act.id)
+                intent.putExtra("nombreActividad", act.nombre)
+                intent.putExtra("precioActividad", act.precio)
+                intent.putExtra("diaActividad", act.dia)
+                intent.putExtra("horaInicio", act.horaInicio)
+                startActivity(intent)
             }
 
             contenedor.addView(view)
         }
     }
-
 
 }
