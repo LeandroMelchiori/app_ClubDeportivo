@@ -1,47 +1,95 @@
 package com.example.clubdeportivo
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class ActividadesActivity : AppCompatActivity() {
 
-    private lateinit var contenedor: LinearLayout
+    private lateinit var rv: RecyclerView
     private lateinit var tvBienvenida: TextView
     private lateinit var btnAgregar: MaterialButton
     private lateinit var bottom: BottomNavigationView
+    private lateinit var etBuscar: SearchView
+    private lateinit var db: DBHelper
+    private lateinit var adapter: ActividadCardAdapter
 
-    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_actividades)
 
+        db = DBHelper(this)
+
         // --- refs UI ---
-        contenedor   = findViewById(R.id.contenedorActividades)
         btnAgregar   = findViewById(R.id.btnAgregar)
         tvBienvenida = findViewById(R.id.tvBienvenida)
         bottom       = findViewById(R.id.bottomNav)
+        etBuscar     = findViewById(R.id.etBuscar)
+        rv           = findViewById(R.id.contenedorActividades)
+
+        // Agregar horario
+        btnAgregar.setOnClickListener {
+            startActivity(Intent(this, IngresarActividadActivity::class.java))}
+
+
+        adapter = ActividadCardAdapter(
+            onEditar = { act ->
+                // TODO: navega a tu pantalla de edición con act.id
+                // startActivity(Intent(this, EditarActividadActivity::class.java).putExtra("id", act.id))
+            },
+            onEliminar = { act ->
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Eliminar actividad")
+                    .setMessage("Se eliminará \"${act.nombre}\" y todos sus horarios. ¿Continuar?")
+                    .setPositiveButton("Eliminar") { _, _ ->
+                        val ok = db.eliminarActividad(act.id)
+                        if (ok) {
+                            Toast.makeText(this, "Actividad eliminada", Toast.LENGTH_SHORT).show()
+                            // refrescá la lista respetando el filtro actual del SearchView
+                            recargarLista(findViewById<SearchView>(R.id.etBuscar).query?.toString())
+                        } else {
+                            Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
+            }
+        )
+
+        rv.layoutManager = LinearLayoutManager(this)
+        rv.setHasFixedSize(true)
+        rv.adapter = adapter
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         tvBienvenida.text = "Bienvenido, $usuario"
 
-        btnAgregar.setOnClickListener {
-            startActivity(Intent(this, IngresarActividadActivity::class.java))
-        }
+        // Carga inicial
+        recargarLista(null)
 
-        // --- carga y render de actividades ---
-        loadActividades()
+        // Buscador en vivo
+        etBuscar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val filtro = newText?.trim().orEmpty()
+                recargarLista(if (filtro.isEmpty()) null else filtro)
+                return true
+            }
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val filtro = query?.trim().orEmpty()
+                recargarLista(if (filtro.isEmpty()) null else filtro)
+                return true
+            }
+        })
 
         // Bottom
-        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_activity
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -68,39 +116,12 @@ class ActividadesActivity : AppCompatActivity() {
                 else -> true
             }
         }
-    }
-
-    private fun loadActividades() {
-        val lista = DBHelper(this).obtenerActividades()
-        renderActividades(lista)
-    }
-    private fun renderActividades(lista: List<DBHelper.ActividadCard>) {
-        contenedor.removeAllViews()
-        val inflater = layoutInflater
-
-        lista.forEach { a ->
-            val item = inflater.inflate(R.layout.item_actividades, contenedor, false)
-
-            item.findViewById<TextView>(R.id.tvNombreActividad).text = a.nombre
-            item.findViewById<TextView>(R.id.tvProfesor).text =
-                "Profesor: " + (a.profesores?.takeIf { it.isNotBlank() } ?: "— (sin asignar)")
-            item.findViewById<TextView>(R.id.tvHorarios).text =
-                "Día y horario:  " + (a.horarios?.takeIf { it.isNotBlank() } ?: "(sin cargar)")
-            item.findViewById<TextView>(R.id.tvPrecio).text =
-                "Valor: $ ${a.precio.toInt()} ARS"
-
-            // Acciones del item (si tenés pantallas para esto)
-            item.findViewById<Button>(R.id.btnEditar).setOnClickListener {
-                startActivity(Intent(this, EditarActividadActivity::class.java).apply {
-                    putExtra("id_actividad", a.id)
-                })
-            }
-            item.findViewById<Button>(R.id.btnEliminar).setOnClickListener {
-                // TODO: mostrar diálogo y eliminar por a.id (si ya lo implementaste en DBHelper)
-            }
-
-            contenedor.addView(item)
         }
+    private fun recargarLista(filtro: String?) {
+        val lista = if (filtro.isNullOrBlank())
+            db.obtenerActividades()
+        else
+            db.buscarActividadesPorNombre(filtro)
+        adapter.submitList(lista)
     }
-
 }

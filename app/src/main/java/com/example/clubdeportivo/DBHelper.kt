@@ -12,6 +12,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.execSQL("PRAGMA foreign_keys=ON")
+        db.setForeignKeyConstraintsEnabled(true)
     }
 
     // ----------------------------------- CRUD -----------------------------------------
@@ -102,32 +103,49 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         """.trimIndent())
 
         db.execSQL("""
-            CREATE TABLE actividad_profesores (
-              id_actividad INTEGER NOT NULL,
-              dni_profesor TEXT NOT NULL,
-              PRIMARY KEY (id_actividad, dni_profesor),
-              FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
-              FOREIGN KEY (dni_profesor) REFERENCES profesores(dni) ON DELETE CASCADE
-            );
-        """.trimIndent())
+            CREATE TABLE IF NOT EXISTS actividad_profesor (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              actividad_id INTEGER NOT NULL,
+              profesor_dni TEXT NOT NULL,
+              UNIQUE(actividad_id, profesor_dni),
+              FOREIGN KEY (actividad_id) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
+              FOREIGN KEY (profesor_dni) REFERENCES profesores(dni) ON DELETE CASCADE);
+              """.trimIndent())
 
         db.execSQL("""
-            CREATE TABLE dias_horarios (
-              id_dia_horario INTEGER PRIMARY KEY AUTOINCREMENT,
-              id_actividad INTEGER,
-              dia            INTEGER NOT NULL CHECK(dia BETWEEN 0 AND 6), -- 0=Dom ... 6=Sáb
-              hora_inicio INTEGER NOT NULL,  -- 18:30 -> 18*60+30 = 1110
-              hora_fin    INTEGER NOT NULL,
-              FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
-              CONSTRAINT chk_rango CHECK (hora_fin > hora_inicio),
-              CONSTRAINT unq_slot UNIQUE (id_actividad, dia, hora_inicio, hora_fin)
-            );
-        """.trimIndent())
-
-        db.execSQL("""
-            CREATE INDEX IF NOT EXISTS idx_dh_dia_hora
-            ON dias_horarios(dia, hora_inicio);
+            CREATE TABLE IF NOT EXISTS dias_horarios (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              actividad_profesor_id INTEGER NOT NULL,
+              dia INTEGER NOT NULL,            -- 0..6 (Dom..Sáb)
+              hora_inicio INTEGER NOT NULL,    -- minutos
+              hora_fin INTEGER NOT NULL,       -- minutos
+              FOREIGN KEY(actividad_profesor_id) REFERENCES actividad_profesor(id) ON DELETE CASCADE,
+              UNIQUE(actividad_profesor_id, dia, hora_inicio, hora_fin));
             """.trimIndent())
+
+        db.execSQL("""
+            CREATE INDEX IF NOT EXISTS idx_ap_act_prof
+            ON actividad_profesor(actividad_id, profesor_dni);
+            """.trimIndent())
+
+        db.execSQL("""
+            CREATE INDEX IF NOT EXISTS idx_dh_apid
+            ON dias_horarios(actividad_profesor_id);
+            """.trimIndent())
+
+        db.execSQL("""
+            CREATE TRIGGER IF NOT EXISTS tr_ap_autoclean
+            AFTER DELETE ON dias_horarios
+            BEGIN
+              DELETE FROM actividad_profesor
+              WHERE id = OLD.actividad_profesor_id
+                AND NOT EXISTS (
+                  SELECT 1 FROM dias_horarios WHERE actividad_profesor_id = OLD.actividad_profesor_id
+                );
+            END;
+            """.trimIndent())
+
+
 
         // CARGA INICIAL (solo corre cuando se crea la BD)
         db.beginTransaction()
@@ -192,6 +210,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         db.execSQL("DROP TABLE IF EXISTS actividades")
         // Vuelve a crear todo
         onCreate(db)
+    }
+    fun eliminarActividad(idActividad: Int): Boolean {
+        val db = writableDatabase
+        db.beginTransaction()
+        return try {
+            val rows = db.delete(
+                "actividades",
+                "id_actividad = ?",
+                arrayOf(idActividad.toString())
+            )
+            db.setTransactionSuccessful()
+            rows > 0
+        } finally {
+            db.endTransaction()
+        }
     }
     // ----------------------------------------------------------------------------------
 
@@ -329,74 +362,72 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val lista = mutableListOf<InicioActivity.ActividadHoy>()
         val db = readableDatabase
         val sql = """
-        SELECT a.nombre, a.precio, d.hora_inicio, d.hora_fin
-        FROM actividades a
-        JOIN dias_horarios d ON a.id_actividad = d.id_actividad
-        WHERE d.dia = ?
-        ORDER BY d.hora_inicio
+        SELECT a.nombre, a.precio, dh.hora_inicio, dh.hora_fin
+        FROM dias_horarios dh
+        JOIN actividad_profesor ap ON ap.id = dh.actividad_profesor_id
+        JOIN actividades a         ON a.id_actividad = ap.actividad_id
+        WHERE dh.dia = ?
+        ORDER BY dh.hora_inicio
     """.trimIndent()
 
         fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
 
-        val c = db.rawQuery(sql, arrayOf(dia.toString()))
-        if (c.moveToFirst()) {
-            do {
+        db.rawQuery(sql, arrayOf(dia.toString())).use { c ->
+            while (c.moveToNext()) {
                 val nombre = c.getString(0)
                 val precio = c.getDouble(1)
                 val hIni = hhmm(c.getInt(2))
                 val hFin = hhmm(c.getInt(3))
                 lista.add(InicioActivity.ActividadHoy(nombre, hIni, hFin, precio))
-            } while (c.moveToNext())
+            }
         }
-        c.close(); db.close()
         return lista
     }
     fun obtenerActividades(): List<ActividadCard> {
         val db = readableDatabase
         val sql = """
-        SELECT 
+         SELECT
             a.id_actividad,
             a.nombre,
             a.precio,
-            -- Profesores como "Apellido Nombre / Apellido Nombre"
             (SELECT GROUP_CONCAT(p.apellido || ' ' || p.nombre, ' / ')
-             FROM actividad_profesores ap 
-             JOIN profesores p ON p.dni = ap.dni_profesor
-             WHERE ap.id_actividad = a.id_actividad
+             FROM actividad_profesor ap2
+             JOIN profesores p ON p.dni = ap2.profesor_dni
+             WHERE ap2.actividad_id = a.id_actividad
             ) AS profesores,
-            -- Horarios como "Lun 18:00-19:00 · Mié 18:00-19:00"
             (SELECT GROUP_CONCAT(
-                (CASE d.dia 
-                    WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar' 
-                    WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie' 
-                    ELSE 'Sáb' END) || ' ' ||
-                printf('%02d:%02d', d.hora_inicio/60, d.hora_inicio%60) || '-' ||
-                printf('%02d:%02d', d.hora_fin/60, d.hora_fin%60),
-            ' · ')
-             FROM dias_horarios d
-             WHERE d.id_actividad = a.id_actividad
-             ORDER BY d.dia, d.hora_inicio
+                    CASE dh.dia
+                        WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar'
+                        WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie'
+                        WHEN 6 THEN 'Sáb' END || ' ' ||
+                    printf('%02d:%02d', dh.hora_inicio/60, dh.hora_inicio%60) || '-' ||
+                    printf('%02d:%02d', dh.hora_fin/60, dh.hora_fin%60)
+                , ' / ')
+             FROM actividad_profesor ap
+             JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
+             WHERE ap.actividad_id = a.id_actividad
             ) AS horarios
         FROM actividades a
-        ORDER BY a.nombre;
+        WHERE EXISTS (
+            SELECT 1
+            FROM actividad_profesor ap
+            JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
+            WHERE ap.actividad_id = a.id_actividad)
+        ORDER BY a.nombre
     """.trimIndent()
 
         val lista = mutableListOf<ActividadCard>()
-        val c = db.rawQuery(sql, null)
-        if (c.moveToFirst()) {
-            do {
-                lista.add(
-                    ActividadCard(
-                        id = c.getInt(0),
-                        nombre = c.getString(1),
-                        precio = c.getDouble(2),
-                        profesores = if (!c.isNull(3)) c.getString(3) else null,
-                        horarios = if (!c.isNull(4)) c.getString(4) else null
-                    )
+        db.rawQuery(sql, null).use { c ->
+            while (c.moveToNext()) {
+                lista += ActividadCard(
+                    id = c.getInt(0),
+                    nombre = c.getString(1),
+                    precio = c.getDouble(2),
+                    profesores = if (!c.isNull(3)) c.getString(3) else null,
+                    horarios = if (!c.isNull(4)) c.getString(4) else null
                 )
-            } while (c.moveToNext())
+            }
         }
-        c.close(); db.close()
         return lista
     }
 
@@ -493,6 +524,58 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
         return noSocio
     }
+    fun buscarActividadesPorNombre(texto: String): List<ActividadCard> {
+        val db = readableDatabase
+        val like = "%${texto.trim()}%"
+        val sql = """
+        SELECT 
+            a.id_actividad,
+            a.nombre,
+            a.precio,
+            (SELECT GROUP_CONCAT(p.apellido || ' ' || p.nombre, ' / ')
+             FROM actividad_profesor ap2
+             JOIN profesores p ON p.dni = ap2.profesor_dni
+             WHERE ap2.actividad_id = a.id_actividad
+            ) AS profesores,
+            (SELECT GROUP_CONCAT(
+                    CASE dh.dia
+                        WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar'
+                        WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie'
+                        WHEN 6 THEN 'Sáb' END || ' ' ||
+                    printf('%02d:%02d', dh.hora_inicio/60, dh.hora_inicio%60) || '-' ||
+                    printf('%02d:%02d', dh.hora_fin/60, dh.hora_fin%60)
+                , ' / ')
+             FROM actividad_profesor ap
+             JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
+             WHERE ap.actividad_id = a.id_actividad
+            ) AS horarios
+        FROM actividades a
+        WHERE a.nombre LIKE ?
+          AND EXISTS (
+              SELECT 1
+              FROM actividad_profesor ap
+              JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
+              WHERE ap.actividad_id = a.id_actividad
+          )
+        ORDER BY a.nombre
+    """.trimIndent()
+
+        val lista = mutableListOf<ActividadCard>()
+        db.rawQuery(sql, arrayOf(like)).use { c ->
+            while (c.moveToNext()) {
+                lista += ActividadCard(
+                    id         = c.getInt(0),
+                    nombre     = c.getString(1),
+                    precio     = c.getDouble(2),
+                    profesores = if (!c.isNull(3)) c.getString(3) else null,
+                    horarios   = if (!c.isNull(4)) c.getString(4) else null
+                )
+            }
+        }
+        return lista
+    }
+
+    // Registros
     fun hacerSocioDesdeNoSocio(
         dni: String,
         monto: Double,
@@ -543,4 +626,65 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             db.close()
         }
     }
+
+    fun insertarHorario(
+        actividadId: Long,
+        profesorDni: String,
+        dia: Int,
+        horaInicio: Int,
+        horaFin: Int
+    ): Long {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            // Verificar que exista el profesor por DNI
+            db.rawQuery("SELECT 1 FROM profesores WHERE dni=?", arrayOf(profesorDni)).use { c ->
+                if (!c.moveToFirst()) throw IllegalArgumentException("Profesor no encontrado")
+            }
+
+            // Obtener o crear la dupla (actividad, profesor)
+            var apId = -1L
+            db.rawQuery(
+                "SELECT id FROM actividad_profesor WHERE actividad_id=? AND profesor_dni=?",
+                arrayOf(actividadId.toString(), profesorDni)
+            ).use { c -> if (c.moveToFirst()) apId = c.getLong(0) }
+
+            if (apId == -1L) {
+                val cvRel = ContentValues().apply {
+                    put("actividad_id", actividadId)
+                    put("profesor_dni", profesorDni)
+                }
+                val ins = db.insertWithOnConflict(
+                    "actividad_profesor",
+                    null,
+                    cvRel,
+                    SQLiteDatabase.CONFLICT_IGNORE
+                )
+                apId = if (ins != -1L) ins else db.rawQuery(
+                    "SELECT id FROM actividad_profesor WHERE actividad_id=? AND profesor_dni=?",
+                    arrayOf(actividadId.toString(), profesorDni)
+                )
+                    .use { c -> if (c.moveToFirst()) c.getLong(0) else throw IllegalStateException("No se pudo resolver actividad_profesor_id") }
+            }
+
+            // Insertar día/horario (en minutos)
+            val cvHorario = ContentValues().apply {
+                put("actividad_profesor_id", apId)
+                put("dia", dia)
+                put("hora_inicio", horaInicio)
+                put("hora_fin", horaFin)
+            }
+            val rowId = db.insertWithOnConflict(
+                "dias_horarios",
+                null,
+                cvHorario,
+                SQLiteDatabase.CONFLICT_IGNORE
+            )
+            db.setTransactionSuccessful()
+            return rowId
+        } finally {
+            db.endTransaction()
+        }
+    }
 }
+

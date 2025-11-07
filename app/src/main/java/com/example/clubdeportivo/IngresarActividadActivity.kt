@@ -66,48 +66,20 @@ class IngresarActividadActivity : AppCompatActivity() {
         // Botón registrar
         val btnIngresar = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnIngresar)
         btnIngresar.setOnClickListener {
-            val db = DBHelper(this).writableDatabase
-
             val actividad = spActividad.selectedItem as ActividadItem
-            val profesor = spProfesor.selectedItem as ProfesorItem
+            val profesor  = spProfesor.selectedItem as ProfesorItem
             val dia = spDia.selectedItemPosition
-            val horaInicio = hhmmToMin(spHoraInicio.selectedItem as String)
-            val horaFin = hhmmToMin(spHoraFin.selectedItem as String)
+            val hi = hhmmToMin(spHoraInicio.selectedItem as String)
+            val hf = hhmmToMin(spHoraFin.selectedItem as String)
 
-            if (horaFin <= horaInicio) {
-                Toast.makeText(this, "rango horario", Toast.LENGTH_LONG).show()
+            if (hf <= hi) {
+                Toast.makeText(this, "El horario de fin debe ser mayor al de inicio", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            // 1️⃣ Insertar vínculo actividad-profesor
-            val cvRel = ContentValues().apply {
-                put("id_actividad", actividad.id)
-                put("dni_profesor", profesor.dni)
-            }
-            db.insertWithOnConflict(
-                "actividad_profesores",
-                null,
-                cvRel,
-                SQLiteDatabase.CONFLICT_IGNORE
-            )
-
-            // 2️⃣ Insertar día y horario
-            val cvHorario = ContentValues().apply {
-                put("id_actividad", actividad.id)
-                put("dia", dia)
-                put("hora_inicio", horaInicio)
-                put("hora_fin", horaFin)
-            }
-            val inserted = db.insertWithOnConflict(
-                "dias_horarios",
-                null,
-                cvHorario,
-                SQLiteDatabase.CONFLICT_IGNORE
-            )
-
-            // 4️⃣ Confirmación
+            val inserted = DBHelper(this).insertarHorario(actividad.id, profesor.dni, dia, hi, hf)
             if (inserted == -1L) {
-                Toast.makeText(this, "Ya existe ese horario para la actividad", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, ActividadesActivity::class.java))
