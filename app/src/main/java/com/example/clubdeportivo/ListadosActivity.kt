@@ -9,6 +9,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -16,19 +18,29 @@ import java.time.format.DateTimeFormatter
 class ListadosActivity : AppCompatActivity() {
 
     // Tipo de view
-    lateinit var scrollVencimientos: ScrollView
-    lateinit var scrollSocios: ScrollView
-    lateinit var scrollNoSocios: ScrollView
-    lateinit var contenedorNoSocios: LinearLayout
-    lateinit var contenedorVencimientos: LinearLayout
-    lateinit var contenedorSocios: LinearLayout
+
+    private lateinit var rvNoSocios: RecyclerView
+    private lateinit var rvSocios: RecyclerView
+    private lateinit var rvVenc: RecyclerView
+    private lateinit var noSocioAdapter: NoSocioAdapter
+    private lateinit var socioAdapter: SocioAdapter
+    private lateinit var vencimientoAdapter: VencimientoAdapter
     lateinit var btnElegirFecha: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // DB Helper
+        val db = DBHelper(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listados)
 
+        // Views
+        rvNoSocios = findViewById(R.id.rvNoSocios)
+        rvSocios   = findViewById(R.id.rvSocios)
+        rvVenc     = findViewById(R.id.rvVencimientos)
         btnElegirFecha = findViewById(R.id.btnElegirFecha)
+
+        // Boton elegir fecha
         btnElegirFecha.setOnClickListener {
             val hoy = LocalDate.now()
             val dlg = DatePickerDialog(
@@ -37,52 +49,50 @@ class ListadosActivity : AppCompatActivity() {
                     val sel = LocalDate.of(y, m + 1, d).toString()
                     val db2 = DBHelper(this)
                     renderVencimientos(db2.obtenerVencimientos(sel))
-                    mostrarScrollViewList(scrollVencimientos)
                 },
                 hoy.year, hoy.monthValue - 1, hoy.dayOfMonth
             )
             dlg.show()
         }
 
-        val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE) // "2025-11-02"
-
-        // DB Helper
-        val db = DBHelper(this)
+        // Fecha actual
+        val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
 
-        // Scrollview listas
-        scrollVencimientos = findViewById(R.id.scrollVencimientos)
-        scrollSocios = findViewById(R.id.scrollSocios)
-        scrollNoSocios = findViewById(R.id.scrollNoSocios)
-
-        // Contenedores
-        contenedorNoSocios = findViewById(R.id.contenedorNoSocios)
-        contenedorVencimientos = findViewById(R.id.contenedorVencimientos)   // existe en el XML
-        contenedorSocios  = findViewById(R.id.contenedorSocios)          // <— añadí este id si aún no está
+        rvNoSocios.layoutManager = LinearLayoutManager(this)
+        rvSocios.layoutManager   = LinearLayoutManager(this)
+        rvVenc.layoutManager     = LinearLayoutManager(this)
 
 
-        // Listado no socios
-        val tarjetas = db.obtenerNoSocios()
-        renderNoSocios(tarjetas)
-        mostrarScrollViewList(scrollNoSocios)    // se muestra de entrada
+        //  crear instancias
+        noSocioAdapter = NoSocioAdapter()
+        socioAdapter   = SocioAdapter()
+        vencimientoAdapter    = VencimientoAdapter()
 
-        // Listado socios
+        // Asignar adapters
+        rvNoSocios.adapter = noSocioAdapter
+        rvSocios.adapter   = socioAdapter
+        rvVenc.adapter     = vencimientoAdapter
+        rvNoSocios.setHasFixedSize(true)
+        rvSocios.setHasFixedSize(true)
+        rvVenc.setHasFixedSize(true)
+
+        // Listados
+        renderNoSocios(db.obtenerNoSocios())
         renderSocios(db.obtenerSocios())
-
-        // Listado vencimientos
         renderVencimientos(db.obtenerVencimientos(hoy))
 
         // Botones listas
         val botonVencimiento: Button = findViewById(R.id.btnListVencimientos)
         val botonSocios: Button = findViewById(R.id.btnListSocios)
         val botonNoSocios: Button = findViewById(R.id.btnListNoSocios)
-        botonVencimiento.setOnClickListener { mostrarScrollViewList(scrollVencimientos) }
-        botonSocios.setOnClickListener { mostrarScrollViewList(scrollSocios) }
-        botonNoSocios.setOnClickListener { mostrarScrollViewList(scrollNoSocios) }
+        botonVencimiento.setOnClickListener {mostrar(rvVenc)}
+        botonSocios.setOnClickListener { mostrar(rvSocios)}
+        botonNoSocios.setOnClickListener { mostrar(rvNoSocios) }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
@@ -114,91 +124,15 @@ class ListadosActivity : AppCompatActivity() {
         }
     }
 
-    fun onVerMasClick(v: View) {
-        startActivity(Intent(this, VerMasActivity::class.java))
+
+    fun mostrar(rv: RecyclerView) {
+        rvNoSocios.visibility = View.GONE
+        rvSocios.visibility   = View.GONE
+        rvVenc.visibility     = View.GONE
+        rv.visibility         = View.VISIBLE
     }
-
-    private fun mostrarScrollViewList(scrollMenu: ScrollView) {
-        scrollVencimientos.visibility = View.GONE
-        scrollSocios.visibility = View.GONE
-        scrollNoSocios.visibility = View.GONE
-
-        scrollMenu.visibility = View.VISIBLE
-    }
-    private fun renderSocios(lista: List<DBHelper.SocioCard>) {
-        contenedorSocios.removeAllViews()
-        val inflater = layoutInflater
-        lista.forEach { s ->
-            val item = inflater.inflate(R.layout.item_nosocio, contenedorSocios, false)
-            item.findViewById<TextView>(R.id.tvNombre).text = "${s.apellido}, ${s.nombre}"
-            item.findViewById<TextView>(R.id.tvDni).text = "#${s.dni}"
-            item.findViewById<TextView>(R.id.tvEstado).text = if (s.ultimoPago != null) "Socio Activo" else "Revisar cuota"
-            item.findViewById<TextView>(R.id.tvUltimoPago).text = if (s.ultimoPago != null) "Último pago: ${s.ultimoPago}" else "Sin pagos registrados"
-            item.findViewById<Button>(R.id.btnAccion).text = "Cuota"
-            item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
-                //
-            }
-            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
-                intent = Intent(this, VerMasActivity::class.java)
-                intent.putExtra("dni", s.dni)
-                startActivity(intent)
-            }
-            contenedorSocios.addView(item)
-        }
-    }
-    private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) {
-        contenedorVencimientos.removeAllViews()
-        val inflater = layoutInflater
-        lista.forEach { v ->
-            val item = inflater.inflate(R.layout.item_nosocio, contenedorVencimientos, false)
-            item.findViewById<TextView>(R.id.tvNombre).text = "${v.apellido}, ${v.nombre}"
-            item.findViewById<TextView>(R.id.tvDni).text = "#${v.dni}"
-            item.findViewById<TextView>(R.id.tvEstado).text = "Vence: ${v.fechaVenc}"
-            item.findViewById<TextView>(R.id.tvUltimoPago).text = if (v.ultimoPago != null) "Último pago: ${v.ultimoPago}" else "Sin pagos registrados"
-            item.findViewById<Button>(R.id.btnAccion).text = "Pagar"
-
-
-            item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
-                // TODO: abrir flujo de pago de cuota
-            }
-            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
-                intent = Intent(this, VerMasActivity::class.java)
-                intent.putExtra("dni", v.dni)
-                startActivity(intent)
-            }
-            contenedorVencimientos.addView(item)
-        }
-    }
-    private fun renderNoSocios(lista: List<DBHelper.NoSocioCard>) {
-        val contenedor = findViewById<LinearLayout>(R.id.contenedorNoSocios)
-        contenedor.removeAllViews()
-        val inflater = layoutInflater
-
-        lista.forEach { ns ->
-            val item = inflater.inflate(R.layout.item_nosocio, contenedor, false)
-
-            item.findViewById<TextView>(R.id.tvNombre).text = "${ns.apellido}, ${ns.nombre}"
-            item.findViewById<TextView>(R.id.tvDni).text = "#${ns.dni}"
-            item.findViewById<TextView>(R.id.tvEstado).text = "Activo"  // podés cambiarlo si querés otra lógica
-            item.findViewById<TextView>(R.id.tvUltimoPago).text =
-                "Ultima pago: ${ns.ultimaPago ?: "-"}"
-
-            item.findViewById<Button>(R.id.btnAccion).setOnClickListener {
-                intent = Intent(this, PagoDeCuotaActivity::class.java)
-                intent.putExtra("dni", ns.dni)
-                intent.putExtra("nombre", "${ns.apellido}, ${ns.nombre}")
-                intent.putExtra("tipoOperacion", "Ser socio")
-                intent.putExtra("precio", "30000")
-                startActivity(Intent(intent))
-            }
-            item.findViewById<Button>(R.id.btnVerMas).setOnClickListener {
-                intent = Intent(this, VerMasActivity::class.java)
-                intent.putExtra("dni", ns.dni)
-                startActivity(intent)
-            }
-
-            contenedor.addView(item)
-        }
-    }
+    private fun renderNoSocios(lista: List<DBHelper.NoSocioCard>) = noSocioAdapter.submitList(lista)
+    private fun renderSocios(lista: List<DBHelper.SocioCard>)     = socioAdapter.submitList(lista)
+    private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) = vencimientoAdapter.submitList(lista)
 
 }

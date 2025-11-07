@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/bg_dark">
 
 
@@ -133,51 +134,38 @@
 
             <!-- Listados -->
             <FrameLayout
+                android:id="@+id/contenedorListas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginBottom="80dp">
 
-                <!-- Scroll vencimientos de hoy -->
-                <ScrollView
-                    android:id="@+id/scrollVencimientos"
+                <!-- No socios -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvNoSocios"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-                    <LinearLayout
-                        android:id="@+id/contenedorVencimientos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-                </ScrollView>
+                    android:padding="12dp"
+                    tools:listitem="@layout/item_nosocio"/>
 
-                <!-- Scroll de socios -->
-                <ScrollView
-                    android:id="@+id/scrollSocios"
+                <!-- Socios -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSocios"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
+                    android:padding="12dp"
+                    tools:listitem="@layout/item_nosocio"/>
 
-                    <LinearLayout
-                        android:id="@+id/contenedorSocios"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" />
-                </ScrollView>
-
-                <!-- Scroll de no socios -->
-                <ScrollView
-                    android:id="@+id/scrollNoSocios"
+                <!-- Vencimientos -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVencimientos"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:id="@+id/contenedorNoSocios"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-                </ScrollView>
+                    android:padding="12dp"
+                    tools:listitem="@layout/item_nosocio"/>
 
             </FrameLayout>
 
