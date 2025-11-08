@@ -42,19 +42,29 @@ class VerMasActivity : AppCompatActivity() {
         val tvDireccion = findViewById<TextView>(R.id.tvDireccion)
         val tvTelefono = findViewById<TextView>(R.id.tvTelefono)
         val tvFechaNacimiento = findViewById<TextView>(R.id.tvFechaNacimiento)
+        val tvIdTipoSocio = findViewById<TextView>(R.id.tvIdTipoSocio)
+
 
         // Reemplaza datos en las view
         tvNombreCompleto.text = "${usuario?.nombre}, ${usuario?.apellido} "
-        tvDNI.text = "DNI: ${usuario?.dni}"
+        tvDNI.text = "DNI: ${usuario!!.dni}"
         tvTelefono.text = "Telefono: ${usuario?.telefono}"
         tvDireccion.text = "Domicilio: ${usuario?.direccion}"
         tvFechaNacimiento.text = "Fecha de nacimiento: ${usuario?.fecha_nac}"
         tvEmail.text = "Email: ${usuario?.email}"
+        if (usuario?.esSocio == false) {
+            tvIdTipoSocio.text = "ID noSocio: ${usuario.id}"
+        } else {
+        tvIdTipoSocio.text = "ID socio: ${usuario?.id}"}
 
         // Boton editar
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
         btnEditar.setOnClickListener {
-            startActivity(Intent(this, EditarUsuarioActivity::class.java))
+            val intent = Intent(this, EditarUsuarioActivity::class.java)
+            intent.putExtra("id", usuario!!.id)
+            intent.putExtra("dni", usuario.dni)
+            intent.putExtra("esSocio", usuario.esSocio)
+            startActivity(intent)
         }
 
         // Boton Eliminar

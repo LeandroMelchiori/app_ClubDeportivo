@@ -141,7 +141,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etFecha"
+                        android:id="@+id/etFechaNac"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -151,27 +151,6 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
-                    <!-- Campo: Edad -->
-                    <TextView
-                        android:id="@+id/tvEdad"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="Edad:"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/etEdad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill_light"
-                        android:hint="44"
-                        android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp" />
 
                     <!-- Campo: DNI -->
                     <TextView
@@ -185,7 +164,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etDNI"
+                        android:id="@+id/etDni"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"

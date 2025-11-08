@@ -16,10 +16,20 @@ class ActividadCardAdapter(
 
     companion object {
         private val DIFF = object : DiffUtil.ItemCallback<DBHelper.ActividadCard>() {
-            override fun areItemsTheSame(a: DBHelper.ActividadCard, b: DBHelper.ActividadCard) = a.id == b.id
-            override fun areContentsTheSame(a: DBHelper.ActividadCard, b: DBHelper.ActividadCard) = a == b
+            override fun areItemsTheSame(a: DBHelper.ActividadCard, b: DBHelper.ActividadCard) =
+                a.idDiaHorario == b.idDiaHorario  // ← clave real del ítem
+
+            override fun areContentsTheSame(a: DBHelper.ActividadCard, b: DBHelper.ActividadCard) =
+                a.nombre == b.nombre &&
+                        a.precio == b.precio &&
+                        a.profesor == b.profesor &&
+                        a.dia == b.dia &&
+                        a.horaInicio == b.horaInicio &&
+                        a.horaFin == b.horaFin
+            // (si preferís, podés usar simplemente a == b porque es data class)
         }
     }
+
 
     class VH(v: View) : RecyclerView.ViewHolder(v) {
         val tvNombre: TextView = v.findViewById(R.id.tvNombre)
@@ -39,8 +49,8 @@ class ActividadCardAdapter(
     override fun onBindViewHolder(h: VH, position: Int) {
         val item = getItem(position)
         h.tvNombre.text = item.nombre
-        h.tvProfesores.text = item.profesores ?: "—"
-        h.tvHorarios.text = item.horarios ?: "—"
+        h.tvProfesores.text = item.profesor ?: "—"
+        h.tvHorarios.text = item.etiquetaHorario ?: "—"
         h.tvPrecio.text = "Precio: $${"%.2f".format(item.precio)}"
         h.btnEditar.setOnClickListener { onEditar(item) }
         h.btnEliminar.setOnClickListener { onEliminar(item) }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.database.getIntOrNull
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -110,6 +111,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               actividad_id INTEGER NOT NULL,
               profesor_dni TEXT NOT NULL,
+              activo INTEGER NOT NULL DEFAULT 1,
+              motivo_baja TEXT,
+              fecha_baja TEXT,
               UNIQUE(actividad_id, profesor_dni),
               FOREIGN KEY (actividad_id) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
               FOREIGN KEY (profesor_dni) REFERENCES profesores(dni) ON DELETE CASCADE);
@@ -122,9 +126,18 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
               dia INTEGER NOT NULL,            -- 0..6 (Dom..Sáb)
               hora_inicio INTEGER NOT NULL,    -- minutos
               hora_fin INTEGER NOT NULL,       -- minutos
+              activo INTEGER NOT NULL DEFAULT 1,
+              motivo_baja TEXT,
+              fecha_baja TEXT,
               FOREIGN KEY(actividad_profesor_id) REFERENCES actividad_profesor(id) ON DELETE CASCADE,
               UNIQUE(actividad_profesor_id, dia, hora_inicio, hora_fin));
             """.trimIndent())
+
+        db.execSQL("""CREATE UNIQUE INDEX IF NOT EXISTS ux_dh_unico_activo
+                ON dias_horarios(actividad_profesor_id, dia, hora_inicio, hora_fin)
+                WHERE activo = 1;
+                """.trimIndent())
+
 
         db.execSQL("""
             CREATE INDEX IF NOT EXISTS idx_ap_act_prof
@@ -207,69 +220,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         db.execSQL("DROP TABLE IF EXISTS socios")
         db.execSQL("DROP TABLE IF EXISTS no_socios")
         db.execSQL("DROP TABLE IF EXISTS actividades")
+
         // Vuelve a crear todo
         onCreate(db)
     }
 
     // ----------------------------------------------------------------------------------
 
-    // Modelos de datos
-    data class NoSocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimaPago: String?
-    )
-    data class VencimientoCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val fechaVenc: String,
-        val ultimoPago: String?
-    )
-    data class SocioCard(
-        val nombre: String,
-        val apellido: String,
-        val dni: String,
-        val ultimoPago: String?
-    )
-    data class NoSocioDTO(
-        val dni: Int,
-        val nombre: String,
-        val apellido: String,
-        val telefono: String,
-        val direccion: String,
-        val email: String,
-        val fecha_nac: String,
-        val fichaMedica: String
-    )
-    data class PersonaDTO(
-        val dni: String,
-        val nombre: String?,
-        val apellido: String?,
-        val telefono: String?,
-        val direccion: String?,
-        val email: String?,
-        val fecha_nac: String?,
-        val fichaMedica: String?,
-        val esSocio: Boolean,
 
-    )
-    data class ActividadCard(
-        val id: Int,
-        val nombre: String,
-        val precio: Double,
-        val profesores: String?,
-        val horarios: String?
-    )
-
-    // Helper para leer columnas opcionales sin crashear
-    private fun Cursor.getStringOrNull(col: String): String? {
-        val idx = getColumnIndex(col)
-        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
-    }
-
-    // ----------------------------------- Querys -----------------------------------
+    // ----------------------------------------- READ -----------------------------------------
 
     // Listados
     fun obtenerNoSocios(): List<NoSocioCard> {
@@ -351,7 +310,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         FROM dias_horarios dh
         JOIN actividad_profesor ap ON ap.id = dh.actividad_profesor_id
         JOIN actividades a         ON a.id_actividad = ap.actividad_id
-        WHERE dh.dia = ?
+         WHERE dh.activo = 1
+           AND dh.dia = ?
         ORDER BY dh.hora_inicio
     """.trimIndent()
 
@@ -370,48 +330,51 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         }
         return lista
     }
-    fun obtenerActividades(): List<ActividadCard> {
+    fun obtenerActividadesPorHorario(): List<ActividadCard> {
         val db = readableDatabase
         val sql = """
-         SELECT
-            a.id_actividad,
-            a.nombre,
-            a.precio,
-            (SELECT GROUP_CONCAT(p.apellido || ' ' || p.nombre, ' / ')
-             FROM actividad_profesor ap2
-             JOIN profesores p ON p.dni = ap2.profesor_dni
-             WHERE ap2.actividad_id = a.id_actividad
-            ) AS profesores,
-            (SELECT GROUP_CONCAT(
-                    CASE dh.dia
-                        WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar'
-                        WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie'
-                        WHEN 6 THEN 'Sáb' END || ' ' ||
-                    printf('%02d:%02d', dh.hora_inicio/60, dh.hora_inicio%60) || '-' ||
-                    printf('%02d:%02d', dh.hora_fin/60, dh.hora_fin%60)
-                , ' / ')
-             FROM actividad_profesor ap
-             JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
-             WHERE ap.actividad_id = a.id_actividad
-            ) AS horarios
-        FROM actividades a
-        WHERE EXISTS (
-            SELECT 1
-            FROM actividad_profesor ap
-            JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
-            WHERE ap.actividad_id = a.id_actividad)
-        ORDER BY a.nombre
+        SELECT
+            a.id_actividad                  AS id_actividad,
+            dh.id                           AS dh_id,
+            a.nombre                        AS nombre,
+            a.precio                        AS precio,
+            (p.apellido || ' ' || p.nombre) AS profesor,
+            dh.dia                          AS dia,
+            dh.hora_inicio                  AS hora_inicio,
+            dh.hora_fin                     AS hora_fin
+        FROM dias_horarios dh
+        JOIN actividad_profesor ap ON ap.id = dh.actividad_profesor_id
+        JOIN actividades a         ON a.id_actividad = ap.actividad_id
+        JOIN profesores p          ON p.dni = ap.profesor_dni
+        WHERE dh.activo = 1 AND (ap.activo IS NULL OR ap.activo = 1)
+        ORDER BY a.nombre, profesor, dh.dia, dh.hora_inicio
     """.trimIndent()
 
         val lista = mutableListOf<ActividadCard>()
         db.rawQuery(sql, null).use { c ->
+            val idxAct   = c.getColumnIndexOrThrow("id_actividad")
+            val idxDh    = c.getColumnIndexOrThrow("dh_id")
+            val idxNom   = c.getColumnIndexOrThrow("nombre")
+            val idxPrec  = c.getColumnIndexOrThrow("precio")
+            val idxProf  = c.getColumnIndexOrThrow("profesor")
+            val idxDia   = c.getColumnIndexOrThrow("dia")
+            val idxIni   = c.getColumnIndexOrThrow("hora_inicio")
+            val idxFin   = c.getColumnIndexOrThrow("hora_fin")
+
             while (c.moveToNext()) {
+                val dia = c.getInt(idxDia)
+                val ini = c.getInt(idxIni)
+                val fin = c.getInt(idxFin)
                 lista += ActividadCard(
-                    id = c.getInt(0),
-                    nombre = c.getString(1),
-                    precio = c.getDouble(2),
-                    profesores = if (!c.isNull(3)) c.getString(3) else null,
-                    horarios = if (!c.isNull(4)) c.getString(4) else null
+                    idActividad    = c.getInt(idxAct),
+                    idDiaHorario   = c.getInt(idxDh),
+                    nombre         = c.getString(idxNom),
+                    precio         = c.getDouble(idxPrec),
+                    profesor       = c.getString(idxProf),
+                    dia            = dia,
+                    horaInicio     = ini,
+                    horaFin        = fin,
+                    etiquetaHorario= "${etiquetaDia(dia)} ${hhmm(ini)}-${hhmm(fin)}"
                 )
             }
         }
@@ -432,15 +395,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         ).use { c ->
             if (c.moveToFirst()) {
                 return PersonaDTO(
-                    dni          = c.getStringOrNull("dni") ?: dni,
-                    nombre       = c.getStringOrNull("nombre"),
-                    apellido     = c.getStringOrNull("apellido"),
-                    telefono     = c.getStringOrNull("telefono"),
-                    direccion    = c.getStringOrNull("direccion"),
-                    email        = c.getStringOrNull("email"),
-                    fecha_nac    = c.getStringOrNull("fecha_nac"),
-                    fichaMedica  = c.getStringOrNull("ficha_medica"),
-                    esSocio      = true,
+                    id = c.getInt(c.getColumnIndexOrThrow("idSocio")),
+                    dni = c.getStringOrNull("dni") ?: dni,
+                    nombre = c.getStringOrNull("nombre"),
+                    apellido = c.getStringOrNull("apellido"),
+                    telefono = c.getStringOrNull("telefono"),
+                    direccion = c.getStringOrNull("direccion"),
+                    email = c.getStringOrNull("email"),
+                    fecha_nac = c.getStringOrNull("fecha_nac"),
+                    fichaMedica = c.getStringOrNull("ficha_medica"),
+                    esSocio = true,
                 )
             }
         }
@@ -455,15 +419,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         ).use { c ->
             if (c.moveToFirst()) {
                 return PersonaDTO(
-                    dni          = c.getStringOrNull("dni") ?: dni,
-                    nombre       = c.getStringOrNull("nombre"),
-                    apellido     = c.getStringOrNull("apellido"),
-                    telefono     = c.getStringOrNull("telefono"),
-                    direccion    = c.getStringOrNull("direccion"),
-                    email        = c.getStringOrNull("email"),
-                    fecha_nac    = c.getStringOrNull("fecha_nac"),
-                    fichaMedica  = c.getStringOrNull("ficha_medica"),
-                    esSocio      = false,
+                    id = c.getInt(c.getColumnIndexOrThrow("idNoSocio")),
+                    dni = c.getStringOrNull("dni") ?: dni,
+                    nombre = c.getStringOrNull("nombre"),
+                    apellido = c.getStringOrNull("apellido"),
+                    telefono = c.getStringOrNull("telefono"),
+                    direccion = c.getStringOrNull("direccion"),
+                    email = c.getStringOrNull("email"),
+                    fecha_nac = c.getStringOrNull("fecha_nac"),
+                    fichaMedica = c.getStringOrNull("ficha_medica"),
+                    esSocio = false,
                 )
             }
         }
@@ -515,54 +480,57 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val db = readableDatabase
         val like = "%${texto.trim()}%"
         val sql = """
-        SELECT 
-            a.id_actividad,
-            a.nombre,
-            a.precio,
-            (SELECT GROUP_CONCAT(p.apellido || ' ' || p.nombre, ' / ')
-             FROM actividad_profesor ap2
-             JOIN profesores p ON p.dni = ap2.profesor_dni
-             WHERE ap2.actividad_id = a.id_actividad
-            ) AS profesores,
-            (SELECT GROUP_CONCAT(
-                    CASE dh.dia
-                        WHEN 0 THEN 'Dom' WHEN 1 THEN 'Lun' WHEN 2 THEN 'Mar'
-                        WHEN 3 THEN 'Mié' WHEN 4 THEN 'Jue' WHEN 5 THEN 'Vie'
-                        WHEN 6 THEN 'Sáb' END || ' ' ||
-                    printf('%02d:%02d', dh.hora_inicio/60, dh.hora_inicio%60) || '-' ||
-                    printf('%02d:%02d', dh.hora_fin/60, dh.hora_fin%60)
-                , ' / ')
-             FROM actividad_profesor ap
-             JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
-             WHERE ap.actividad_id = a.id_actividad
-            ) AS horarios
-        FROM actividades a
-        WHERE a.nombre LIKE ?
-          AND EXISTS (
-              SELECT 1
-              FROM actividad_profesor ap
-              JOIN dias_horarios dh ON dh.actividad_profesor_id = ap.id
-              WHERE ap.actividad_id = a.id_actividad
-          )
-        ORDER BY a.nombre
+        SELECT
+            a.id_actividad                  AS id_actividad,
+            dh.id                           AS dh_id,
+            a.nombre                        AS nombre,
+            a.precio                        AS precio,
+            (p.apellido || ' ' || p.nombre) AS profesor,
+            dh.dia                          AS dia,
+            dh.hora_inicio                  AS hora_inicio,
+            dh.hora_fin                     AS hora_fin
+        FROM dias_horarios dh
+        JOIN actividad_profesor ap ON ap.id = dh.actividad_profesor_id
+        JOIN actividades a         ON a.id_actividad = ap.actividad_id
+        JOIN profesores p          ON p.dni = ap.profesor_dni
+        WHERE dh.activo = 1
+          AND a.nombre LIKE ?
+        ORDER BY a.nombre, profesor, dh.dia, dh.hora_inicio
     """.trimIndent()
 
         val lista = mutableListOf<ActividadCard>()
         db.rawQuery(sql, arrayOf(like)).use { c ->
+            val idxAct  = c.getColumnIndexOrThrow("id_actividad")
+            val idxDh   = c.getColumnIndexOrThrow("dh_id")
+            val idxNom  = c.getColumnIndexOrThrow("nombre")
+            val idxPrec = c.getColumnIndexOrThrow("precio")
+            val idxProf = c.getColumnIndexOrThrow("profesor")
+            val idxDia  = c.getColumnIndexOrThrow("dia")
+            val idxIni  = c.getColumnIndexOrThrow("hora_inicio")
+            val idxFin  = c.getColumnIndexOrThrow("hora_fin")
+
             while (c.moveToNext()) {
+                val dia = c.getInt(idxDia)
+                val ini = c.getInt(idxIni)
+                val fin = c.getInt(idxFin)
                 lista += ActividadCard(
-                    id         = c.getInt(0),
-                    nombre     = c.getString(1),
-                    precio     = c.getDouble(2),
-                    profesores = if (!c.isNull(3)) c.getString(3) else null,
-                    horarios   = if (!c.isNull(4)) c.getString(4) else null
+                    idActividad    = c.getInt(idxAct),
+                    idDiaHorario   = c.getInt(idxDh),
+                    nombre         = c.getString(idxNom),
+                    precio         = c.getDouble(idxPrec),
+                    profesor       = c.getString(idxProf),
+                    dia            = dia,
+                    horaInicio     = ini,
+                    horaFin        = fin,
+                    etiquetaHorario= "${etiquetaDia(dia)} ${hhmm(ini)}-${hhmm(fin)}"
                 )
             }
         }
         return lista
     }
 
-    // Registros
+
+    // // ----------------------------------------- CREATE -----------------------------------------
     fun hacerSocioDesdeNoSocio(
         dni: String,
         monto: Double,
@@ -619,7 +587,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         profesorDni: String,
         dia: Int,
         horaInicio: Int,
-        horaFin: Int
+        horaFin: Int,
     ): Long {
         val db = writableDatabase
         db.beginTransaction()
@@ -631,15 +599,36 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
             // Obtener o crear la dupla (actividad, profesor)
             var apId = -1L
+            var apActivo = 1
             db.rawQuery(
-                "SELECT id FROM actividad_profesor WHERE actividad_id=? AND profesor_dni=?",
+                "SELECT id, COALESCE(activo,1) AS activo FROM actividad_profesor WHERE actividad_id=? AND profesor_dni=?",
                 arrayOf(actividadId.toString(), profesorDni)
-            ).use { c -> if (c.moveToFirst()) apId = c.getLong(0) }
+            ).use { c ->
+                if (c.moveToFirst()) {
+                    apId = c.getLong(0)
+                    apActivo = c.getInt(1)
+                }
+            }
 
+            // Si existe, y la columnaactivo esta en 0, convertir a 1
+            if (apId != -1L) {
+                // Existe: si estaba inactiva, reactivarla (y limpiar bajas si las tenés)
+                if ( apActivo ==0) {
+                    val cv = ContentValues().apply {
+                        put("activo", 1)
+                        putNull("fecha_baja")
+                        putNull("motivo_baja")
+                    }
+                    db.update("actividad_profesor", cv, "id=?", arrayOf(apId.toString()))
+                }
+            }
+
+            // Si no existe, crearlo
             if (apId == -1L) {
                 val cvRel = ContentValues().apply {
                     put("actividad_id", actividadId)
                     put("profesor_dni", profesorDni)
+                    put("activo", 1)
                 }
                 val ins = db.insertWithOnConflict(
                     "actividad_profesor",
@@ -692,22 +681,47 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         return db.insert("pagos_actividad", null, cv)
     }
 
-    // Eliminar
-    fun eliminarActividad(idActividad: Int): Boolean {
+    // ----------------------------------------- Delete -----------------------------------------
+    fun darDeBajaHorario(dhId: Int, motivo: String? = null): Boolean {
         val db = writableDatabase
         db.beginTransaction()
         return try {
-            val rows = db.delete(
-                "actividades",
-                "id_actividad = ?",
-                arrayOf(idActividad.toString())
+            // Traer apId por si luego marcamos la relación inactiva
+            val apId = android.database.DatabaseUtils.longForQuery(
+                db, "SELECT actividad_profesor_id FROM dias_horarios WHERE id=?",
+                arrayOf(dhId.toString())
             )
+
+            val hoy = java.time.LocalDate.now().toString() // "YYYY-MM-DD"
+            val cv = ContentValues().apply {
+                put("activo", 0)
+                put("fecha_baja", hoy)
+                if (motivo != null) put("motivo_baja", motivo)
+            }
+
+            val rows = db.update("dias_horarios", cv, "id=?", arrayOf(dhId.toString()))
+            if (rows == 0) { db.endTransaction(); return false }
+
+            // Si esa relación ya no tiene horarios activos, marcamos la relación como inactiva (no se borra)
+            val quedanActivos = android.database.DatabaseUtils.longForQuery(
+                db,
+                "SELECT COUNT(*) FROM dias_horarios WHERE actividad_profesor_id=? AND activo=1",
+                arrayOf(apId.toString())
+            )
+            if (quedanActivos == 0L) {
+                val cvAp = ContentValues().apply {
+                    put("activo", 0)
+                    put("fecha_baja", hoy)
+                    if (motivo != null) put("motivo_baja", motivo)
+                }
+                db.update("actividad_profesor", cvAp, "id=?", arrayOf(apId.toString()))
+            }
+
             db.setTransactionSuccessful()
-            rows > 0
-        } finally {
-            db.endTransaction()
-        }
+            true
+        } finally { db.endTransaction() }
     }
+
     fun eliminarPersonaPorDni(dni: String): Boolean {
         val db = this.writableDatabase
         db.beginTransaction()
@@ -734,5 +748,156 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             db.endTransaction()
         }
     }
+
+    // ----------------------------------------- Update -----------------------------------------
+
+    fun actualizarSocioPorId(
+        idSocio: Int,
+        nombre: String,
+        apellido: String,
+        dni: String,
+        fechaNac: String,         // formato que ya uses (p.ej. "YYYY-MM-DD")
+        telefono: String?,
+        direccion: String?,
+        email: String?,
+    ): Boolean {
+        val cv = ContentValues().apply {
+            put("nombre", nombre)
+            put("apellido", apellido)
+            put("dni", dni)
+            put("fecha_nac", fechaNac)
+            putOrNull("telefono", telefono)
+            putOrNull("direccion", direccion)
+            putOrNull("email", email)
+        }
+        val rows = writableDatabase.update("socios", cv, "idSocio = ?", arrayOf(idSocio.toString()))
+        return rows > 0
+    }
+
+    // No socios
+    fun actualizarNoSocioPorId(
+        idNoSocio: Int,
+        nombre: String,
+        apellido: String,
+        dni: String,
+        fechaNac: String,
+        telefono: String?,
+        direccion: String?,
+        email: String?,
+    ): Boolean {
+        val cv = ContentValues().apply {
+            put("nombre", nombre)
+            put("apellido", apellido)
+            put("dni", dni)
+            put("fecha_nac", fechaNac)
+            putOrNull("telefono", telefono)
+            putOrNull("direccion", direccion)
+            putOrNull("email", email)
+            // NO tocar: idNoSocio, dni, fecha_inscripcion
+        }
+        val rows = writableDatabase.update("no_socios", cv, "idNoSocio = ?", arrayOf(idNoSocio.toString()))
+        return rows > 0
+    }
+
+    fun actualizarPersonaPorDni(
+        dni: String,
+        nombre: String,
+        apellido: String,
+        fechaNac: String,
+        telefono: String?,
+        direccion: String?,
+        email: String?,
+    ): Boolean {
+        val tabla = when {
+            existeConDni("socios", dni) -> "socios"
+            existeConDni("no_socios", dni) -> "no_socios"
+            else -> return false
+        }
+        val cv = ContentValues().apply {
+            put("nombre", nombre)
+            put("apellido", apellido)
+            put("dni", dni)
+            put("fecha_nac", fechaNac)
+            putOrNull("telefono", telefono)
+            putOrNull("direccion", direccion)
+            putOrNull("email", email)
+        }
+        val rows = writableDatabase.update(tabla, cv, "dni = ?", arrayOf(dni))
+        return rows > 0
+    }
+
+    // Utilidades
+    private fun Cursor.getStringOrNull(col: String): String? {
+        val idx = getColumnIndex(col)
+        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
+    }
+    private fun ContentValues.putOrNull(key: String, value: String?) {
+        if (value == null) putNull(key) else put(key, value)
+    }
+    private fun ContentValues.putBool01(key: String, value: Boolean?) {
+        if (value != null) put(key, if (value) 1 else 0)
+    }
+    private fun existeConDni(table: String, dni: String): Boolean =
+        readableDatabase.query(table, arrayOf("dni"), "dni = ?", arrayOf(dni), null, null, null)
+            .use { it.moveToFirst() }
+    private fun etiquetaDia(dia: Int) = when (dia) {
+        0 -> "Dom"; 1 -> "Lun"; 2 -> "Mar"; 3 -> "Mié"; 4 -> "Jue"; 5 -> "Vie"; else -> "Sáb"
+    }
+    private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
+
+    // Modelos de datos
+    data class NoSocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimaPago: String?
+    )
+    data class VencimientoCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val fechaVenc: String,
+        val ultimoPago: String?
+    )
+    data class SocioCard(
+        val nombre: String,
+        val apellido: String,
+        val dni: String,
+        val ultimoPago: String?
+    )
+    data class NoSocioDTO(
+        val dni: Int,
+        val nombre: String,
+        val apellido: String,
+        val telefono: String,
+        val direccion: String,
+        val email: String,
+        val fecha_nac: String,
+        val fichaMedica: String
+    )
+    data class PersonaDTO(
+        val id: Int?,
+        val dni: String,
+        val nombre: String?,
+        val apellido: String?,
+        val telefono: String?,
+        val direccion: String?,
+        val email: String?,
+        val fecha_nac: String?,
+        val fichaMedica: String?,
+        val esSocio: Boolean,
+
+        )
+    data class ActividadCard(
+        val idActividad: Int,
+        val idDiaHorario: Int,   // ← dh.id para eliminar
+        val nombre: String,
+        val precio: Double,
+        val profesor: String,
+        val dia: Int,
+        val horaInicio: Int,     // en minutos
+        val horaFin: Int,        // en minutos
+        val etiquetaHorario: String // "Lun 08:00-09:00"
+    )
 }
 

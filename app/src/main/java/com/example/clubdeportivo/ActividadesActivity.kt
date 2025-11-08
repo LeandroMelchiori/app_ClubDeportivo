@@ -48,9 +48,9 @@ class ActividadesActivity : AppCompatActivity() {
             onEliminar = { act ->
                 androidx.appcompat.app.AlertDialog.Builder(this)
                     .setTitle("Eliminar actividad")
-                    .setMessage("Se eliminará \"${act.nombre}\" y todos sus horarios. ¿Continuar?")
+                    .setMessage("Se eliminará \"${act.nombre}\" en el horario del ${act.etiquetaHorario} ¿Continuar?")
                     .setPositiveButton("Eliminar") { _, _ ->
-                        val ok = db.eliminarActividad(act.id)
+                        val ok = db.darDeBajaHorario(act.idDiaHorario)
                         if (ok) {
                             Toast.makeText(this, "Actividad eliminada", Toast.LENGTH_SHORT).show()
                             // refrescá la lista respetando el filtro actual del SearchView
@@ -119,7 +119,7 @@ class ActividadesActivity : AppCompatActivity() {
         }
     private fun recargarLista(filtro: String?) {
         val lista = if (filtro.isNullOrBlank())
-            db.obtenerActividades()
+            db.obtenerActividadesPorHorario()
         else
             db.buscarActividadesPorNombre(filtro)
         adapter.submitList(lista)
