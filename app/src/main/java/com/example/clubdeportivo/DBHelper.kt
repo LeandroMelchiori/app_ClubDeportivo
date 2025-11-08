@@ -18,7 +18,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         db.setForeignKeyConstraintsEnabled(true)
     }
 
-    // ----------------------------------- CRUD -----------------------------------------
+    // ----------------------------------- Creacion DB -----------------------------------------
     // Crear tablas
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
@@ -210,47 +210,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Vuelve a crear todo
         onCreate(db)
     }
-    fun eliminarActividad(idActividad: Int): Boolean {
-        val db = writableDatabase
-        db.beginTransaction()
-        return try {
-            val rows = db.delete(
-                "actividades",
-                "id_actividad = ?",
-                arrayOf(idActividad.toString())
-            )
-            db.setTransactionSuccessful()
-            rows > 0
-        } finally {
-            db.endTransaction()
-        }
-    }
-    fun eliminarPersonaPorDni(dni: String): Boolean {
-        val db = this.writableDatabase
-        db.beginTransaction()
-        try {
-            // ¿Es socio?
-            var idSocio: Long? = null
-            db.rawQuery("SELECT idSocio FROM socios WHERE dni = ?", arrayOf(dni)).use { c ->
-                if (c.moveToFirst()) idSocio = c.getLong(0)
-            }
-
-            if (idSocio != null) {
-                // Si es socio, primero borro dependencias (ej.: cuotas) y luego al socio
-                db.delete("cuotas", "idSocio = ?", arrayOf(idSocio.toString()))
-                val rows = db.delete("socios", "idSocio = ?", arrayOf(idSocio.toString()))
-                db.setTransactionSuccessful()
-                return rows > 0
-            } else {
-                // No socio: borro directo por DNI
-                val rows = db.delete("no_socios", "dni = ?", arrayOf(dni))
-                db.setTransactionSuccessful()
-                return rows > 0
-            }
-        } finally {
-            db.endTransaction()
-        }
-    }
 
     // ----------------------------------------------------------------------------------
 
@@ -259,20 +218,20 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val nombre: String,
         val apellido: String,
         val dni: String,
-        val ultimaPago: String? // puede ser null si nunca pagó
+        val ultimaPago: String?
     )
     data class VencimientoCard(
         val nombre: String,
         val apellido: String,
         val dni: String,
         val fechaVenc: String,
-        val ultimoPago: String?   // puede ser null
+        val ultimoPago: String?
     )
     data class SocioCard(
         val nombre: String,
         val apellido: String,
         val dni: String,
-        val ultimoPago: String?   // puede ser null
+        val ultimoPago: String?
     )
     data class NoSocioDTO(
         val dni: Int,
@@ -285,26 +244,26 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val fichaMedica: String
     )
     data class PersonaDTO(
-        val dni: String,                // usá String para no perder ceros a la izquierda
+        val dni: String,
         val nombre: String?,
         val apellido: String?,
         val telefono: String?,
         val direccion: String?,
         val email: String?,
-        val fecha_nac: String?,         // o el tipo que uses
-        val fichaMedica: String?,       // puede no existir en socios → null
-        val esSocio: Boolean,           // true = vino de "socios", false = "no_socios"
+        val fecha_nac: String?,
+        val fichaMedica: String?,
+        val esSocio: Boolean,
 
     )
     data class ActividadCard(
         val id: Int,
         val nombre: String,
         val precio: Double,
-        val profesores: String?, // puede ser null si no asignaste
-        val horarios: String?    // puede ser null si no cargaste horarios
+        val profesores: String?,
+        val horarios: String?
     )
 
-    // Helper para leer columnas opcionales sin crashear si no existen
+    // Helper para leer columnas opcionales sin crashear
     private fun Cursor.getStringOrNull(col: String): String? {
         val idx = getColumnIndex(col)
         return if (idx >= 0 && !isNull(idx)) getString(idx) else null
@@ -468,7 +427,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             "socios",
             null,
             "dni = ?",
-            arrayOf(dni), // si en tu tabla está como INTEGER igual funciona; SQLite compara por valor
+            arrayOf(dni),
             null, null, null
         ).use { c ->
             if (c.moveToFirst()) {
@@ -480,7 +439,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                     direccion    = c.getStringOrNull("direccion"),
                     email        = c.getStringOrNull("email"),
                     fecha_nac    = c.getStringOrNull("fecha_nac"),
-                    fichaMedica  = c.getStringOrNull("ficha_medica"), // si no existe → null
+                    fichaMedica  = c.getStringOrNull("ficha_medica"),
                     esSocio      = true,
                 )
             }
@@ -517,10 +476,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         // Consultar la tabla "no_socios" filtrando por DNI
         val cursor = db.query(
             "no_socios",
-            null,                   // Seleccionar todas las columnas
-            "dni = ?",              // Cláusula WHERE para el DNI
-            arrayOf(dni),           // Argumentos de la cláusula WHERE
-            null, null, null        // groupBy, having, orderBy (no aplican aquí)
+            null,
+            "dni = ?",
+            arrayOf(dni),
+            null, null, null
         )
 
         var noSocio: NoSocioDTO? = null
@@ -628,7 +587,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 put("ficha_medica", ns.fichaMedica)
                 put("email", ns.email)
                 put("activo", 1)
-                put("carnet", 1)  // o 0 si no corresponde
+                put("carnet", 1)
             }
             val idSocio = db.insertOrThrow("socios", null, cvSocio)
 
@@ -695,7 +654,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                     .use { c -> if (c.moveToFirst()) c.getLong(0) else throw IllegalStateException("No se pudo resolver actividad_profesor_id") }
             }
 
-            // Insertar día/horario (en minutos)
+            // Insertar día/horario
             val cvHorario = ContentValues().apply {
                 put("actividad_profesor_id", apId)
                 put("dia", dia)
@@ -717,7 +676,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
     fun registrarPagoActividadNoSocio(
         dni: String,
-        horarioId: Int,          // FK a dias_horarios (o a tu relación actividad_profesor_horario)
+        horarioId: Int,
         monto: Double,
         medioPago: String,
         fechaIso: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -725,12 +684,55 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val db = writableDatabase
         val cv = ContentValues().apply {
             put("dni_nosocio", dni)
-            put("id_actividad", horarioId) // o "actividad_horario_id" según tu esquema
+            put("id_actividad", horarioId)
             put("monto", monto)
             put("forma_pago", medioPago)
             put("fecha_pago", fechaIso)
         }
         return db.insert("pagos_actividad", null, cv)
+    }
+
+    // Eliminar
+    fun eliminarActividad(idActividad: Int): Boolean {
+        val db = writableDatabase
+        db.beginTransaction()
+        return try {
+            val rows = db.delete(
+                "actividades",
+                "id_actividad = ?",
+                arrayOf(idActividad.toString())
+            )
+            db.setTransactionSuccessful()
+            rows > 0
+        } finally {
+            db.endTransaction()
+        }
+    }
+    fun eliminarPersonaPorDni(dni: String): Boolean {
+        val db = this.writableDatabase
+        db.beginTransaction()
+        try {
+            // ¿Es socio?
+            var idSocio: Long? = null
+            db.rawQuery("SELECT idSocio FROM socios WHERE dni = ?", arrayOf(dni)).use { c ->
+                if (c.moveToFirst()) idSocio = c.getLong(0)
+            }
+
+            if (idSocio != null) {
+                // Si es socio, primero borro dependencias (cuotas) y luego al socio
+                db.delete("cuotas", "idSocio = ?", arrayOf(idSocio.toString()))
+                val rows = db.delete("socios", "idSocio = ?", arrayOf(idSocio.toString()))
+                db.setTransactionSuccessful()
+                return rows > 0
+            } else {
+                // No socio: borro directo por DNI
+                val rows = db.delete("no_socios", "dni = ?", arrayOf(dni))
+                db.setTransactionSuccessful()
+                return rows > 0
+            }
+        } finally {
+            db.endTransaction()
+        }
     }
 }
 
