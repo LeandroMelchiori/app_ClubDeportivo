@@ -101,7 +101,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
               forma_pago TEXT NOT NULL,
               monto NUMERIC NOT NULL,
               FOREIGN KEY (dni_nosocio) REFERENCES no_socios(dni),
-              FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad)
+              FOREIGN KEY (id_actividad) REFERENCES dias_horarios(id)
             );
         """.trimIndent())
 
@@ -724,11 +724,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
     ): Long {
         val db = writableDatabase
         val cv = ContentValues().apply {
-            put("dni_no_socio", dni)
-            put("dias_horarios_id", horarioId) // o "actividad_horario_id" según tu esquema
+            put("dni_nosocio", dni)
+            put("id_actividad", horarioId) // o "actividad_horario_id" según tu esquema
             put("monto", monto)
-            put("medio_pago", medioPago)
-            put("fecha", fechaIso)
+            put("forma_pago", medioPago)
+            put("fecha_pago", fechaIso)
         }
         return db.insert("pagos_actividad", null, cv)
     }
