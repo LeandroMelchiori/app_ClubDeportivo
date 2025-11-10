@@ -4,22 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_blue"
-    android:orientation="vertical"
     android:gravity="center"
-    >
+    android:orientation="vertical" >
 
-
+    <!-- Encabezado -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="CLUB DEPORTIVO"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        />
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
+    <!-- Usuario -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +28,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/etNombreActividad"
+        android:id="@+id/etUsuario"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,7 +39,7 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp" />
 
-
+    <!-- Contraseña -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +50,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/etNombreProfe"
+        android:id="@+id/etContraseña"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -62,8 +61,9 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp" />
 
+    <!-- Boton ingresar -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPepe"
+        android:id="@+id/btnLogin"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"

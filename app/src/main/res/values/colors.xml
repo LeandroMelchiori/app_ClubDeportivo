@@ -4,7 +4,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="bg_dark">#1E1E1E</color>
-    <color name="card_dark">#2A2A2A</color>
+    <color name="card_dark">#2A2F35</color>
+    <color name="card_stroke">#33FFFFFF</color>    <!-- blanco al 20% aprox -->
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#CCFFFFFF</color>
 

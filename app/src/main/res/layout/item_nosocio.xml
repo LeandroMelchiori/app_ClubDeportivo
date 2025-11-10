@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/bg_gradient_blue">
+
+    <!-- Nombre + estado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/boxNombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Apellido, Nombre"
+                android:textColor="@color/bg_dark"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tvDni"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="123456789"
+                android:textColor="@color/bg_dark"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Estado: no socio (blanco) -->
+        <View
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_pill_light" />
+    </LinearLayout>
+
+    <!-- Info + botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Activo"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvUltimoPago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Ultima actividad: "
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btnAccion"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_chip_blue"
+                android:text="Ser socio"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="0dp"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/white_button"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/btnVerMas"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:textSize="16sp"
+                android:background="@drawable/bg_chip_blue"
+                android:text="Ver mas"
+                android:textColor="@color/black"
+                android:padding="0dp"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/white_button" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

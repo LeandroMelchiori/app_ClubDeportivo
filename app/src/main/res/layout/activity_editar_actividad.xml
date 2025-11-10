@@ -5,30 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <!-- Bottom bar -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blue_start"
-        app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
-
     <!-- Contenido -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingTop="20dp"
-        android:background="@color/card_dark">
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,43 +24,48 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <!-- Texto bienvenida -->
                 <TextView
-                    android:id="@+id/tvBienvenido"
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
-                    android:textColor="@color/blue_start"
-                    android:textSize="26sp"
-                    android:textStyle="bold"/>
+                    android:text="Bienvenido"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:contentDescription="perfil"
                     android:src="@drawable/ic_person"
-                    app:tint="@color/text_primary"
-                    android:contentDescription="perfil"/>
+                    app:tint="@color/text_primary" />
             </LinearLayout>
 
+            <!-- Fecha hoy -->
             <TextView
+                android:id="@+id/tvFechaHoy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
+            <!-- Texto tipo formulario -->
             <TextView
+                android:id="@+id/tvTipoFormulario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
                 android:text="Editar actividad:"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="18dp"/>
+                android:textStyle="bold" />
 
             <!-- Tarjeta azul con el formulario -->
             <com.google.android.material.card.MaterialCardView
@@ -86,9 +75,8 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeWidth="0dp"
                 app:strokeColor="@android:color/transparent"
-                >
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,6 +87,7 @@
 
                     <!-- Campo: Nombre Actividad -->
                     <TextView
+                        android:id="@+id/tvNombreActividad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre Actividad:"
@@ -119,6 +108,7 @@
 
                     <!-- Campo: Nombre Prof -->
                     <TextView
+                        android:id="@+id/tvNombreProfe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -140,6 +130,7 @@
 
                     <!-- Campo: Día -->
                     <TextView
+                        android:id="@+id/tvDia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -161,16 +152,17 @@
 
                     <!-- Campo: Horario -->
                     <TextView
+                        android:id="@+id/tvInicio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="Horario:"
+                        android:text="Hora Inicio: "
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etHorario"
+                        android:id="@+id/etInicio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -182,16 +174,17 @@
 
                     <!-- Campo: Duración -->
                     <TextView
+                        android:id="@+id/tvFin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="Duración:"
+                        android:text="Hora Fin:"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etDuracion"
+                        android:id="@+id/etHoraFin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -203,6 +196,7 @@
 
                     <!-- Campo: Valor -->
                     <TextView
+                        android:id="@+id/tvValor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
@@ -243,4 +237,20 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blue_start"
+        app:itemGravity="center"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
+
 </RelativeLayout>

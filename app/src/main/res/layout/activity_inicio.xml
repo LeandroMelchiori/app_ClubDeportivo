@@ -5,9 +5,113 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <!-- Bottom bar -->
+    <!-- Contenido scrolleable -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
+        android:fillViewport="true"
+        android:paddingBottom="16dp">
 
-    <!-- Contenido scrollable -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
+
+            <!-- Encabezado: Bienvenida + perfil -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvBienvenida"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bienvenido"
+                    android:textColor="@color/blue_accent"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivPerfil"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Jueves, 28 de Septiembre"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <!-- Botón “Agregar actividad” -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUsuario"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="16dp"
+                android:text="Nuevo Usuario"
+                android:textAllCaps="false"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                app:backgroundTint="@color/blue_start"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/ic_expand"
+                app:iconGravity="end"
+                app:iconPadding="16dp" />
+
+            <!-- Contenedor activdades -->
+            <LinearLayout
+                android:id="@+id/llActividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="20dp">
+
+                <!-- Titulo -->
+                <TextView
+                    android:id="@+id/tvActividades"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="Actividades del dia.."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/contenedorActividadesHoy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="6dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -17,172 +121,10 @@
         android:background="@color/blue_start"
         app:itemGravity="center"
         app:itemHorizontalTranslationEnabled="false"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_nav"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomNav"
-        android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
-
-            <!-- Encabezado: Bienvenida + perfil -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tvBienvenido"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
-                    android:textColor="@color/blue_accent"
-                    android:textSize="32sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/ivPerfil"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
-                    android:contentDescription="Icono perfil"
-                    app:tint="@color/text_primary" />
-            </LinearLayout>
-
-            <!-- Fecha -->
-            <TextView
-                android:id="@+id/tvFecha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jueves, 28 de Septiembre"
-                android:textColor="@color/text_secondary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
-
-
-            <!-- Botón “Agregar actividad” -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnUsuario"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:text="Nuevo Usuario"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                android:gravity="start"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                app:cornerRadius="18dp"
-                app:backgroundTint="@color/blue_start"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="10dp"
-                android:paddingVertical="16dp"
-                app:icon="@drawable/ic_expand"
-                app:iconGravity="end"
-                app:iconPadding="16dp"
-                />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingRight="20dp"
-                >
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Actividades del dia.."
-                    android:textColor="@color/text_secondary"
-                    android:textSize="24sp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
-
-                    />
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInscribir"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    app:cornerRadius="18dp"
-                    app:backgroundTint="@color/bg_dark"
-                    android:layout_marginBottom="10dp"
-                    android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp"
-                    />
-
-                <com.google.android.material.button.MaterialButton
-
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    app:cornerRadius="18dp"
-                    app:backgroundTint="@color/bg_dark"
-                    android:layout_marginBottom="10dp"
-                    android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp"
-                    />
-
-                <com.google.android.material.button.MaterialButton
-
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:text="9:00 - AcuaGym"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="24sp"
-                    android:gravity="start"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    app:cornerRadius="18dp"
-                    app:backgroundTint="@color/bg_dark"
-                    android:layout_marginBottom="10dp"
-                    android:paddingVertical="16dp"
-                    app:icon="@drawable/ic_expand"
-                    app:iconGravity="end"
-                    app:iconPadding="16dp"
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
 </RelativeLayout>

@@ -6,8 +6,6 @@
     android:background="@color/bg_dark">
 
     <!-- Bottom bar -->
-
-    <!-- Contenido scrollable -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -15,43 +13,44 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
+    <!-- Contenido scrollable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado: Bienvenida + perfil -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <!-- Texto bienvenida -->
                 <TextView
-                    android:id="@+id/tvBienvenido"
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
+                    android:text="Bienvenido"
                     android:textColor="@color/blue_accent"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -60,8 +59,8 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -70,53 +69,53 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold" />
 
             <!-- Tarjeta azul actividad -->
             <LinearLayout
                 android:id="@+id/cardActividad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_gradient_blue"
                 android:orientation="vertical"
-                android:padding="30dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="12dp">
+                android:padding="30dp">
 
                 <TextView
                     android:id="@+id/tvNombreAct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pepe"
+                    android:textColor="@color/black"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textStyle="bold" />
 
                 <!-- Boton Eliminar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="30dp"
-                    >
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnEliminar"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingVertical="10dp"
                         android:text="Eliminar"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:minHeight="0dp" android:minWidth="0dp"
-                        android:backgroundTint="@color/red"
-                        android:layout_marginStart="8dp"
-                        android:paddingVertical="10dp"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

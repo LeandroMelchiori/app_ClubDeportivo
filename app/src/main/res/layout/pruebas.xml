@@ -12,7 +12,7 @@
         android:layout_above="@id/bottomNav"
         android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,14 +27,13 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <!-- Texto bienvenida -->
                 <TextView
                     android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido"
-                    android:textColor="@color/blue_accent"
+                    android:text="Bienvenido, Pepe"
+                    android:textColor="@color/blue_start"
                     android:textSize="32sp"
                     android:textStyle="bold" />
 
@@ -46,23 +45,19 @@
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
-            <!-- Fecha hoy -->
             <TextView
-                android:id="@+id/tvFechaHoy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="24sp" />
 
-            <!-- Texto tipo formulario -->
             <TextView
-                android:id="@+id/tvTipoFormulario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:text="Editar Usuario:"
+                android:text="Ingrese Usuario:"
                 android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -77,7 +72,6 @@
                 app:cardElevation="0dp"
                 app:strokeColor="@android:color/transparent"
                 app:strokeWidth="0dp">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,7 +135,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etFechaNac"
+                        android:id="@+id/etFecha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -150,7 +144,6 @@
                         android:importantForAutofill="no"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
-
 
                     <!-- Campo: DNI -->
                     <TextView
@@ -164,7 +157,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etDni"
+                        android:id="@+id/etDNI"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -240,19 +233,20 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
-                    <!-- Botón CONFIRMAR -->
+                    <!-- Botón INGRESAR -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnConfirmar"
+                        android:id="@+id/btnRegistrar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="36dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:padding="10dp"
-                        android:text="CONFIRMAR"
+                        android:text="REGISTRAR USUARIO"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
                         android:textSize="24sp"
+                        android:textStyle="bold"
                         app:backgroundTint="@color/white"
                         app:cornerRadius="24dp" />
                 </LinearLayout>

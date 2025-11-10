@@ -1,5 +1,6 @@
 package com.example.clubdeportivo
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
@@ -8,19 +9,21 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class NuevoUsuarioActivity : AppCompatActivity() {
+class pruebasActivity : AppCompatActivity() {
     private lateinit var db: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nuevo_usuario)
+        setContentView(R.layout.pruebas)
 
         db = DBHelper(this).writableDatabase
 
@@ -85,8 +88,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                 // Try insert and catch error
                 try {
                     val rowId = db.insertOrThrow(tabla, null, values)  // usa insertOrThrow para ver el error real
-                    startActivity(Intent(this, InicioActivity::class.java))
-                    Toast.makeText(this, "Registro exitoso (ID $rowId)", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Usuario registrado (ID $rowId)", Toast.LENGTH_LONG).show()
 
                     // Limpieza de campos
                     etNombre.text.clear()
@@ -106,42 +108,22 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                 }
             }
 
-        // Bottom
+        // Bottom Nav
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_home -> {
-                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
-                    true
-                }
-
+                R.id.nav_pagos     -> { startActivity(Intent(this, PagosActivity::class.java)); true }
+                R.id.nav_activity  -> { startActivity(Intent(this, ActividadesActivity::class.java)); true }
+                R.id.nav_settings  -> { startActivity(Intent(this, ConfiguracionActivity::class.java)); true }
+                R.id.nav_home      -> { startActivity(Intent(this, InicioActivity::class.java)); true }
+                R.id.nav_listas    -> { startActivity(Intent(this, ListadosActivity::class.java)); true }
                 else -> true
             }
         }
     }
 
-    // Metodo para normalizar la fecha
+    // Metodo para normalizar la fecha de nacimiento
     private fun normalizarFecha(input: String): String? {
         if (input.isBlank()) return null
         return try {
@@ -159,5 +141,5 @@ class NuevoUsuarioActivity : AppCompatActivity() {
             return c.moveToFirst() && c.getInt(0) > 0
         }
     }
-
 }
+

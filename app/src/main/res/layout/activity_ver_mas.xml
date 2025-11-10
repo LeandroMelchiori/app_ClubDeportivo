@@ -6,8 +6,6 @@
     android:background="@color/bg_dark">
 
     <!-- Bottom bar -->
-
-    <!-- Contenido scrollable -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -15,43 +13,44 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue_start"
         app:itemGravity="center"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="30dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:itemIconSize="30dp"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
+    <!-- Contenido scrollable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
+        android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingBottom="16dp"
-        android:background="@color/card_dark">
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado: Bienvenida + perfil -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <!-- Texto bienvenida -->
                 <TextView
-                    android:id="@+id/tvBienvenido"
+                    android:id="@+id/tvBienvenida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido, Pepe"
+                    android:text="Bienvenido"
                     android:textColor="@color/blue_accent"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -60,8 +59,8 @@
                     android:id="@+id/ivPerfil"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="Icono perfil"
+                    android:src="@drawable/ic_person"
                     app:tint="@color/text_primary" />
             </LinearLayout>
 
@@ -70,123 +69,136 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Jueves, 28 de Septiembre"
                 android:textColor="@color/text_secondary"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_gradient_blue"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp">
+                android:orientation="vertical">
 
                 <!-- Contenido -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginHorizontal="20dp">
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="vertical">
 
                     <!-- nombre del cliente -->
                     <TextView
+                        android:id="@+id/tvNombreUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Choque, Heber"
                         android:layout_marginTop="15dp"
-                        android:textSize="30sp"
-                        />
-
-                    <!-- Fecha de nacimiento -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:text="Choque, Heber"
                         android:textColor="@color/black"
-                        android:text="Fecha de nacimiento: 31/02/1958"
-                        android:layout_marginTop="20dp"
-                        android:textSize="20sp"/>
-
-                    <!-- Edad -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Edad: 67 años"
-                        android:layout_marginTop="10dp"
-                        android:textSize="20sp"/>
-
-                    <!-- Direcccion -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Direccion: Calle Falsa 123"
-                        android:layout_marginTop="10dp"
-                        android:textSize="20sp"/>
+                        android:textSize="30sp" />
 
                     <!-- DNI -->
                     <TextView
+                        android:id="@+id/tvIdTipoSocio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="DNI: 11223344"
                         android:layout_marginTop="10dp"
-                        android:textSize="20sp"/>
+                        android:text="ID:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <!-- DNI -->
+                    <TextView
+                        android:id="@+id/tvDNI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="DNI:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <!-- Fecha de nacimiento -->
+                    <TextView
+                        android:id="@+id/tvFechaNacimiento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Fecha de nacimiento:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <!-- Direcccion -->
+                    <TextView
+                        android:id="@+id/tvDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Direccion: Calle Falsa 123"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
                     <!-- Telefono -->
                     <TextView
+                        android:id="@+id/tvTelefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Telefono: 11XXXX-XXXX"
                         android:layout_marginTop="10dp"
-                        android:textSize="20sp"/>
+                        android:text="Telefono: "
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <!-- Email -->
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Heber hace el manual gato"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
                     <!-- Botones -->
                     <LinearLayout
+                        android:id="@+id/llBotones"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="30dp"
                         android:layout_marginBottom="20dp"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
                         <!-- Editar cliente -->
                         <Button
                             android:id="@+id/btnEditar"
                             android:layout_width="100dp"
                             android:layout_height="40dp"
-                            android:padding="0dp"
                             android:layout_marginHorizontal="20dp"
                             android:background="@drawable/bg_chip_blue"
-                            app:backgroundTint="#D9D9D9"
-                            android:textColor="@color/black"
+                            android:padding="0dp"
                             android:text="Editar"
-                            android:textSize="17sp"/>
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            app:backgroundTint="#D9D9D9" />
 
                         <!-- Eliminar cliente -->
                         <Button
+                            android:id="@+id/btnEliminar"
                             android:layout_width="100dp"
                             android:layout_height="40dp"
-                            android:padding="0dp"
                             android:layout_marginHorizontal="20dp"
                             android:background="@drawable/bg_chip_blue"
-                            app:backgroundTint="@color/red"
-                            android:textColor="@color/black"
+                            android:padding="0dp"
                             android:text="Eliminar"
-                            android:textSize="17sp"/>
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            app:backgroundTint="@color/red" />
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
-
 </RelativeLayout>

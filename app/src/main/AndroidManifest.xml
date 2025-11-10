@@ -9,14 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ClubDeportivo">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+
+<!--         Vista de prueba -->
+<!--        <activity-->
+<!--            android:name=".pruebasActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+<!--        <activity android:name=".MainActivity" android:exported="false"/>-->
+
+<!-- Vista posta -->
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity android:name=".ActividadesActivity" android:exported="false"/>
         <activity android:name=".IngresarActividadActivity" android:exported="false"/>
         <activity android:name=".EditarActividadActivity" android:exported="false"/>
