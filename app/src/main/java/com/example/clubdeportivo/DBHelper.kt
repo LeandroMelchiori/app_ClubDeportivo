@@ -13,13 +13,12 @@ import java.util.Locale
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
 
+    // ----------------------------------- Creacion DB -----------------------------------------
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.execSQL("PRAGMA foreign_keys=ON")
         db.setForeignKeyConstraintsEnabled(true)
     }
-
-    // ----------------------------------- Creacion DB -----------------------------------------
     // Crear tablas
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
@@ -161,8 +160,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             END;
             """.trimIndent())
 
-
-        // CARGA INICIAL
         db.beginTransaction()
         try {
             // ACTIVIDADES
@@ -205,6 +202,64 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 ('Julieta','Bianchi','37123456','2003-04-22','3416000008','julieta.bianchi@gmail.com','Salta 1750, Rosario','2025-03-08',1,1);
                 """.trimIndent()
             )
+
+            // --- SOCIOS (seed) ---
+            db.execSQL("""
+                INSERT OR IGNORE INTO socios
+                (idSocio, nombre, apellido, dni, fecha_nac, telefono, direccion, fecha_inscripcion, ficha_medica, email, activo, carnet) VALUES
+                (1,'Pablo','Álvarez','40111111','1993-02-15','3415557001','San Luis 101, Rosario',date('now','-4 months'),1,'p.alvarez@club.com',1,1),
+                (2,'Mariana','Cabral','40222222','1991-07-09','3415557002','Santiago 220, Rosario',date('now','-2 months'),1,'m.cabral@club.com',1,1),
+                (3,'Diego','Ortiz','40333333','1989-11-20','3415557003','Pellegrini 1500, Rosario',date('now','-6 months'),1,'d.ortiz@club.com',1,1),
+                (4,'Lucía','Funes','40444444','1995-03-03','3415557004','Riobamba 800, Rosario',date('now','-8 months'),1,'l.funes@club.com',1,1),
+                (6,'Carla','Vega','40666666','1992-12-12','3415557006','Mitre 200, Rosario',date('now','-3 months'),1,'c.vega@club.com',1,1),
+                (7,'Sofía','Ramos','40777777','1990-09-17','3415557007','Salta 900, Rosario',date('now','-10 months'),1,'s.ramos@club.com',1,1),
+                (8,'Hernán','Molina','40888888','1994-01-30','3415557008','España 1200, Rosario',date('now','-1 months'),1,'h.molina@club.com',1,1);
+                """.trimIndent())
+
+            // Socio 1: AL DÍA (última cuota paga hoy, vence el mes que viene)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (1, 30000, date('now','-2 months'), 'Efectivo', 1, date('now','-1 months')),
+                (1, 30000, date('now','-1 months'), 'Efectivo', 1, date('now')),
+                (1, 30000, date('now'),            'Efectivo', 1, date('now','+1 months'));
+                """.trimIndent())
+
+            // Socio 2: POR VENCER (faltan < 7 días)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (2, 30000, date('now','-25 days'), 'Transferencia', 1, date('now','+5 days'));
+                """.trimIndent())
+
+            // Socio 3: VENCIDO hace 10 días (DEUDOR)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (3, 30000, date('now','-40 days'), 'Tarjeta', 1, date('now','-10 days'));
+                """.trimIndent())
+
+            // Socio 4: VENCIDO hace 40 días (DEUDOR)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (4, 30000, date('now','-70 days'), 'Efectivo', 1, date('now','-40 days'));
+                """.trimIndent())
+
+            // Socio 6: AL DÍA con historial
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (6, 30000, date('now','-2 months'), 'Tarjeta', 1, date('now','-1 months')),
+                (6, 30000, date('now','-1 months'), 'Tarjeta', 1, date('now'));
+                """.trimIndent())
+
+            // Socio 7: Vencido hace 5 meses (DEUDOR crónico)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (7, 30000, date('now','-6 months'), 'Efectivo', 1, date('now','-5 months'));
+                """.trimIndent())
+
+            // Socio 8: VENCE HOY
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                (8, 30000, date('now','-30 days'), 'Transferencia', 1, date('now'));
+                """.trimIndent())
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -225,10 +280,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         onCreate(db)
     }
 
-    // ----------------------------------------------------------------------------------
 
-
-    // ----------------------------------------- READ -----------------------------------------
+    // ----------------------------------------- READ -------------------------------------------
 
     // Listados
     fun obtenerNoSocios(): List<NoSocioCard> {
@@ -529,8 +582,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         return lista
     }
 
+    // ----------------------------------------- CREATE -----------------------------------------
 
-    // // ----------------------------------------- CREATE -----------------------------------------
     fun hacerSocioDesdeNoSocio(
         dni: String,
         monto: Double,
@@ -663,6 +716,26 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         }
     }
 
+    fun registrarPagoCuota(
+        dni: String,
+        monto: Double,
+        formaPago: String,
+        ultimoPago: String,
+        fechaPago: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    ): Long {
+        val db = writableDatabase
+        val fechaVenc = LocalDate.parse(ultimoPago).plusMonths(1).toString()
+        val s = obtenerPersonaPorDni(dni)
+        val cv = ContentValues().apply {
+            put("idSocio", s!!.id)
+            put("monto", monto)
+            put("fechaPago", fechaPago)
+            put("formaPago", formaPago)
+            put("estadoDelPago", 1)
+            put("fechaVencimiento", fechaVenc)
+        }
+        return db.insert("cuotas", null, cv)
+    }
     fun registrarPagoActividadNoSocio(
         dni: String,
         horarioId: Int,
@@ -716,12 +789,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
                 }
                 db.update("actividad_profesor", cvAp, "id=?", arrayOf(apId.toString()))
             }
-
             db.setTransactionSuccessful()
             true
         } finally { db.endTransaction() }
     }
-
     fun eliminarPersonaPorDni(dni: String): Boolean {
         val db = this.writableDatabase
         db.beginTransaction()
@@ -751,12 +822,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
 
     // ----------------------------------------- Update -----------------------------------------
 
+    // Socios
     fun actualizarSocioPorId(
         idSocio: Int,
         nombre: String,
         apellido: String,
         dni: String,
-        fechaNac: String,         // formato que ya uses (p.ej. "YYYY-MM-DD")
+        fechaNac: String,
         telefono: String?,
         direccion: String?,
         email: String?,
@@ -771,6 +843,22 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
             putOrNull("email", email)
         }
         val rows = writableDatabase.update("socios", cv, "idSocio = ?", arrayOf(idSocio.toString()))
+        return rows > 0
+    }
+
+    // Horarios
+    fun actualizarHorarioPorId(
+        idDiaHorario: Int,
+        dia: Int,
+        horaInicio: Int,
+        horaFin: Int,
+    ): Boolean {
+        val cv = ContentValues().apply {
+            put("dia", dia)
+            put("hora_inicio", horaInicio)
+            put("hora_fin", horaFin)
+        }
+        val rows = writableDatabase.update("dias_horarios", cv, "id = ?", arrayOf(idDiaHorario.toString()))
         return rows > 0
     }
 
@@ -826,25 +914,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         return rows > 0
     }
 
-    // Utilidades
-    private fun Cursor.getStringOrNull(col: String): String? {
-        val idx = getColumnIndex(col)
-        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
-    }
-    private fun ContentValues.putOrNull(key: String, value: String?) {
-        if (value == null) putNull(key) else put(key, value)
-    }
-    private fun ContentValues.putBool01(key: String, value: Boolean?) {
-        if (value != null) put(key, if (value) 1 else 0)
-    }
-    private fun existeConDni(table: String, dni: String): Boolean =
-        readableDatabase.query(table, arrayOf("dni"), "dni = ?", arrayOf(dni), null, null, null)
-            .use { it.moveToFirst() }
-    private fun etiquetaDia(dia: Int) = when (dia) {
-        0 -> "Dom"; 1 -> "Lun"; 2 -> "Mar"; 3 -> "Mié"; 4 -> "Jue"; 5 -> "Vie"; else -> "Sáb"
-    }
-    private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
 
+    // ----------------------------------------- Utilidades -----------------------------------------
     // Modelos de datos
     data class NoSocioCard(
         val nombre: String,
@@ -886,7 +957,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val fecha_nac: String?,
         val fichaMedica: String?,
         val esSocio: Boolean,
-
         )
     data class ActividadCard(
         val idActividad: Int,
@@ -899,5 +969,23 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.
         val horaFin: Int,        // en minutos
         val etiquetaHorario: String // "Lun 08:00-09:00"
     )
-}
 
+    // Herramientas
+    private fun Cursor.getStringOrNull(col: String): String? {
+        val idx = getColumnIndex(col)
+        return if (idx >= 0 && !isNull(idx)) getString(idx) else null
+    }
+    private fun ContentValues.putOrNull(key: String, value: String?) {
+        if (value == null) putNull(key) else put(key, value)
+    }
+    private fun ContentValues.putBool01(key: String, value: Boolean?) {
+        if (value != null) put(key, if (value) 1 else 0)
+    }
+    private fun existeConDni(table: String, dni: String): Boolean =
+        readableDatabase.query(table, arrayOf("dni"), "dni = ?", arrayOf(dni), null, null, null)
+            .use { it.moveToFirst() }
+    private fun etiquetaDia(dia: Int) = when (dia) {
+        0 -> "Dom"; 1 -> "Lun"; 2 -> "Mar"; 3 -> "Mié"; 4 -> "Jue"; 5 -> "Vie"; else -> "Sáb"
+    }
+    private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
+}

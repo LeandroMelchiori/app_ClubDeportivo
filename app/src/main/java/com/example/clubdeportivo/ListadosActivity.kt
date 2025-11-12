@@ -109,7 +109,9 @@ class ListadosActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
+                    startActivity(Intent(this, PagosActivity::class.java)).apply {
+                        putExtra("usuario", usuario)
+                    } // o MainActivity
                     true
                 }
 

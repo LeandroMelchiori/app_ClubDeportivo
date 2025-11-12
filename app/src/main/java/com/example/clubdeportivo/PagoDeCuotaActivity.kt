@@ -14,6 +14,16 @@ import java.time.LocalDate
 
 class PagoDeCuotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val db = DBHelper(this)
+        val fechaHoy = LocalDate.now()
+
+        // Datos recuperados de la vista anterior
+        val noSocio = intent.getStringExtra("nombre") ?: "nombre"
+        val dni = intent.getStringExtra("dni") ?: "dni"
+        val ultimoPago = intent.getStringExtra("ultimoPago") ?: "ultimoPago"
+        val tipoOperacion = intent.getStringExtra("tipoOperacion") ?: "tipoOperacion"
+        val precio = intent.getStringExtra("precio") ?: "precio"
+        val esSocio = intent.getBooleanExtra("esSocio", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pago_de_cuota)
 
@@ -21,12 +31,6 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Datos recuperados de la vista anterior
-        val noSocio = intent.getStringExtra("nombre") ?: "nombre"
-        val dni = intent.getStringExtra("dni") ?: "dni"
-        val tipoOperacion = intent.getStringExtra("tipoOperacion") ?: "tipoOperacion"
-        val precio = intent.getStringExtra("precio") ?: "precio"
 
         // Inicializar vistas
         val tvNombre = findViewById<TextView>(R.id.tvNombre)
@@ -63,7 +67,35 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                 Toast.makeText(this, "Monto inválido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if (esSocio) {
+                // Si ultimo pago esta dentro del mes actual, debe indicar que el pago  del mes ya esta hecho
+                val fechaUltimoPago = LocalDate.parse(ultimoPago)
+                if (fechaUltimoPago.month == fechaHoy.month) {
+                    Toast.makeText(this, "El pago del mes actual ya fue realizado", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    // 💬 Diálogo de confirmación
+                    AlertDialog.Builder(this)
+                        .setTitle("Confirmar pago")
+                        .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\"?")
+                        .setPositiveButton("Sí") { _, _ ->
+                            try {
+                                val fechaHoy = LocalDate.now().toString()
+                                val db = DBHelper(this)
+                                db.registrarPagoCuota(dni, monto, formaPago, fechaHoy)
+                                Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
+                                finish()
 
+                            } catch (e: IllegalArgumentException) {
+                                Toast.makeText(this, e.message ?: "Error al realizar el pago", Toast.LENGTH_LONG).show()
+                            } catch (e: Exception) {
+                                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        .setNegativeButton("Cancelar", null)
+                        .show()
+                }
+            } else {
             // 💬 Diálogo de confirmación
             AlertDialog.Builder(this)
                 .setTitle("Confirmar pago")
@@ -73,9 +105,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                         val fechaHoy = LocalDate.now().toString()
                         val db = DBHelper(this)
                         val idSocio = db.hacerSocioDesdeNoSocio(dni, monto, formaPago, fechaHoy)
-
                         Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this, ListadosActivity::class.java))
                         finish()
 
                     } catch (e: IllegalArgumentException) {
@@ -86,6 +116,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
+            }
         }
 
         // Bottom

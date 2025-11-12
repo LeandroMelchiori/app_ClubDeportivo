@@ -9,8 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
-// NoSocioAdapter.kt (usá PascalCase para el nombre del archivo y clase)
 class NoSocioAdapter :
     ListAdapter<DBHelper.NoSocioCard, NoSocioAdapter.VH>(DIFF) {
 
@@ -21,6 +22,7 @@ class NoSocioAdapter :
         val tvUltimoPago: TextView = view.findViewById(R.id.tvUltimoPago)
         val btnAccion: Button = view.findViewById(R.id.btnAccion)
         val btnVerMas: Button = view.findViewById(R.id.btnVerMas)
+        val vEstado: View = view.findViewById(R.id.vEstado)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -33,8 +35,16 @@ class NoSocioAdapter :
         val ns = getItem(pos)
         h.tvNombre.text = "${ns.apellido}, ${ns.nombre}"
         h.tvDni.text = "#${ns.dni}"
-        h.tvEstado.text = "Inactivo"          // ajustá si tenés campo estado
-        h.tvUltimoPago.text = ns.ultimaPago ?: "Ultima actividad: No registra actividad"
+        if (
+            !ns.ultimaPago.isNullOrBlank()
+            && ChronoUnit.DAYS.between(LocalDate.parse(ns.ultimaPago), LocalDate.now()) < 30){
+            h.tvEstado.text = "Activo"
+            h.vEstado.setBackgroundResource(R.drawable.bg_pill_green)
+        } else{
+            h.tvEstado.text ="Inactivo"
+            h.vEstado.setBackgroundResource(R.drawable.bg_pill_red)
+        }
+        h.tvUltimoPago.text = if (ns.ultimaPago != null) "Ultima actividad: ${ns.ultimaPago}" else "No registra actividad"
 
         h.btnAccion.setOnClickListener {
             val c = h.itemView.context

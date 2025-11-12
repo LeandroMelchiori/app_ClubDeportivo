@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class SocioAdapter(
     private val onAccion: (DBHelper.SocioCard) -> Unit = {},
@@ -37,6 +39,7 @@ class SocioAdapter(
         val tvUltimoPago: TextView = view.findViewById(R.id.tvUltimoPago)
         val btnAccion: Button = view.findViewById(R.id.btnAccion)
         val btnVerMas: Button = view.findViewById(R.id.btnVerMas)
+        val vEstado: View = view.findViewById(R.id.vEstado)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -46,15 +49,30 @@ class SocioAdapter(
 
     override fun onBindViewHolder(h: VH, position: Int) {
         val item = getItem(position)
-        h.tvEstado.text = "Socio"
         h.tvNombre.text = "${item.nombre} ${item.apellido}"
+        if (ChronoUnit.DAYS.between(LocalDate.parse(item.ultimoPago), LocalDate.now()) < 45){
+            h.tvEstado.text = "Socio activo"
+            h.vEstado.setBackgroundResource(R.drawable.bg_pill_green)
+        } else{
+            h.tvEstado.text ="Socio inactivo"
+            h.vEstado.setBackgroundResource(R.drawable.bg_pill_red)
+        }
         h.tvUltimoPago.text = "Últ. pago: ${item.ultimoPago}"
 
         // textos de botones (si querés otros, cambialos)
-        h.btnAccion.text = "Acción"
+        h.btnAccion.text = "Pagar  cuota"
         h.btnVerMas.text = "Ver más"
 
-        h.btnAccion.setOnClickListener { onAccion(item) }
+        h.btnAccion.setOnClickListener { val c = h.itemView.context
+            c.startActivity(Intent(c, PagoDeCuotaActivity::class.java).apply {
+                putExtra("dni", item.dni)
+                putExtra("nombre", "${item.apellido}, ${item.nombre}")
+                putExtra("tipoOperacion", "Cuota mensual")
+                putExtra("ultimoPago", item.ultimoPago)
+                putExtra("precio", "30000")
+                putExtra("esSocio", true)
+            })
+        }
         h.btnVerMas.setOnClickListener { val c = h.itemView.context
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }
     }
