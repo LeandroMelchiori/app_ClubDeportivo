@@ -20,9 +20,17 @@ class ConfiguracionActivity : AppCompatActivity() {
 
         // Boton editar admin
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
+        btnEditar.isEnabled = false
         btnEditar.setOnClickListener {
             startActivity(Intent(this, EditarAdminActivity::class.java))
         }
+
+        // Boton nuevo admin
+        val btnNuevo = findViewById<MaterialButton>(R.id.btnNuevo)
+        btnNuevo.isEnabled = false
+//        btnNuevo.setOnClickListener {
+//            startActivity(Intent(this, NuevoAdminActivity::class.java))
+//        }
 
         // Boton cerrar sesion
         val btnSalir = findViewById<MaterialButton>(R.id.btnCerrarSesion)

@@ -42,8 +42,18 @@ class ActividadesActivity : AppCompatActivity() {
 
         adapter = ActividadCardAdapter(
             onEditar = { act ->
-                // TODO: navega a tu pantalla de edición con act.id
-                // startActivity(Intent(this, EditarActividadActivity::class.java).putExtra("id", act.id))
+                startActivity(
+                    Intent(this, EditarActividadActivity::class.java).apply {
+                        putExtra("dh_id",        act.idDiaHorario)
+                        putExtra("id_actividad", act.idActividad)
+                        putExtra("nombre_act",   act.nombre)
+                        putExtra("profesor",     act.profesor)
+                        putExtra("dia",          act.dia)
+                        putExtra("hora_inicio",  act.horaInicio)
+                        putExtra("hora_fin",     act.horaFin)
+                        putExtra("precio",       act.precio)
+                    }
+                )
             },
             onEliminar = { act ->
                 androidx.appcompat.app.AlertDialog.Builder(this)
