@@ -22,29 +22,40 @@ class EditarAdminActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, PagosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_activity -> {
-                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ActividadesActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_settings -> {
-                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_home -> {
-                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ConfiguracionActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ListadosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
+
+                R.id.nav_home -> {
+                    val intent = Intent(this, InicioActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
+                    true
+                }
+
 
                 else -> true
             }

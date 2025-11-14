@@ -27,13 +27,13 @@ class VerMasActivity : AppCompatActivity() {
         val db = DBHelper(this)
 
         // Recupera el nombre de usuario del intent y lo muestra
-        val admin = intent.getStringExtra("usuario") ?: "Usuario"
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
-        tvBienvenida.text = "Bienvenido, $admin"
+        tvBienvenida.text = "Bienvenido, $usuario"
 
         // Recupera dni del intent y busca a la persona en la BBDD
         val dniUsuario = intent.getStringExtra("dni") ?: "dni"
-        val usuario = db.obtenerPersonaPorDni(dniUsuario)
+        val cliente = db.obtenerPersonaPorDni(dniUsuario)
 
         //Inicializar vistas
         val tvNombreCompleto = findViewById<TextView>(R.id.tvNombreUsuario)
@@ -46,24 +46,24 @@ class VerMasActivity : AppCompatActivity() {
 
 
         // Reemplaza datos en las view
-        tvNombreCompleto.text = "${usuario?.nombre}, ${usuario?.apellido} "
-        tvDNI.text = "DNI: ${usuario!!.dni}"
-        tvTelefono.text = "Telefono: ${usuario?.telefono}"
-        tvDireccion.text = "Domicilio: ${usuario?.direccion}"
-        tvFechaNacimiento.text = "Fecha de nacimiento: ${usuario?.fecha_nac}"
-        tvEmail.text = "Email: ${usuario?.email}"
-        if (usuario?.esSocio == false) {
-            tvIdTipoSocio.text = "ID noSocio: ${usuario.id}"
+        tvNombreCompleto.text = "${cliente?.nombre}, ${cliente?.apellido} "
+        tvDNI.text = "DNI: ${cliente!!.dni}"
+        tvTelefono.text = "Telefono: ${cliente?.telefono}"
+        tvDireccion.text = "Domicilio: ${cliente?.direccion}"
+        tvFechaNacimiento.text = "Fecha de nacimiento: ${cliente?.fecha_nac}"
+        tvEmail.text = "Email: ${cliente?.email}"
+        if (cliente?.esSocio == false) {
+            tvIdTipoSocio.text = "ID noSocio: ${cliente.id}"
         } else {
-        tvIdTipoSocio.text = "ID socio: ${usuario?.id}"}
+        tvIdTipoSocio.text = "ID socio: ${cliente?.id}"}
 
         // Boton editar
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
         btnEditar.setOnClickListener {
             val intent = Intent(this, EditarUsuarioActivity::class.java)
-            intent.putExtra("id", usuario!!.id)
-            intent.putExtra("dni", usuario.dni)
-            intent.putExtra("esSocio", usuario.esSocio)
+            intent.putExtra("id", cliente!!.id)
+            intent.putExtra("dni", cliente.dni)
+            intent.putExtra("esSocio", cliente.esSocio)
             startActivity(intent)
         }
 
@@ -75,10 +75,10 @@ class VerMasActivity : AppCompatActivity() {
                 .setMessage("¿Seguro que querés eliminar a esta persona? Esta acción no se puede deshacer.")
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Eliminar") { _, _ ->
-                    val ok = db.eliminarPersonaPorDni(usuario!!.dni) // ← clave
+                    val ok = db.eliminarPersonaPorDni(cliente!!.dni) // ← clave
                     if (ok) {
                         Toast.makeText(this, "Eliminado correctamente", Toast.LENGTH_SHORT).show()
-                        val data = Intent().putExtra("dniEliminado", usuario.dni)
+                        val data = Intent().putExtra("dniEliminado", cliente.dni)
                         setResult(Activity.RESULT_OK, data)
                         finish()
                     } else {
@@ -94,27 +94,37 @@ class VerMasActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, PagosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_activity -> {
-                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ActividadesActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_settings -> {
-                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_home -> {
-                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ConfiguracionActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ListadosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.nav_home -> {
+                    val intent = Intent(this, InicioActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 

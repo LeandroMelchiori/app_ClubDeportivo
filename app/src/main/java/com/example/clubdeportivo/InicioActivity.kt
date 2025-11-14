@@ -24,7 +24,6 @@ class InicioActivity : AppCompatActivity() {
         val precio: Double
     )
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
@@ -46,34 +45,45 @@ class InicioActivity : AppCompatActivity() {
         // Boton nuevo usuario
         val btnUsuario = findViewById<MaterialButton>(R.id.btnUsuario)
         btnUsuario.setOnClickListener {
-            startActivity(Intent(this, NuevoUsuarioActivity::class.java))
+        val intent = Intent(this, NuevoUsuarioActivity::class.java)
+        intent.putExtra("usuario", usuario)
+        startActivity(intent)
         }
 
-        // Bottom
+
+
+            // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_home
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
-                    true
+    bottom.selectedItemId = R.id.nav_home
+    bottom.setOnItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.nav_pagos -> {
+                val intent = Intent(this, PagosActivity::class.java)
+                intent.putExtra("usuario", usuario)
+                startActivity(intent)
+                true
                 }
 
                 R.id.nav_activity -> {
-                    startActivity(Intent(this, ActividadesActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ActividadesActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_settings -> {
-                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ConfiguracionActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ListadosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
-
                 else -> true
             }
         }
