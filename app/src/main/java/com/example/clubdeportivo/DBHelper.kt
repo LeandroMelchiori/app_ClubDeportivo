@@ -1,17 +1,17 @@
 package com.example.clubdeportivo
 
-import android.content.ContentValues
-import android.content.Context
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-import androidx.core.database.getIntOrNull
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
+    import android.content.ContentValues
+    import android.content.Context
+    import android.database.Cursor
+    import android.database.sqlite.SQLiteDatabase
+    import android.database.sqlite.SQLiteOpenHelper
+    import androidx.core.database.getIntOrNull
+    import java.text.SimpleDateFormat
+    import java.time.LocalDate
+    import java.util.Date
+    import java.util.Locale
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
+    class DBHelper(context: Context) : SQLiteOpenHelper(context, "app_clubDeportivo.db", null, 1) {
 
     // ----------------------------------- Creacion DB -----------------------------------------
     override fun onConfigure(db: SQLiteDatabase) {

@@ -35,6 +35,10 @@ class ActividadesActivity : AppCompatActivity() {
         etBuscar     = findViewById(R.id.etBuscar)
         rv           = findViewById(R.id.contenedorActividades)
 
+        // Recupera el nombre de usuario del intent y lo muestra
+        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+        tvBienvenida.text = "Bienvenido, $usuario"
+
         // Agregar horario
         btnAgregar.setOnClickListener {
             startActivity(Intent(this, IngresarActividadActivity::class.java))}
@@ -52,6 +56,7 @@ class ActividadesActivity : AppCompatActivity() {
                         putExtra("hora_inicio",  act.horaInicio)
                         putExtra("hora_fin",     act.horaFin)
                         putExtra("precio",       act.precio)
+                        putExtra("usuario", usuario)
                     }
                 )
             },
@@ -78,10 +83,6 @@ class ActividadesActivity : AppCompatActivity() {
         rv.setHasFixedSize(true)
         rv.adapter = adapter
 
-        // Recupera el nombre de usuario del intent y lo muestra
-        val usuario = intent.getStringExtra("usuario") ?: "Usuario"
-        tvBienvenida.text = "Bienvenido, $usuario"
-
         // Carga inicial
         recargarLista(null)
 
@@ -104,29 +105,36 @@ class ActividadesActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    startActivity(Intent(this, PagosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, PagosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_settings -> {
-                    startActivity(Intent(this, ConfiguracionActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                R.id.nav_home -> {
-                    startActivity(Intent(this, InicioActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ConfiguracionActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
                 R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
+                    val intent = Intent(this, ListadosActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
                     true
                 }
 
+                R.id.nav_home -> {
+                    val intent = Intent(this, InicioActivity::class.java)
+                    intent.putExtra("usuario", usuario)
+                    startActivity(intent)
+                    true
+                }
                 else -> true
             }
         }
-        }
+    }
     private fun recargarLista(filtro: String?) {
         val lista = if (filtro.isNullOrBlank())
             db.obtenerActividadesPorHorario()
