@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
         android:background="@color/card_dark"
-        android:fillViewport="true"
-        android:paddingBottom="16dp">
+        android:fillViewport="true">
 
         <!-- Contenedor gral -->
         <LinearLayout
@@ -71,8 +70,6 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_gradient_blue"
                 android:orientation="vertical">
-
-
             </LinearLayout>
 
             <!-- Botones de listados -->
@@ -123,9 +120,21 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
                 android:queryHint="Buscar por nombre"
-                android:layout_marginBottom="15dp"
                 android:background="@drawable/bg_input_gray"
                 android:text="Buscar" />
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/tvNombreLista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Nombre Lista"
+                android:paddingStart="20dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <!-- Listados -->
             <FrameLayout
@@ -133,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="80dp">
+                android:layout_marginBottom="5dp">
 
                 <!-- No socios -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -141,7 +150,7 @@
                     android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
+                    android:padding="5dp"
                     tools:listitem="@layout/item_nosocio"/>
 
                 <!-- Socios -->

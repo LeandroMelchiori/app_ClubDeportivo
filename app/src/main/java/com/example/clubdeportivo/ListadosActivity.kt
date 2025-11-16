@@ -22,6 +22,7 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var rvNoSocios: RecyclerView
     private lateinit var rvSocios: RecyclerView
     private lateinit var rvVenc: RecyclerView
+    private lateinit var tvNombreLista: TextView
     private lateinit var noSocioAdapter: NoSocioAdapter
     private lateinit var socioAdapter: SocioAdapter
     private lateinit var vencimientoAdapter: VencimientoAdapter
@@ -45,6 +46,7 @@ class ListadosActivity : AppCompatActivity() {
         rvNoSocios = findViewById(R.id.rvNoSocios)
         rvSocios   = findViewById(R.id.rvSocios)
         rvVenc     = findViewById(R.id.rvVencimientos)
+        tvNombreLista = findViewById(R.id.tvNombreLista)
 
         // Fecha actual
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
@@ -81,9 +83,18 @@ class ListadosActivity : AppCompatActivity() {
         val botonVencimiento: Button = findViewById(R.id.btnListVencimientos)
         val botonSocios: Button = findViewById(R.id.btnListSocios)
         val botonNoSocios: Button = findViewById(R.id.btnListNoSocios)
-        botonVencimiento.setOnClickListener {mostrar(rvVenc)}
-        botonSocios.setOnClickListener { mostrar(rvSocios)}
-        botonNoSocios.setOnClickListener { mostrar(rvNoSocios) }
+        botonVencimiento.setOnClickListener {
+            mostrar(rvVenc)
+            tvNombreLista.text = "Listado Vencimientos"
+        }
+        botonSocios.setOnClickListener {
+            mostrar(rvSocios)
+            tvNombreLista.text = "Listado Socios"
+        }
+        botonNoSocios.setOnClickListener {
+            mostrar(rvNoSocios)
+            tvNombreLista.text = "Listado No Socios"
+        }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)

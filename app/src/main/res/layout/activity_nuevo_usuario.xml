@@ -18,7 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
             <!-- Encabezado (igual al de las otras pantallas) -->
             <LinearLayout
@@ -126,7 +128,6 @@
                         android:background="@drawable/bg_pill_light"
                         android:hint="Choque"
                         android:importantForAutofill="no"
-                        android:paddingLeft="12dp"
                         android:paddingRight="12dp" />
 
                     <!-- Campo: Día -->

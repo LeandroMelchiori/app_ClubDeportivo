@@ -3,227 +3,209 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
-    app:cardBackgroundColor="@color/card_dark">
+    android:background="@color/bg_dark">
 
-    <!-- Contenido con scroll (el paddingBottom evita que lo tape el BottomNav) -->
+    <!-- Contenido con scroll -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNav"
-        android:fillViewport="true"
-        android:paddingBottom="0dp">
+        android:background="@color/card_dark"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/card_dark"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="40dp"
+            android:paddingRight="20dp">
 
-            <!-- Contenedor centrado -->
+            <!-- Tarjeta oscura con elevación -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!-- Tarjeta oscura con elevación -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardPrincipal"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Encabezado: Bienvenida + perfil -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="0dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/card_dark"
-                    app:cardUseCompatPadding="false"
-                    app:contentPadding="16dp"
-                    app:strokeColor="@color/border_dim"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!-- Texto bienvenida -->
+                    <TextView
+                        android:id="@+id/tvBienvenida"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bienvenido"
+                        android:textColor="@color/blue_accent"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivPerfil"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="Icono perfil"
+                        android:src="@drawable/ic_person"
+                        app:tint="@color/text_primary" />
+                </LinearLayout>
+
+                <!-- Fecha -->
+                <TextView
+                    android:id="@+id/tvFecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Jueves, 28 de Septiembre"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- Sección -->
+                <TextView
+                    android:id="@+id/tvTitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="Resumen mensual"
+                    android:textColor="@color/text_primary"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+
+                <!-- Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardMes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@android:color/transparent"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:background="@drawable/bg_gradient_blue"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <!-- Encabezado: Bienvenida + perfil -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
 
-                            <!-- Texto bienvenida -->
                             <TextView
-                                android:id="@+id/tvBienvenida"
-                                android:layout_width="0dp"
+                                android:id="@+id/btnMesAnterior"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Bienvenido"
-                                android:textColor="@color/blue_accent"
-                                android:textSize="32sp"
-                                android:textStyle="bold" />
+                                android:text="-"
+                                android:textSize="24sp"
+                                android:textColor="@color/black"
+                                android:padding="8dp" />
 
-                            <ImageView
-                                android:id="@+id/ivPerfil"
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
-                                android:contentDescription="Icono perfil"
-                                android:src="@drawable/ic_person"
-                                app:tint="@color/text_primary" />
+                            <TextView
+                                android:id="@+id/tvMes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Enero"
+                                android:textColor="@color/black"
+                                android:textSize="30sp"
+                                android:textStyle="bold"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp" />
+
+                            <TextView
+                                android:id="@+id/btnMesSiguiente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+"
+                                android:textSize="24sp"
+                                android:textColor="@color/black"
+                                android:padding="8dp" />
                         </LinearLayout>
 
-                        <!-- Fecha -->
                         <TextView
-                            android:id="@+id/tvFecha"
+                            android:id="@+id/tvNoSocios"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Jueves, 28 de Septiembre"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="No Socios : 0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-                        <!-- Sección -->
                         <TextView
-                            android:id="@+id/tvTitulo"
+                            android:id="@+id/tvSocios"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="30dp"
-                            android:text="Resumen mensual"
-                            android:textColor="@color/text_primary"
-                            android:textSize="26sp"
-                            android:textStyle="bold" />
+                            android:layout_marginBottom="8dp"
+                            android:text="Socios: 0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-
-                        <!-- Card -->
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/cardMes"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tvTotalClientes"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            app:cardCornerRadius="16dp"
-                            app:cardElevation="2dp"
-                            app:strokeColor="@android:color/transparent"
-                            app:strokeWidth="0dp">
+                            android:layout_marginBottom="8dp"
+                            android:text="Total clientes: 0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_gradient_blue"
-                                android:orientation="vertical"
-                                android:padding="16dp">
+                        <TextView
+                            android:id="@+id/tvMontoCuotas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="Monto cuotas: $0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:orientation="horizontal"
-                                    android:layout_marginBottom="8dp">
+                        <TextView
+                            android:id="@+id/tvMontoActividades"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="Monto Actividades: $0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-                                    <TextView
-                                        android:id="@+id/btnMesAnterior"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="-"
-                                        android:textSize="24sp"
-                                        android:textColor="@color/black"
-                                        android:padding="8dp" />
+                        <TextView
+                            android:id="@+id/tvIngresosTotales"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:text="Ingresos Totales: $0"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
 
-                                    <TextView
-                                        android:id="@+id/tvMes"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Enero"
-                                        android:textColor="@color/black"
-                                        android:textSize="30sp"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="16dp"
-                                        android:layout_marginEnd="16dp" />
-
-                                    <TextView
-                                        android:id="@+id/btnMesSiguiente"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="+"
-                                        android:textSize="24sp"
-                                        android:textColor="@color/black"
-                                        android:padding="8dp" />
-                                </LinearLayout>
-
-                                <TextView
-                                    android:id="@+id/tvNoSocios"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:layout_marginBottom="8dp"
-                                    android:text="No Socios : 0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvSocios"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="8dp"
-                                    android:text="Socios: 0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvTotalClientes"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="8dp"
-                                    android:text="Total clientes: 0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvMontoCuotas"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="8dp"
-                                    android:text="Monto cuotas: $0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvMontoActividades"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="8dp"
-                                    android:text="Monto Actividades: $0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/tvIngresosTotales"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="16dp"
-                                    android:text="Ingresos Totales: $0"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
-
-                                <!-- Botón píldora centrado -->
-                                <TextView
-                                    android:id="@+id/btnDescargar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="14dp"
-                                    android:background="@drawable/bg_pill_light"
-                                    android:gravity="center"
-                                    android:paddingLeft="100dp"
-                                    android:paddingTop="10dp"
-                                    android:paddingRight="100dp"
-                                    android:paddingBottom="10dp"
-                                    android:text="Descargar"
-                                    android:textColor="@color/bg_dark"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </com.google.android.material.card.MaterialCardView>
+                        <!-- Botón píldora centrado -->
+                        <TextView
+                            android:id="@+id/btnDescargar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/bg_pill_light"
+                            android:gravity="center"
+                            android:paddingLeft="100dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="100dp"
+                            android:paddingBottom="10dp"
+                            android:text="Descargar"
+                            android:textColor="@color/bg_dark"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

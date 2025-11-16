@@ -253,7 +253,6 @@ package com.example.clubdeportivo
                 INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (7, 30000, date('now','-6 months'), 'Efectivo', 1, date('now','-5 months'));
                 """.trimIndent())
-
             // Socio 8: VENCE HOY
             db.execSQL("""
                 INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
@@ -305,7 +304,6 @@ package com.example.clubdeportivo
         c.close(); db.close()
         return lista
     }
-        
     fun obtenerSocios(): List<SocioCard> {
         val lista = mutableListOf<SocioCard>()
         val db = readableDatabase
