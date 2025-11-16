@@ -68,7 +68,16 @@ class VencimientoAdapter(
         h.btnVerMas.text = "Ver más"
 
         // Botones
-        h.btnAccion.setOnClickListener { onAccion(item) }
+        h.btnAccion.setOnClickListener { val c = h.itemView.context
+            c.startActivity(Intent(c, PagoDeCuotaActivity::class.java).apply {
+                putExtra("dni", item.dni)
+                putExtra("nombre", "${item.apellido}, ${item.nombre}")
+                putExtra("tipoOperacion", "Cuota mensual - 10% Recargo")
+                putExtra("ultimoPago", item.ultimoPago)
+                putExtra("precio", "40000")
+                putExtra("esSocio", true)
+            })
+        }
         h.btnVerMas.setOnClickListener { val c = h.itemView.context
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }
     }

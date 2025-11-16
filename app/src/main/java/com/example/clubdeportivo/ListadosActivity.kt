@@ -1,6 +1,7 @@
 package com.example.clubdeportivo
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -90,16 +91,33 @@ class ListadosActivity : AppCompatActivity() {
         val botonVencimiento: Button = findViewById(R.id.btnListVencimientos)
         val botonSocios: Button = findViewById(R.id.btnListSocios)
         val botonNoSocios: Button = findViewById(R.id.btnListNoSocios)
+
+        // Lista por defecto
+        botonNoSocios.setTextColor(Color.WHITE);
+        botonSocios.setTextColor(Color.BLACK);
+        botonVencimiento.setTextColor(Color.BLACK)
+        tvNombreLista.text = "Listado No Socios"
+
+        // onClick
         botonVencimiento.setOnClickListener {
             mostrar(rvVenc)
+            botonNoSocios.setTextColor(Color.BLACK);
+            botonSocios.setTextColor(Color.BLACK);
+            botonVencimiento.setTextColor(Color.WHITE)
             tvNombreLista.text = "Listado Vencimientos"
         }
         botonSocios.setOnClickListener {
             mostrar(rvSocios)
+            botonNoSocios.setTextColor(Color.BLACK);
+            botonSocios.setTextColor(Color.WHITE);
+            botonVencimiento.setTextColor(Color.BLACK)
             tvNombreLista.text = "Listado Socios"
         }
         botonNoSocios.setOnClickListener {
             mostrar(rvNoSocios)
+            botonNoSocios.setTextColor(Color.WHITE);
+            botonSocios.setTextColor(Color.BLACK);
+            botonVencimiento.setTextColor(Color.BLACK)
             tvNombreLista.text = "Listado No Socios"
         }
 
