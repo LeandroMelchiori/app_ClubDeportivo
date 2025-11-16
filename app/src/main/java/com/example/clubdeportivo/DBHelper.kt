@@ -159,9 +159,10 @@ package com.example.clubdeportivo
             END;
             """.trimIndent())
 
+        // ----------------------------------- Carga inicial DB -----------------------------------------
         db.beginTransaction()
         try {
-            // ACTIVIDADES
+            // --------- ACTIVIDADES ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO actividades (nombre, precio) VALUES
                 ('Fútbol', 8000.00),
@@ -174,7 +175,7 @@ package com.example.clubdeportivo
                 ('Natación Adultos', 9000.00);
                 """.trimIndent())
 
-            // PROFESORES
+            // --------- PROFESORES ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO profesores
                 (dni, nombre, apellido, fecha_nac, telefono, direccion, fecha_inscripcion, ficha_medica, email, activo, titulo) VALUES
@@ -187,7 +188,7 @@ package com.example.clubdeportivo
                 """.trimIndent()
             )
 
-            // NO_SOCIOS
+            // --------- NO_SOCIOS ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO no_socios
                 (nombre, apellido, dni, fecha_nac, telefono, email, direccion, fecha_inscripcion, ficha_medica, activo) VALUES
@@ -202,7 +203,7 @@ package com.example.clubdeportivo
                 """.trimIndent()
             )
 
-            // --- SOCIOS (seed) ---
+            //--------- SOCIOS ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO socios
                 (idSocio, nombre, apellido, dni, fecha_nac, telefono, direccion, fecha_inscripcion, ficha_medica, email, activo, carnet) VALUES
@@ -214,6 +215,8 @@ package com.example.clubdeportivo
                 (7,'Sofía','Ramos','40777777','1990-09-17','3415557007','Salta 900, Rosario',date('now','-10 months'),1,'s.ramos@club.com',1,1),
                 (8,'Hernán','Molina','40888888','1994-01-30','3415557008','España 1200, Rosario',date('now','-1 months'),1,'h.molina@club.com',1,1);
                 """.trimIndent())
+
+            // --------- CUOTAS ---------
 
             // Socio 1: AL DÍA (última cuota paga hoy, vence el mes que viene)
             db.execSQL("""
@@ -258,6 +261,126 @@ package com.example.clubdeportivo
                 INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (8, 30000, date('now','-30 days'), 'Transferencia', 1, date('now'));
                 """.trimIndent())
+
+            // --------- Actividad_Profesor ---------
+            db.execSQL("""
+                INSERT OR IGNORE INTO actividad_profesor (actividad_id, profesor_dni, activo) VALUES
+                (1, '27999888', 1),  -- Fútbol - Diego Sosa
+                (2, '20888999', 1),  -- Básquet - Sofía Almada
+                (3, '20888999', 1),  -- Vóley  - Sofía Almada
+                (4, '22333444', 1),  -- Yoga   - María Giménez
+                (5, '23111222', 1),  -- CrossFit - Agustín Rossi
+                (6, '20123456', 1),  -- Funcional - Juan Pérez
+                (7, '20123456', 1),  -- GAP - Juan Pérez
+                (8, '25444777', 1);  -- Natación Adultos - Lucía Benítez
+                """.trimIndent())
+
+            // --------- Horarios ---------
+
+            // Lunes (1) – Fútbol y CrossFit
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 1, 1080, 1140   -- 18:00–19:00
+                FROM actividad_profesor
+                WHERE actividad_id = 1 AND profesor_dni = '27999888';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 1, 1140, 1200   -- 19:00–20:00
+                FROM actividad_profesor
+                WHERE actividad_id = 5 AND profesor_dni = '23111222';
+                """.trimIndent())
+
+            // Martes (2) – Básquet y Vóley
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 2, 1080, 1170   -- 18:00–19:30
+                FROM actividad_profesor
+                WHERE actividad_id = 2 AND profesor_dni = '20888999';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 2, 1170, 1260   -- 19:30–21:00
+                FROM actividad_profesor
+                WHERE actividad_id = 3 AND profesor_dni = '20888999';
+                """.trimIndent())
+
+            // Miércoles (3) – Yoga mañana, Funcional tarde
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 3, 540, 600     -- 09:00–10:00
+                FROM actividad_profesor
+                WHERE actividad_id = 4 AND profesor_dni = '22333444';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 3, 1080, 1140   -- 18:00–19:00
+                FROM actividad_profesor
+                WHERE actividad_id = 6 AND profesor_dni = '20123456';
+                """.trimIndent())
+
+            // Jueves (4) – GAP y Natación
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 4, 1020, 1080   -- 17:00–18:00
+                FROM actividad_profesor
+                WHERE actividad_id = 7 AND profesor_dni = '20123456';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 4, 1080, 1140   -- 18:00–19:00
+                FROM actividad_profesor
+                WHERE actividad_id = 8 AND profesor_dni = '25444777';
+                """.trimIndent())
+
+            // Viernes (5) – Fútbol y CrossFit
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 5, 1080, 1170   -- 18:00–19:30
+                FROM actividad_profesor
+                WHERE actividad_id = 1 AND profesor_dni = '27999888';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 5, 1170, 1230   -- 19:30–20:30
+                FROM actividad_profesor
+                WHERE actividad_id = 5 AND profesor_dni = '23111222';
+                """.trimIndent())
+
+            // Sábado (6) – Natación mañana, Yoga tarde
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 6, 600, 660     -- 10:00–11:00
+                FROM actividad_profesor
+                WHERE actividad_id = 8 AND profesor_dni = '25444777';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 6, 1080, 1140   -- 18:00–19:00
+                FROM actividad_profesor
+                WHERE actividad_id = 4 AND profesor_dni = '22333444';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 0, 600, 660     -- 10:00–11:00
+                FROM actividad_profesor
+                WHERE actividad_id = 6 AND profesor_dni = '20123456';
+                """.trimIndent())
+
+            db.execSQL("""
+                INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
+                SELECT id, 0, 1080, 1140   -- 18:00–19:00
+                FROM actividad_profesor
+                WHERE actividad_id = 3 AND profesor_dni = '20888999';
+                """.trimIndent())
+
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()

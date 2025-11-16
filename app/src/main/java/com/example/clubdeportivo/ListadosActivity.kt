@@ -13,8 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class ListadosActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
@@ -23,6 +26,7 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var rvSocios: RecyclerView
     private lateinit var rvVenc: RecyclerView
     private lateinit var tvNombreLista: TextView
+    private lateinit var tvFecha: TextView
     private lateinit var noSocioAdapter: NoSocioAdapter
     private lateinit var socioAdapter: SocioAdapter
     private lateinit var vencimientoAdapter: VencimientoAdapter
@@ -47,6 +51,8 @@ class ListadosActivity : AppCompatActivity() {
         rvSocios   = findViewById(R.id.rvSocios)
         rvVenc     = findViewById(R.id.rvVencimientos)
         tvNombreLista = findViewById(R.id.tvNombreLista)
+        tvFecha = findViewById(R.id.tvFecha)
+
 
         // Fecha actual
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
@@ -55,6 +61,11 @@ class ListadosActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Fecha encabezado
+        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
+        val fechaHoy = formato.format(Date())
+        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
 
         rvNoSocios.layoutManager = LinearLayoutManager(this)

@@ -19,7 +19,7 @@
             android:background="@color/card_dark"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingTop="40dp"
+            android:paddingTop="50dp"
             android:paddingRight="20dp">
 
             <!-- Tarjeta oscura con elevación -->

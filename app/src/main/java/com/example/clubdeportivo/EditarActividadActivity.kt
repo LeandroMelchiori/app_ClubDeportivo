@@ -10,7 +10,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 
 class EditarActividadActivity : AppCompatActivity() {
     private lateinit var spActividad: Spinner
@@ -56,6 +59,12 @@ class EditarActividadActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Fecha encabezado
+        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
+        val fechaHoy = formato.format(Date())
+        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
         // Actividad/Profesor fijos
         spActividad.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf(nombreAct ?: ""))

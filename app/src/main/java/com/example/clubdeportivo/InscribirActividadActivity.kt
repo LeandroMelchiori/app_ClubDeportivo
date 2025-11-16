@@ -12,7 +12,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 
 class InscribirActividadActivity : AppCompatActivity() {
 
@@ -59,6 +62,12 @@ class InscribirActividadActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Fecha encabezado
+        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
+        val fechaHoy = formato.format(Date())
+        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
         // Valor int dia de la convertido a texto
         val dias = arrayOf("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado")

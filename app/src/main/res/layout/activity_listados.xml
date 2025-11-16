@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingTop="40dp"
+            android:paddingTop="50dp"
             android:paddingRight="20dp">
 
             <!-- Encabezado -->
@@ -159,7 +159,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
+                    android:padding="5dp"
                     tools:listitem="@layout/item_nosocio"/>
 
                 <!-- Vencimientos -->
@@ -168,7 +168,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
+                    android:padding="5dp"
                     tools:listitem="@layout/item_nosocio"/>
 
             </FrameLayout>

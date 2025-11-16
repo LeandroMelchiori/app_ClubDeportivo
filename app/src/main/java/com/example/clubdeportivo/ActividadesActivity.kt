@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class ActividadesActivity : AppCompatActivity() {
@@ -38,6 +41,12 @@ class ActividadesActivity : AppCompatActivity() {
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Fecha encabezado
+        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
+        val fechaHoy = formato.format(Date())
+        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
         // Agregar horario
         btnAgregar.setOnClickListener {

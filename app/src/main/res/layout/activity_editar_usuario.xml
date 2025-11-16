@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingTop="40dp"
+            android:paddingTop="50dp"
             android:paddingRight="20dp">
 
             <!-- Encabezado (igual al de las otras pantallas) -->
