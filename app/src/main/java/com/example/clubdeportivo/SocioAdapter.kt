@@ -76,4 +76,5 @@ class SocioAdapter(
         h.btnVerMas.setOnClickListener { val c = h.itemView.context
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }
     }
+
 }
