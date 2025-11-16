@@ -21,6 +21,7 @@ package com.example.clubdeportivo
     }
     // Crear tablas
     override fun onCreate(db: SQLiteDatabase) {
+        // Create TABLES
         db.execSQL("""
             CREATE TABLE actividades (
               id_actividad INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +29,6 @@ package com.example.clubdeportivo
               precio NUMERIC NOT NULL
             );
         """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE no_socios (
                 idNoSocio INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,12 +44,10 @@ package com.example.clubdeportivo
                 fecha_baja TEXT,
                 fecha_inscripcion TEXT NOT NULL DEFAULT (date('now')),
                 ficha_medica     INTEGER NOT NULL DEFAULT 1,     -- ← default 1
-                activo           INTEGER NOT NULL DEFAULT 1     -- ← default 1
+                suspendido INTEGER NOT NULL DEFAULT 0
                 );
             """.trimIndent())
-
-        db.execSQL(
-            """
+        db.execSQL("""
             CREATE TABLE socios (
                 idSocio INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
@@ -62,10 +60,10 @@ package com.example.clubdeportivo
                 ficha_medica INTEGER NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 activo INTEGER NOT NULL,
-                carnet INTEGER NOT NULL
+                carnet INTEGER NOT NULL,
+                suspendido INTEGER NOT NULL DEFAULT 0
                 );
             """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE profesores (
               dni TEXT PRIMARY KEY,
@@ -81,7 +79,6 @@ package com.example.clubdeportivo
               titulo TEXT
             );
             """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE cuotas (
               idCuota INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,7 +91,6 @@ package com.example.clubdeportivo
               FOREIGN KEY (idSocio) REFERENCES socios(idSocio)
             );
             """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE pagos_actividad (
               id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,7 +103,6 @@ package com.example.clubdeportivo
               FOREIGN KEY (id_actividad) REFERENCES dias_horarios(id)
             );
             """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE IF NOT EXISTS actividad_profesor (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -120,7 +115,6 @@ package com.example.clubdeportivo
               FOREIGN KEY (actividad_id) REFERENCES actividades(id_actividad) ON DELETE CASCADE,
               FOREIGN KEY (profesor_dni) REFERENCES profesores(dni) ON DELETE CASCADE);
               """.trimIndent())
-
         db.execSQL("""
             CREATE TABLE IF NOT EXISTS dias_horarios (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -134,23 +128,19 @@ package com.example.clubdeportivo
               FOREIGN KEY(actividad_profesor_id) REFERENCES actividad_profesor(id) ON DELETE CASCADE,
               UNIQUE(actividad_profesor_id, dia, hora_inicio, hora_fin));
             """.trimIndent())
-
         db.execSQL("""
             CREATE UNIQUE INDEX IF NOT EXISTS ux_dh_unico_activo
             ON dias_horarios(actividad_profesor_id, dia, hora_inicio, hora_fin)
             WHERE activo = 1;
             """.trimIndent())
-
         db.execSQL("""
             CREATE INDEX IF NOT EXISTS idx_ap_act_prof
             ON actividad_profesor(actividad_id, profesor_dni);
             """.trimIndent())
-
         db.execSQL("""
             CREATE INDEX IF NOT EXISTS idx_dh_apid
             ON dias_horarios(actividad_profesor_id);
             """.trimIndent())
-
         db.execSQL("""
             CREATE TRIGGER IF NOT EXISTS tr_ap_autoclean
             AFTER DELETE ON dias_horarios
@@ -191,7 +181,6 @@ package com.example.clubdeportivo
                 ('20888999','Sofía','Almada','1991-12-01','3415556666','Córdoba 1500, Rosario','2025-02-01',1,'sofia.almada@club.com',1,'Prof. Vóley');
                 """.trimIndent()
             )
-
             // --------- NO_SOCIOS ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO no_socios
@@ -206,7 +195,6 @@ package com.example.clubdeportivo
                 ('Julieta','Bianchi','37123456','2003-04-22','3416000008','julieta.bianchi@gmail.com','Salta 1750, Rosario','2025-03-08',1,1);
                 """.trimIndent()
             )
-
             //--------- SOCIOS ---------
             db.execSQL("""
                 INSERT OR IGNORE INTO socios
@@ -415,6 +403,7 @@ package com.example.clubdeportivo
         SELECT n.nombre, n.apellido, n.dni, MAX(p.fecha_pago) AS ultima_pago
         FROM no_socios n
         LEFT JOIN pagos_actividad p ON p.dni_nosocio = n.dni
+        WHERE n.suspendido = 0
         GROUP BY n.dni, n.nombre, n.apellido
         ORDER BY n.apellido, n.nombre
     """.trimIndent()
@@ -438,6 +427,7 @@ package com.example.clubdeportivo
         SELECT s.nombre, s.apellido, s.dni, MAX(c.fechaPago) AS ultimo_pago
         FROM socios s
         LEFT JOIN cuotas c ON c.idSocio = s.idSocio
+        WHERE s.suspendido = 0
         GROUP BY s.idSocio, s.nombre, s.apellido, s.dni
         ORDER BY s.apellido, s.nombre
     """.trimIndent()
@@ -476,6 +466,7 @@ package com.example.clubdeportivo
              AND ult.maxVenc = c.fechaVencimiento
         -- Vence hoy o ya venció
         WHERE c.fechaVencimiento <= ?
+            AND s.suspendido = 0
         ORDER BY s.apellido, s.nombre
     """.trimIndent()
 
@@ -582,7 +573,7 @@ package com.example.clubdeportivo
         db.query(
             "socios",
             null,
-            "dni = ?",
+            "dni = ? AND suspendido = 0",
             arrayOf(dni),
             null, null, null
         ).use { c ->
@@ -606,7 +597,7 @@ package com.example.clubdeportivo
         db.query(
             "no_socios",
             null,
-            "dni = ?",
+            "dni = ? AND suspendido = 0",
             arrayOf(dni),
             null, null, null
         ).use { c ->
@@ -635,7 +626,7 @@ package com.example.clubdeportivo
         val cursor = db.query(
             "no_socios",
             null,
-            "dni = ?",
+            "dni = ? AND suspendido = 0",
             arrayOf(dni),
             null, null, null
         )
@@ -819,8 +810,12 @@ package com.example.clubdeportivo
             }
             db.insertOrThrow("cuotas", null, cvCuota)
 
-            // 4) Eliminar del padrón de no socios
-            db.delete("no_socios", "dni = ?", arrayOf(dni))
+            // 4) Borrado logico del padrón de no socios para evitar conflicto con tabla de pagos
+            // !!!!!!! Buscar otra solución !!!!!!
+            val cv = ContentValues().apply {
+                put("suspendido", 1)
+            }
+            db.update("no_socios", cv, "dni = ?", arrayOf(dni))
 
             db.setTransactionSuccessful()
             return idSocio
@@ -910,7 +905,6 @@ package com.example.clubdeportivo
             db.endTransaction()
         }
     }
-
     fun registrarPagoCuota(
         dni: String,
         monto: Double,
@@ -950,6 +944,8 @@ package com.example.clubdeportivo
     }
 
     // ----------------------------------------- Delete -----------------------------------------
+    // 4) Borrado logico del padrón para evitar conflicto con tabla de pagos
+    // !!!!!!! Buscar otra solución !!!!!!
     fun darDeBajaHorario(dhId: Int, motivo: String? = null): Boolean {
         val db = writableDatabase
         db.beginTransaction()
@@ -998,17 +994,16 @@ package com.example.clubdeportivo
                 if (c.moveToFirst()) idSocio = c.getLong(0)
             }
 
+            val cv = ContentValues().apply {
+                put("suspendido", 1)
+            }
+
             if (idSocio != null) {
-                // Si es socio, primero borro dependencias (cuotas) y luego al socio
-                db.delete("cuotas", "idSocio = ?", arrayOf(idSocio.toString()))
-                val rows = db.delete("socios", "idSocio = ?", arrayOf(idSocio.toString()))
+                val rows = db.update("socios", cv,"idSocio = ?", arrayOf(idSocio.toString()))
                 db.setTransactionSuccessful()
                 return rows > 0
             } else {
-                // Verifico primero si existen pagos de actividades, si es así, borro primero los pagos y luego elimino al no socio
-
-                db.delete("pagos_actividad", "dni_nosocio = ?", arrayOf(dni))
-                val rows = db.delete("no_socios", "dni = ?", arrayOf(dni))
+                val rows = db.update("no_socios", cv,"dni = ?", arrayOf(dni))
                 db.setTransactionSuccessful()
                 return rows > 0
             }
