@@ -12,13 +12,15 @@
         android:layout_above="@id/bottomNav"
         android:background="@color/card_dark"
         android:fillViewport="true"
-        android:paddingTop="20dp">
+        android:paddingLeft="20dp"
+        android:paddingTop="50dp"
+        android:paddingRight="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:background="@color/card_dark">
 
             <!-- Encabezado (igual al de las otras pantallas) -->
             <LinearLayout
@@ -48,6 +50,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"

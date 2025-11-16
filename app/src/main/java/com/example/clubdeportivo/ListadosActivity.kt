@@ -13,8 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class ListadosActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
@@ -22,6 +25,8 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var rvNoSocios: RecyclerView
     private lateinit var rvSocios: RecyclerView
     private lateinit var rvVenc: RecyclerView
+    private lateinit var tvNombreLista: TextView
+    private lateinit var tvFecha: TextView
     private lateinit var noSocioAdapter: NoSocioAdapter
     private lateinit var socioAdapter: SocioAdapter
     private lateinit var vencimientoAdapter: VencimientoAdapter
@@ -45,6 +50,9 @@ class ListadosActivity : AppCompatActivity() {
         rvNoSocios = findViewById(R.id.rvNoSocios)
         rvSocios   = findViewById(R.id.rvSocios)
         rvVenc     = findViewById(R.id.rvVencimientos)
+        tvNombreLista = findViewById(R.id.tvNombreLista)
+        tvFecha = findViewById(R.id.tvFecha)
+
 
         // Fecha actual
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
@@ -53,6 +61,11 @@ class ListadosActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Fecha encabezado
+        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
+        val fechaHoy = formato.format(Date())
+        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
 
         rvNoSocios.layoutManager = LinearLayoutManager(this)
@@ -81,9 +94,18 @@ class ListadosActivity : AppCompatActivity() {
         val botonVencimiento: Button = findViewById(R.id.btnListVencimientos)
         val botonSocios: Button = findViewById(R.id.btnListSocios)
         val botonNoSocios: Button = findViewById(R.id.btnListNoSocios)
-        botonVencimiento.setOnClickListener {mostrar(rvVenc)}
-        botonSocios.setOnClickListener { mostrar(rvSocios)}
-        botonNoSocios.setOnClickListener { mostrar(rvNoSocios) }
+        botonVencimiento.setOnClickListener {
+            mostrar(rvVenc)
+            tvNombreLista.text = "Listado Vencimientos"
+        }
+        botonSocios.setOnClickListener {
+            mostrar(rvSocios)
+            tvNombreLista.text = "Listado Socios"
+        }
+        botonNoSocios.setOnClickListener {
+            mostrar(rvNoSocios)
+            tvNombreLista.text = "Listado No Socios"
+        }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)

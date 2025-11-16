@@ -26,6 +26,7 @@ class PagosActivity : AppCompatActivity() {
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
 
+
         // --------- Fecha de hoy ----------
         val calendar = Calendar.getInstance()
         mesActual = calendar.get(Calendar.MONTH) + 1      // 1..12
