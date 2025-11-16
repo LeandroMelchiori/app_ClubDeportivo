@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import java.time.LocalDate
 
 class IngresarActividadActivity : AppCompatActivity() {
 
@@ -66,6 +68,7 @@ class IngresarActividadActivity : AppCompatActivity() {
         // Botón registrar
         val btnIngresar = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnIngresar)
         btnIngresar.setOnClickListener {
+
             val actividad = spActividad.selectedItem as ActividadItem
             val profesor  = spProfesor.selectedItem as ProfesorItem
             val dia = spDia.selectedItemPosition
@@ -77,14 +80,28 @@ class IngresarActividadActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val inserted = DBHelper(this).insertarHorario(actividad.id, profesor.dni, dia, hi, hf)
-            if (inserted == -1L) {
-                Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
-                intent = Intent(this, ActividadesActivity::class.java)
-                intent.putExtra("usuario", usuario)
-            }
+            AlertDialog.Builder(this)
+                .setTitle("Confirmar horario")
+                .setMessage("¿Confirmar nuevo horario de ${actividad.nombre}?")
+                .setPositiveButton("Sí") { _, _ ->
+                    try {
+                        val inserted = DBHelper(this).insertarHorario(actividad.id, profesor.dni, dia, hi, hf)
+                        if (inserted == -1L) {
+                            Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
+                            intent = Intent(this, ActividadesActivity::class.java)
+                            intent.putExtra("usuario", usuario)
+                            startActivity(intent)
+                        }
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(this, e.message ?: "Error al insertar horario", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
 
         // Bottom

@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class VencimientoAdapter(
     private val onAccion: (DBHelper.VencimientoCard) -> Unit = {},
@@ -47,13 +49,25 @@ class VencimientoAdapter(
 
     override fun onBindViewHolder(h: VH, position: Int) {
         val item = getItem(position)
-        h.tvEstado.text = "Vence"
+
+        // Calcular diferencia de días entre hoy y la fecha de vencimiento
+        val hoy = LocalDate.now()
+        val fv = LocalDate.parse(item.fechaVenc)   // viene en formato "yyyy-MM-dd"
+        val diff = ChronoUnit.DAYS.between(fv, hoy)  // fv -> hoy
+        val estadoTexto = when {
+            diff == 0L -> "Vence hoy"
+            diff > 0L  -> "Debe hace $diff días"
+            else       -> "Vence en ${-diff} días"   // implementacion a futuro
+        }
+
+        // Rellenar la vista
+        h.tvEstado.text = estadoTexto
         h.tvNombre.text = "${item.nombre} ${item.apellido}"
         h.tvUltimoPago.text = "Venc.: ${item.fechaVenc}"
-
         h.btnAccion.text = "Pagar"
         h.btnVerMas.text = "Ver más"
 
+        // Botones
         h.btnAccion.setOnClickListener { onAccion(item) }
         h.btnVerMas.setOnClickListener { val c = h.itemView.context
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }

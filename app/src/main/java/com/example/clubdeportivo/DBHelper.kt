@@ -330,30 +330,46 @@ package com.example.clubdeportivo
         return lista
     }
     fun obtenerVencimientos(fecha: String): List<VencimientoCard> {
-        val lista = mutableListOf<VencimientoCard>()
-        val db = readableDatabase
-        val sql = """
-        SELECT s.nombre, s.apellido, s.dni, c.fechaVencimiento,
-               (SELECT MAX(c2.fechaPago) FROM cuotas c2 WHERE c2.idSocio = s.idSocio) AS ultimo_pago
+            val lista = mutableListOf<VencimientoCard>()
+            val db = readableDatabase
+            val sql = """
+        SELECT s.nombre,
+               s.apellido,
+               s.dni,
+               c.fechaVencimiento,
+               (SELECT MAX(c2.fechaPago)
+                FROM cuotas c2
+                WHERE c2.idSocio = s.idSocio) AS ultimo_pago
         FROM cuotas c
         JOIN socios s ON s.idSocio = c.idSocio
-        WHERE c.fechaVencimiento = ?
+        -- Nos quedamos solo con la ÚLTIMA cuota de cada socio
+        JOIN (
+            SELECT idSocio, MAX(fechaVencimiento) AS maxVenc
+            FROM cuotas
+            GROUP BY idSocio
+        ) ult ON ult.idSocio = c.idSocio
+             AND ult.maxVenc = c.fechaVencimiento
+        -- Vence hoy o ya venció
+        WHERE c.fechaVencimiento <= ?
         ORDER BY s.apellido, s.nombre
     """.trimIndent()
-        val c = db.rawQuery(sql, arrayOf(fecha))
-        if (c.moveToFirst()) {
-            do {
-                val nombre = c.getString(0)
-                val apellido = c.getString(1)
-                val dni = c.getString(2)
-                val fv = c.getString(3)
-                val ultimo = if (!c.isNull(4)) c.getString(4) else null
-                lista.add(VencimientoCard(nombre, apellido, dni, fv, ultimo))
-            } while (c.moveToNext())
+
+            val c = db.rawQuery(sql, arrayOf(fecha))
+            if (c.moveToFirst()) {
+                do {
+                    val nombre  = c.getString(0)
+                    val apellido = c.getString(1)
+                    val dni      = c.getString(2)
+                    val fv       = c.getString(3)   // fechaVencimiento (YYYY-MM-DD)
+                    val ultimo   = if (!c.isNull(4)) c.getString(4) else null
+
+                    lista.add(VencimientoCard(nombre, apellido, dni, fv, ultimo))
+                } while (c.moveToNext())
+            }
+            c.close()
+            db.close()
+            return lista
         }
-        c.close(); db.close()
-        return lista
-    }
     fun obtenerActividadesDelDia(dia: Int): List<InicioActivity.ActividadHoy> {
         val lista = mutableListOf<InicioActivity.ActividadHoy>()
         val db = readableDatabase

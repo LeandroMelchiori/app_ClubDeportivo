@@ -100,7 +100,7 @@ class InscribirActividadActivity : AppCompatActivity() {
 
         btnPagar.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Confirmar pago")
+                .setTitle("Confirmar pago actividad")
                 .setMessage("¿Confirmás registrar el pago de $precio por la actividad: $nombreActividad ?")
                 .setPositiveButton("Sí") { _, _ ->
                     try {

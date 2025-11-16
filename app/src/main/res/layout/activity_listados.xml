@@ -118,19 +118,14 @@
             </LinearLayout>
 
             <!-- Buscar usuario por id segun la lista actual -->
-            <EditText
+            <SearchView
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
+                android:queryHint="Buscar por nombre"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/bg_input_gray"
                 android:text="Buscar" />
-
-            <Button
-                android:id="@+id/btnElegirFecha"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Fecha"
-                android:layout_margin="8dp"/>
 
             <!-- Listados -->
             <FrameLayout
