@@ -77,4 +77,26 @@ class SocioAdapter(
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }
     }
 
+    private var fullList: List<DBHelper.SocioCard> = emptyList()
+
+    override fun submitList(list: List<DBHelper.SocioCard>?) {
+        fullList = list ?: emptyList()
+        super.submitList(list)
+    }
+
+    fun filtrarPorNombre(texto: String) {
+        val q = texto.trim().lowercase()
+
+        val filtrada = if (q.isEmpty()) {
+            fullList
+        } else {
+            fullList.filter {
+                it.nombre.lowercase().contains(q) ||
+                        it.apellido.lowercase().contains(q)
+            }
+        }
+
+        super.submitList(filtrada)
+    }
+
 }
