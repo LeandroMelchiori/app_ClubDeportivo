@@ -25,7 +25,6 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var noSocioAdapter: NoSocioAdapter
     private lateinit var socioAdapter: SocioAdapter
     private lateinit var vencimientoAdapter: VencimientoAdapter
-    lateinit var btnElegirFecha: Button
     private lateinit var verMasLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,22 +45,6 @@ class ListadosActivity : AppCompatActivity() {
         rvNoSocios = findViewById(R.id.rvNoSocios)
         rvSocios   = findViewById(R.id.rvSocios)
         rvVenc     = findViewById(R.id.rvVencimientos)
-        btnElegirFecha = findViewById(R.id.btnElegirFecha)
-
-        // Boton elegir fecha
-        btnElegirFecha.setOnClickListener {
-            val hoy = LocalDate.now()
-            val dlg = DatePickerDialog(
-                this,
-                { _, y, m, d ->
-                    val sel = LocalDate.of(y, m + 1, d).toString()
-                    val db2 = DBHelper(this)
-                    renderVencimientos(db2.obtenerVencimientos(sel))
-                },
-                hoy.year, hoy.monthValue - 1, hoy.dayOfMonth
-            )
-            dlg.show()
-        }
 
         // Fecha actual
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
@@ -71,10 +54,10 @@ class ListadosActivity : AppCompatActivity() {
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
 
+
         rvNoSocios.layoutManager = LinearLayoutManager(this)
         rvSocios.layoutManager   = LinearLayoutManager(this)
         rvVenc.layoutManager     = LinearLayoutManager(this)
-
 
         //  crear instancias
         noSocioAdapter = NoSocioAdapter()
@@ -88,7 +71,6 @@ class ListadosActivity : AppCompatActivity() {
         rvNoSocios.setHasFixedSize(true)
         rvSocios.setHasFixedSize(true)
         rvVenc.setHasFixedSize(true)
-
 
         // Listados
         renderNoSocios(db.obtenerNoSocios())
@@ -139,8 +121,6 @@ class ListadosActivity : AppCompatActivity() {
             }
         }
     }
-
-
     fun mostrar(rv: RecyclerView) {
         rvNoSocios.visibility = View.GONE
         rvSocios.visibility   = View.GONE
@@ -150,12 +130,10 @@ class ListadosActivity : AppCompatActivity() {
     private fun renderNoSocios(lista: List<DBHelper.NoSocioCard>) = noSocioAdapter.submitList(lista)
     private fun renderSocios(lista: List<DBHelper.SocioCard>)     = socioAdapter.submitList(lista)
     private fun renderVencimientos(lista: List<DBHelper.VencimientoCard>) = vencimientoAdapter.submitList(lista)
-
     private fun refreshVisibleList() {
         val rvSocios        = findViewById<RecyclerView>(R.id.rvSocios)
         val rvNoSocios      = findViewById<RecyclerView>(R.id.rvNoSocios)
         val rvVencimientos  = findViewById<RecyclerView>(R.id.rvVencimientos)
-
         when {
             rvSocios.visibility == View.VISIBLE ->
                 renderSocios(db.obtenerSocios())

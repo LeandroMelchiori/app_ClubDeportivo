@@ -137,7 +137,6 @@ package com.example.clubdeportivo
                 WHERE activo = 1;
                 """.trimIndent())
 
-
         db.execSQL("""
             CREATE INDEX IF NOT EXISTS idx_ap_act_prof
             ON actividad_profesor(actividad_id, profesor_dni);
@@ -280,7 +279,6 @@ package com.example.clubdeportivo
         onCreate(db)
     }
 
-
     // ----------------------------------------- READ -------------------------------------------
 
     // Listados
@@ -307,6 +305,7 @@ package com.example.clubdeportivo
         c.close(); db.close()
         return lista
     }
+        
     fun obtenerSocios(): List<SocioCard> {
         val lista = mutableListOf<SocioCard>()
         val db = readableDatabase
@@ -331,30 +330,46 @@ package com.example.clubdeportivo
         return lista
     }
     fun obtenerVencimientos(fecha: String): List<VencimientoCard> {
-        val lista = mutableListOf<VencimientoCard>()
-        val db = readableDatabase
-        val sql = """
-        SELECT s.nombre, s.apellido, s.dni, c.fechaVencimiento,
-               (SELECT MAX(c2.fechaPago) FROM cuotas c2 WHERE c2.idSocio = s.idSocio) AS ultimo_pago
+            val lista = mutableListOf<VencimientoCard>()
+            val db = readableDatabase
+            val sql = """
+        SELECT s.nombre,
+               s.apellido,
+               s.dni,
+               c.fechaVencimiento,
+               (SELECT MAX(c2.fechaPago)
+                FROM cuotas c2
+                WHERE c2.idSocio = s.idSocio) AS ultimo_pago
         FROM cuotas c
         JOIN socios s ON s.idSocio = c.idSocio
-        WHERE c.fechaVencimiento = ?
+        -- Nos quedamos solo con la ÚLTIMA cuota de cada socio
+        JOIN (
+            SELECT idSocio, MAX(fechaVencimiento) AS maxVenc
+            FROM cuotas
+            GROUP BY idSocio
+        ) ult ON ult.idSocio = c.idSocio
+             AND ult.maxVenc = c.fechaVencimiento
+        -- Vence hoy o ya venció
+        WHERE c.fechaVencimiento <= ?
         ORDER BY s.apellido, s.nombre
     """.trimIndent()
-        val c = db.rawQuery(sql, arrayOf(fecha))
-        if (c.moveToFirst()) {
-            do {
-                val nombre = c.getString(0)
-                val apellido = c.getString(1)
-                val dni = c.getString(2)
-                val fv = c.getString(3)
-                val ultimo = if (!c.isNull(4)) c.getString(4) else null
-                lista.add(VencimientoCard(nombre, apellido, dni, fv, ultimo))
-            } while (c.moveToNext())
+
+            val c = db.rawQuery(sql, arrayOf(fecha))
+            if (c.moveToFirst()) {
+                do {
+                    val nombre  = c.getString(0)
+                    val apellido = c.getString(1)
+                    val dni      = c.getString(2)
+                    val fv       = c.getString(3)   // fechaVencimiento (YYYY-MM-DD)
+                    val ultimo   = if (!c.isNull(4)) c.getString(4) else null
+
+                    lista.add(VencimientoCard(nombre, apellido, dni, fv, ultimo))
+                } while (c.moveToNext())
+            }
+            c.close()
+            db.close()
+            return lista
         }
-        c.close(); db.close()
-        return lista
-    }
     fun obtenerActividadesDelDia(dia: Int): List<InicioActivity.ActividadHoy> {
         val lista = mutableListOf<InicioActivity.ActividadHoy>()
         val db = readableDatabase
@@ -581,6 +596,61 @@ package com.example.clubdeportivo
         }
         return lista
     }
+    fun obtenerResumenPagosMes(anio: Int, mes: Int): ResumenPagosMes {
+            val db = readableDatabase
+            val anioStr = anio.toString()
+            val mesStr = String.format("%02d", mes) // "01", "02", ..., "12"
+
+            // ----- Cuotas de socios -----
+            var cantSocios = 0
+            var montoCuotas = 0.0
+            db.rawQuery(
+                """
+        SELECT COUNT(DISTINCT idSocio) AS cant, IFNULL(SUM(monto),0) AS total
+        FROM cuotas
+        WHERE strftime('%Y', fechaPago) = ? 
+          AND strftime('%m', fechaPago) = ?
+        """.trimIndent(),
+                arrayOf(anioStr, mesStr)
+            ).use { c ->
+                if (c.moveToFirst()) {
+                    cantSocios = c.getInt(0)
+                    montoCuotas = c.getDouble(1)
+                }
+            }
+
+            // ----- Pagos de actividades de NO socios -----
+            var cantNoSocios = 0
+            var montoActividades = 0.0
+            db.rawQuery(
+                """
+        SELECT COUNT(DISTINCT dni_nosocio) AS cant, IFNULL(SUM(monto),0) AS total
+        FROM pagos_actividad
+        WHERE strftime('%Y', fecha_pago) = ? 
+          AND strftime('%m', fecha_pago) = ?
+        """.trimIndent(),
+                arrayOf(anioStr, mesStr)
+            ).use { c ->
+                if (c.moveToFirst()) {
+                    cantNoSocios = c.getInt(0)
+                    montoActividades = c.getDouble(1)
+                }
+            }
+
+            val totalClientes = cantSocios + cantNoSocios
+            val ingresosTotales = montoCuotas + montoActividades
+
+            return ResumenPagosMes(
+                anio = anio,
+                mes = mes,
+                cantNoSocios = cantNoSocios,
+                cantSocios = cantSocios,
+                totalClientes = totalClientes,
+                montoCuotas = montoCuotas,
+                montoActividades = montoActividades,
+                ingresosTotales = ingresosTotales
+            )
+        }
 
     // ----------------------------------------- CREATE -----------------------------------------
 
@@ -810,7 +880,9 @@ package com.example.clubdeportivo
                 db.setTransactionSuccessful()
                 return rows > 0
             } else {
-                // No socio: borro directo por DNI
+                // Verifico primero si existen pagos de actividades, si es así, borro primero los pagos y luego elimino al no socio
+
+                db.delete("pagos_actividad", "dni_nosocio = ?", arrayOf(dni))
                 val rows = db.delete("no_socios", "dni = ?", arrayOf(dni))
                 db.setTransactionSuccessful()
                 return rows > 0
@@ -906,9 +978,9 @@ package com.example.clubdeportivo
             put("apellido", apellido)
             put("dni", dni)
             put("fecha_nac", fechaNac)
-            putOrNull("telefono", telefono)
-            putOrNull("direccion", direccion)
-            putOrNull("email", email)
+            put("telefono", telefono)
+            put("direccion", direccion)
+            put("email", email)
         }
         val rows = writableDatabase.update(tabla, cv, "dni = ?", arrayOf(dni))
         return rows > 0
@@ -969,6 +1041,16 @@ package com.example.clubdeportivo
         val horaFin: Int,        // en minutos
         val etiquetaHorario: String // "Lun 08:00-09:00"
     )
+    data class ResumenPagosMes(
+        val anio: Int,
+        val mes: Int,
+        val cantNoSocios: Int,
+        val cantSocios: Int,
+        val totalClientes: Int,
+        val montoCuotas: Double,
+        val montoActividades: Double,
+        val ingresosTotales: Double
+    )
 
     // Herramientas
     private fun Cursor.getStringOrNull(col: String): String? {
@@ -977,9 +1059,6 @@ package com.example.clubdeportivo
     }
     private fun ContentValues.putOrNull(key: String, value: String?) {
         if (value == null) putNull(key) else put(key, value)
-    }
-    private fun ContentValues.putBool01(key: String, value: Boolean?) {
-        if (value != null) put(key, if (value) 1 else 0)
     }
     private fun existeConDni(table: String, dni: String): Boolean =
         readableDatabase.query(table, arrayOf("dni"), "dni = ?", arrayOf(dni), null, null, null)

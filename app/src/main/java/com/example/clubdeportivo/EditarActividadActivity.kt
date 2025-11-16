@@ -7,8 +7,10 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import java.time.LocalDate
 
 class EditarActividadActivity : AppCompatActivity() {
     private lateinit var spActividad: Spinner
@@ -84,14 +86,28 @@ class EditarActividadActivity : AppCompatActivity() {
             val nuevoDia = spDia.selectedItemPosition
             val nuevaIni = horas[spHoraInicio.selectedItemPosition]
             val nuevaFin = horas[spHoraFin.selectedItemPosition]
-            db.actualizarHorarioPorId(
-                idDiaHorario = dhId,
-                dia = nuevoDia,
-                horaInicio = nuevaIni,
-                horaFin =nuevaFin
-            )
-            Toast.makeText(this, "Actividad actualizada con exito", Toast.LENGTH_SHORT).show()
-            finish()
+            AlertDialog.Builder(this)
+                .setTitle("Confirmar edicion de actividad")
+                .setMessage("¿Confirmás editar la actividad $nombreAct?")
+                .setPositiveButton("Sí") { _, _ ->
+                    try {
+                        db.actualizarHorarioPorId(
+                            idDiaHorario = dhId,
+                            dia = nuevoDia,
+                            horaInicio = nuevaIni,
+                            horaFin =nuevaFin
+                        )
+                        Toast.makeText(this, "Actividad actualizada con exito", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(this, e.message ?: "Error al actualizar", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+
         }
 
         // Bottom

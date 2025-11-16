@@ -8,10 +8,12 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -50,8 +52,30 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                 val email     = etEmail.text.toString().trim()
 
                 // Validaciones campos vacios
+
                 if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || fecha.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || email.isEmpty()) {
                     Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                //  Validar DNI
+                if (!dni.matches(Regex("^\\d{8,9}\$"))) {
+                    Toast.makeText(this, "El DNI debe tener 8 o 9 números", Toast.LENGTH_LONG).show()
+                    etDNI.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // Validar teléfono
+                if (!telefono.matches(Regex("^\\d{9,12}\$"))) {
+                    Toast.makeText(this, "Ingrese numerode telefono valido", Toast.LENGTH_LONG).show()
+                    etTelefono.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // 4) Validar email
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_LONG).show()
+                    etEmail.requestFocus()
                     return@setOnClickListener
                 }
 
@@ -82,28 +106,34 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                // Try insert and catch error
-                try {
-                    val rowId = db.insertOrThrow(tabla, null, values)  // usa insertOrThrow para ver el error real
-                    startActivity(Intent(this, InicioActivity::class.java))
-                    Toast.makeText(this, "Registro exitoso (ID $rowId)", Toast.LENGTH_LONG).show()
+                AlertDialog.Builder(this)
+                    .setTitle("Confirmar registro")
+                    .setMessage("¿Confirmás registro nuevo usuario?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        try {
+                            val rowId = db.insertOrThrow(tabla, null, values)  // usa insertOrThrow para ver el error real
+                            startActivity(Intent(this, InicioActivity::class.java))
+                            Toast.makeText(this, "Registro exitoso (ID $rowId)", Toast.LENGTH_LONG).show()
 
-                    // Limpieza de campos
-                    etNombre.text.clear()
-                    etApellido.text.clear()
-                    etFecha.text.clear()
-                    etDNI.text.clear()
-                    etDireccion.text.clear()
-                    etTelefono.text.clear()
-                    etEmail.text.clear()
+                            // Limpieza de campos
+                            etNombre.text.clear()
+                            etApellido.text.clear()
+                            etFecha.text.clear()
+                            etDNI.text.clear()
+                            etDireccion.text.clear()
+                            etTelefono.text.clear()
+                            etEmail.text.clear()
 
-                } catch (e: android.database.sqlite.SQLiteConstraintException) {
-                    Log.e("DB", "Constraint al insertar: ${e.message}")
-                    Toast.makeText(this, "No se pudo registrar: ${e.message}", Toast.LENGTH_LONG).show()
-                } catch (e: Exception) {
-                    Log.e("DB", "Error al insertar", e)
-                    Toast.makeText(this, "Error al registrar: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                }
+                        } catch (e: android.database.sqlite.SQLiteConstraintException) {
+                            Log.e("DB", "Constraint al insertar: ${e.message}")
+                            Toast.makeText(this, "No se pudo registrar: ${e.message}", Toast.LENGTH_LONG).show()
+                        } catch (e: Exception) {
+                            Log.e("DB", "Error al insertar", e)
+                            Toast.makeText(this, "Error al registrar: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
             }
 
         // Bottom

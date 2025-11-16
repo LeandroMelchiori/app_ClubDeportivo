@@ -42,7 +42,7 @@ class NoSocioAdapter :
             h.vEstado.setBackgroundResource(R.drawable.bg_pill_green)
         } else{
             h.tvEstado.text ="Inactivo"
-            h.vEstado.setBackgroundResource(R.drawable.bg_pill_red)
+            h.vEstado.setBackgroundResource(R.drawable.bg_pill_light)
         }
         h.tvUltimoPago.text = if (ns.ultimaPago != null) "Ultima actividad: ${ns.ultimaPago}" else "No registra actividad"
 

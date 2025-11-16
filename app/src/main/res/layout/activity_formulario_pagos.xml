@@ -84,17 +84,18 @@
 
                         <!-- Sección -->
                         <TextView
-                            android:id="@+id/tvPagosTitulo"
+                            android:id="@+id/tvTitulo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="30dp"
-                            android:text="Pagos"
+                            android:text="Resumen mensual"
                             android:textColor="@color/text_primary"
                             android:textSize="26sp"
                             android:textStyle="bold" />
 
-                        <!-- Bloque azul con bordes y aire -->
+
+                        <!-- Card -->
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cardMes"
                             android:layout_width="match_parent"
@@ -112,61 +113,95 @@
                                 android:orientation="vertical"
                                 android:padding="16dp">
 
-                                <TextView
-                                    android:id="@+id/tvMes"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Enero"
-                                    android:textColor="@color/black"
-                                    android:textSize="30sp"
-                                    android:textStyle="bold" />
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:layout_marginBottom="8dp">
+
+                                    <TextView
+                                        android:id="@+id/btnMesAnterior"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="-"
+                                        android:textSize="24sp"
+                                        android:textColor="@color/black"
+                                        android:padding="8dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvMes"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Enero"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginStart="16dp"
+                                        android:layout_marginEnd="16dp" />
+
+                                    <TextView
+                                        android:id="@+id/btnMesSiguiente"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="+"
+                                        android:textSize="24sp"
+                                        android:textColor="@color/black"
+                                        android:padding="8dp" />
+                                </LinearLayout>
 
                                 <TextView
+                                    android:id="@+id/tvNoSocios"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:text="No Socios : 129"
+                                    android:text="No Socios : 0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 
                                 <TextView
+                                    android:id="@+id/tvSocios"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="8dp"
-                                    android:text="Socios: 88"
+                                    android:text="Socios: 0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 
                                 <TextView
+                                    android:id="@+id/tvTotalClientes"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="8dp"
-                                    android:text="total clientes: 217"
+                                    android:text="Total clientes: 0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 
                                 <TextView
+                                    android:id="@+id/tvMontoCuotas"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="8dp"
-                                    android:text="Monto cuotas: $2.640.000"
+                                    android:text="Monto cuotas: $0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 
                                 <TextView
+                                    android:id="@+id/tvMontoActividades"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="8dp"
-                                    android:text="Monto Actividades: $500.000"
+                                    android:text="Monto Actividades: $0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 
                                 <TextView
+                                    android:id="@+id/tvIngresosTotales"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="16dp"
-                                    android:text="Ingresos Totales: $3.140.000"
+                                    android:text="Ingresos Totales: $0"
                                     android:textColor="@color/black"
                                     android:textSize="18sp" />
 

@@ -49,7 +49,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/bg_pill_light" />
+            android:background="@drawable/bg_pill_red" />
     </LinearLayout>
 
     <!-- Info + botones -->
@@ -74,7 +74,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Activo"
                 android:textColor="@color/black"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvUltimoPago"

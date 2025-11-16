@@ -8,9 +8,11 @@ import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
+import java.time.LocalDate
 
 class InscribirActividadActivity : AppCompatActivity() {
 
@@ -29,9 +31,9 @@ class InscribirActividadActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val db = DBHelper(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inscribir_actividad)
+        db = DBHelper(this)
 
         // Inicializar views
         tvNombreActividad = findViewById<TextView>(R.id.tvNombreActividad)
@@ -97,43 +99,21 @@ class InscribirActividadActivity : AppCompatActivity() {
         // Boton Pagar
 
         btnPagar.setOnClickListener {
-            val dni = etBuscar.query.toString()
-            val persona = db.obtenerPersonaPorDni(dni)
-            if (persona == null) {
-                toast("Ingresa un DNI valido")
-            }
-
-            if (persona?.esSocio == true){
-                toast("Socios no necesitan pagar")
-            }
-
-            if (persona != null && persona.esSocio != true) {
-                val medioPago = when (rgMedioPago.checkedRadioButtonId) {
-                    R.id.rbEfectivo -> "Efectivo"
-                    R.id.rbTarjeta -> "Tarjeta"
-                    R.id.rbTransferencia -> "Transferencia"
-                    else -> {}
+            AlertDialog.Builder(this)
+                .setTitle("Confirmar pago actividad")
+                .setMessage("¿Confirmás registrar el pago de $precio por la actividad: $nombreActividad ?")
+                .setPositiveButton("Sí") { _, _ ->
+                    try {
+                        pagarActividad(etBuscar.query.toString(), idActividad, precio)
+                        Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-            val selectedId = rgMedioPago.checkedRadioButtonId
-            if (selectedId == -1) {
-                Toast.makeText(this, "Debe seleccionar una forma de pago", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val formaPago = findViewById<RadioButton>(selectedId).text.toString()
-            val insertedId = db.registrarPagoActividadNoSocio(
-                dni = persona!!.dni,
-                horarioId = idActividad,
-                monto = precio,
-                medioPago = formaPago
-            )
-
-            if (insertedId > 0L) {
-                toast("Pago registrado")
-                finish() // o limpiar pantalla si preferís
-            } else {
-                toast("No se pudo registrar el pago")
-            }
+                .setNegativeButton("Cancelar", null)
+                .show()
 
         }
         // Bottom
@@ -181,4 +161,44 @@ class InscribirActividadActivity : AppCompatActivity() {
 
     private fun toast(msg: String) =
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+    fun pagarActividad(dni: String, idActividad: Int, precio: Double) {
+        // 1) Buscar persona
+        val persona = db.obtenerPersonaPorDni(dni)
+
+        if (persona == null) {
+            toast("Ingresa un DNI válido")
+            return                      // IMPORTANTE: cortar acá
+        }
+
+        if (persona.esSocio == true) {
+            toast("Los socios no necesitan pagar esta actividad")
+            return                      // IMPORTANTE: tampoco seguir
+        }
+
+        // 2) Validar medio de pago
+        val selectedId = rgMedioPago.checkedRadioButtonId
+        if (selectedId == -1) {
+            Toast.makeText(this, "Debe seleccionar una forma de pago", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val formaPago = findViewById<RadioButton>(selectedId).text.toString()
+
+        // 3) Registrar pago
+        val insertedId = db.registrarPagoActividadNoSocio(
+            dni = persona.dni,          // ya no usamos persona!!
+            horarioId = idActividad,
+            monto = precio,
+            medioPago = formaPago
+        )
+
+        if (insertedId > 0L) {
+            toast("Pago registrado")
+            finish() // o limpiar pantalla
+        } else {
+            toast("No se pudo registrar el pago")
+        }
+    }
+
 }
