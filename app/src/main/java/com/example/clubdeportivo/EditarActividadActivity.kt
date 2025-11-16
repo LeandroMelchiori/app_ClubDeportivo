@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -107,7 +106,9 @@ class EditarActividadActivity : AppCompatActivity() {
                             horaFin =nuevaFin
                         )
                         Toast.makeText(this, "Actividad actualizada con exito", Toast.LENGTH_SHORT).show()
-                        finish()
+                        intent = Intent(this, ActividadesActivity::class.java)
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "Error al actualizar", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -126,7 +127,7 @@ class EditarActividadActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

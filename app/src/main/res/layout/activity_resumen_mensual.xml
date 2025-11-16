@@ -100,38 +100,44 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:orientation="horizontal"
-                            android:layout_marginBottom="8dp">
+                            android:gravity="center_vertical">
 
-                            <TextView
+                            <ImageButton
                                 android:id="@+id/btnMesAnterior"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="-"
-                                android:textSize="24sp"
-                                android:textColor="@color/black"
-                                android:padding="8dp" />
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:padding="8dp"
+                                android:src="@drawable/outline_arrow_back_ios_24"
+                                android:tint="@color/black"
+                                android:contentDescription="Mes anterior"
+                                android:scaleType="centerInside" />
 
                             <TextView
                                 android:id="@+id/tvMes"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:gravity="center"
                                 android:text="Enero"
                                 android:textColor="@color/black"
                                 android:textSize="30sp"
-                                android:textStyle="bold"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp" />
+                                android:textStyle="bold" />
 
-                            <TextView
+                            <ImageButton
                                 android:id="@+id/btnMesSiguiente"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="+"
-                                android:textSize="24sp"
-                                android:textColor="@color/black"
-                                android:padding="8dp" />
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:padding="8dp"
+                                android:src="@drawable/outline_arrow_forward_ios_24"
+                                android:tint="@color/black"
+                                android:contentDescription="Mes siguiente"
+                                android:scaleType="centerInside" />
+
                         </LinearLayout>
 
                         <TextView

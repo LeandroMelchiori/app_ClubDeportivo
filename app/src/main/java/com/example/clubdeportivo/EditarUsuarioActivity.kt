@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -25,7 +24,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         tvBienvenida.text = "Bienvenido, $usuario"
 
         // Fecha encabezado
-        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        val tvFecha = findViewById<TextView>(R.id.tvFechaHoy)
         val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
         val fechaHoy = formato.format(Date())
         tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
@@ -126,7 +125,9 @@ class EditarUsuarioActivity : AppCompatActivity() {
                                 email       = etEmail.text.toString().trim(),
                             )
                             Toast.makeText(this, "No socio actualizado con exito", Toast.LENGTH_SHORT).show()
-                            finish()
+                            intent = Intent(this, ListadosActivity::class.java)
+                            intent.putExtra("usuario", usuario)
+                            startActivity(intent)
                         }
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "Error al actualizar usuario", Toast.LENGTH_LONG).show()
@@ -146,7 +147,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

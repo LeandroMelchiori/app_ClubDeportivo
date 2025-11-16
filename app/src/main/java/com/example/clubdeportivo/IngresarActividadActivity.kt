@@ -1,9 +1,7 @@
 package com.example.clubdeportivo
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -12,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -45,8 +42,8 @@ class IngresarActividadActivity : AppCompatActivity() {
         val spDia        = findViewById<Spinner>(R.id.spDia)
         val spHoraInicio = findViewById<Spinner>(R.id.spHoraInicio)
         val spHoraFin    = findViewById<Spinner>(R.id.spHoraFin)
-        val spActividad = findViewById<Spinner>(R.id.spActividad)
-        val spProfesor  = findViewById<Spinner>(R.id.spProfesor)
+        val spActividad  = findViewById<Spinner>(R.id.spActividad)
+        val spProfesor   = findViewById<Spinner>(R.id.spProfesor)
 
         // Adapters
         spDia.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, DIAS)
@@ -118,7 +115,7 @@ class IngresarActividadActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true
