@@ -34,13 +34,14 @@ class InicioActivity : AppCompatActivity() {
 
         val actividades = db.obtenerActividadesDelDia(diaHoy) // devuelve List<ActividadHoy>
 
-        // Renderiza la lista de actividades del día
-        renderActividadesHoy(actividades)
-
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+
+        // Renderiza la lista de actividades del día
+        renderActividadesHoy(actividades, usuario)
+
 
         // Boton nuevo usuario
         val btnUsuario = findViewById<MaterialButton>(R.id.btnUsuario)
@@ -50,12 +51,10 @@ class InicioActivity : AppCompatActivity() {
         startActivity(intent)
         }
 
-
-
-            // Bottom
+        // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-    bottom.selectedItemId = R.id.nav_home
-    bottom.setOnItemSelectedListener { item ->
+        bottom.selectedItemId = R.id.nav_home
+        bottom.setOnItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_pagos -> {
                 val intent = Intent(this, PagosActivity::class.java)
@@ -90,7 +89,7 @@ class InicioActivity : AppCompatActivity() {
     }
 
     // Renderiza la lista de actividades del día con el item de tarjeta
-    private fun renderActividadesHoy(actividades: List<ActividadHoy>) {
+    private fun renderActividadesHoy(actividades: List<ActividadHoy>, usuario: String) {
         val contenedor = findViewById<LinearLayout>(R.id.contenedorActividadesHoy)
         contenedor.removeAllViews()
 
@@ -100,7 +99,6 @@ class InicioActivity : AppCompatActivity() {
         actividades.forEach { act ->
             val view = inflater.inflate(R.layout.item_actividad_hoy, contenedor, false)
             val tvTitulo  = view.findViewById<TextView>(R.id.tvTitulo)
-            val ivIcono   = view.findViewById<ImageView>(R.id.ivIcono)
             val btnAccion = view.findViewById<ImageButton>(R.id.btnAccion)
             tvTitulo.text = "${act.horaInicio} - ${act.nombre}"
 
@@ -111,11 +109,10 @@ class InicioActivity : AppCompatActivity() {
                 intent.putExtra("precioActividad", act.precio)
                 intent.putExtra("diaActividad", act.dia)
                 intent.putExtra("horaInicio", act.horaInicio)
+                intent.putExtra("usuario", usuario)
                 startActivity(intent)
             }
-
             contenedor.addView(view)
         }
     }
-
 }
