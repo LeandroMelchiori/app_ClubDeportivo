@@ -61,6 +61,27 @@ class NoSocioAdapter :
         }
     }
 
+    private var fullList: List<DBHelper.NoSocioCard> = emptyList()
+
+    override fun submitList(list: List<DBHelper.NoSocioCard>?) {
+        fullList = list ?: emptyList()
+        super.submitList(list)
+    }
+
+    fun filtrarPorNombre(texto: String) {
+        val q = texto.trim().lowercase()
+
+        val filtrada = if (q.isEmpty()) {
+            fullList
+        } else {
+            fullList.filter {
+                it.nombre.lowercase().contains(q) ||
+                        it.apellido.lowercase().contains(q)
+            }
+        }
+
+        super.submitList(filtrada)
+    }
     companion object {
         private val DIFF = object : DiffUtil.ItemCallback<DBHelper.NoSocioCard>() {
             override fun areItemsTheSame(a: DBHelper.NoSocioCard, b: DBHelper.NoSocioCard) =

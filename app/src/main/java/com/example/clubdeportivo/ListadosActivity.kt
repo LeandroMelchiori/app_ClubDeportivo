@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +39,7 @@ class ListadosActivity : AppCompatActivity() {
                 refreshVisibleList()
             }
         }
-        val db = DBHelper(this)
+        db = DBHelper(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listados)
@@ -98,6 +99,20 @@ class ListadosActivity : AppCompatActivity() {
         botonVencimiento.setTextColor(Color.BLACK)
         tvNombreLista.text = "Listado No Socios"
 
+        // Buscador
+        val svBuscar = findViewById<SearchView>(R.id.svBuscar)
+
+        svBuscar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filtrarSegunListaActual(query.orEmpty())
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filtrarSegunListaActual(newText.orEmpty())
+                return true
+            }
+        })
         // onClick
         botonVencimiento.setOnClickListener {
             mostrar(rvVenc)
@@ -182,6 +197,18 @@ class ListadosActivity : AppCompatActivity() {
 
             else ->
                 renderNoSocios(db.obtenerNoSocios()) // fallback
+        }
+    }
+    private fun filtrarSegunListaActual(texto: String) {
+        when {
+            rvNoSocios.visibility == View.VISIBLE ->
+                noSocioAdapter.filtrarPorNombre(texto)
+
+            rvSocios.visibility == View.VISIBLE ->
+                socioAdapter.filtrarPorNombre(texto)
+
+            rvVenc.visibility == View.VISIBLE ->
+                vencimientoAdapter.filtrarPorNombre(texto) // si implementás filtro ahí
         }
     }
 }

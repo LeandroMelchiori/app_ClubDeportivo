@@ -19,7 +19,6 @@ class VencimientoAdapter(
     // Mientras tanto reutilizo el de no socio que ya tenés.
     private val layoutRes: Int = R.layout.item_nosocio
 ) : ListAdapter<DBHelper.VencimientoCard, VencimientoAdapter.VH>(DIFF) {
-
     companion object {
         private val DIFF = object : DiffUtil.ItemCallback<DBHelper.VencimientoCard>() {
             override fun areItemsTheSame(
@@ -33,7 +32,6 @@ class VencimientoAdapter(
             ) = oldItem == newItem
         }
     }
-
     class VH(view: View) : RecyclerView.ViewHolder(view) {
         val tvEstado: TextView = view.findViewById(R.id.tvEstado)
         val tvNombre: TextView = view.findViewById(R.id.tvNombre)
@@ -80,5 +78,25 @@ class VencimientoAdapter(
         }
         h.btnVerMas.setOnClickListener { val c = h.itemView.context
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", item.dni)) }
+    }
+
+    private var fullList: List<DBHelper.VencimientoCard> = emptyList()
+    override fun submitList(list: List<DBHelper.VencimientoCard>?) {
+        fullList = list ?: emptyList()
+        super.submitList(list)
+    }
+    fun filtrarPorNombre(texto: String) {
+        val q = texto.trim().lowercase()
+
+        val filtrada = if (q.isEmpty()) {
+            fullList
+        } else {
+            fullList.filter {
+                it.nombre.lowercase().contains(q) ||
+                        it.apellido.lowercase().contains(q)
+            }
+        }
+
+        super.submitList(filtrada)
     }
 }
