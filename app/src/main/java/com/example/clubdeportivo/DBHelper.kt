@@ -39,6 +39,9 @@ package com.example.clubdeportivo
                 telefono TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 direccion TEXT NOT NULL,
+                activo INTEGER NOT NULL DEFAULT 1,
+                motivo_baja TEXT,
+                fecha_baja TEXT,
                 fecha_inscripcion TEXT NOT NULL DEFAULT (date('now')),
                 ficha_medica     INTEGER NOT NULL DEFAULT 1,     -- ← default 1
                 activo           INTEGER NOT NULL DEFAULT 1     -- ← default 1
@@ -77,7 +80,7 @@ package com.example.clubdeportivo
               activo INTEGER,
               titulo TEXT
             );
-        """.trimIndent())
+            """.trimIndent())
 
         db.execSQL("""
             CREATE TABLE cuotas (
@@ -90,7 +93,7 @@ package com.example.clubdeportivo
               fechaVencimiento TEXT NOT NULL,
               FOREIGN KEY (idSocio) REFERENCES socios(idSocio)
             );
-        """.trimIndent())
+            """.trimIndent())
 
         db.execSQL("""
             CREATE TABLE pagos_actividad (
@@ -103,7 +106,7 @@ package com.example.clubdeportivo
               FOREIGN KEY (dni_nosocio) REFERENCES no_socios(dni),
               FOREIGN KEY (id_actividad) REFERENCES dias_horarios(id)
             );
-        """.trimIndent())
+            """.trimIndent())
 
         db.execSQL("""
             CREATE TABLE IF NOT EXISTS actividad_profesor (
@@ -132,10 +135,11 @@ package com.example.clubdeportivo
               UNIQUE(actividad_profesor_id, dia, hora_inicio, hora_fin));
             """.trimIndent())
 
-        db.execSQL("""CREATE UNIQUE INDEX IF NOT EXISTS ux_dh_unico_activo
-                ON dias_horarios(actividad_profesor_id, dia, hora_inicio, hora_fin)
-                WHERE activo = 1;
-                """.trimIndent())
+        db.execSQL("""
+            CREATE UNIQUE INDEX IF NOT EXISTS ux_dh_unico_activo
+            ON dias_horarios(actividad_profesor_id, dia, hora_inicio, hora_fin)
+            WHERE activo = 1;
+            """.trimIndent())
 
         db.execSQL("""
             CREATE INDEX IF NOT EXISTS idx_ap_act_prof

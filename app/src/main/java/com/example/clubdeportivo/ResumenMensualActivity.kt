@@ -2,6 +2,7 @@ package com.example.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -9,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class PagosActivity : AppCompatActivity() {
+class ResumenMensualActivity : AppCompatActivity() {
 
     private lateinit var db: DBHelper
     private var mesActual: Int = 0
@@ -17,7 +18,7 @@ class PagosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_formulario_pagos)
+        setContentView(R.layout.activity_resumen_mensual)
 
         db = DBHelper(this)
 
@@ -44,8 +45,8 @@ class PagosActivity : AppCompatActivity() {
         val tvMontoCuotas = findViewById<TextView>(R.id.tvMontoCuotas)
         val tvMontoActividades = findViewById<TextView>(R.id.tvMontoActividades)
         val tvIngresosTotales = findViewById<TextView>(R.id.tvIngresosTotales)
-        val btnMesAnterior = findViewById<TextView>(R.id.btnMesAnterior)
-        val btnMesSiguiente = findViewById<TextView>(R.id.btnMesSiguiente)
+        val btnMesAnterior = findViewById<ImageButton>(R.id.btnMesAnterior)
+        val btnMesSiguiente = findViewById<ImageButton>(R.id.btnMesSiguiente)
 
         fun nombreMes(mes: Int): String {
             val meses = arrayOf(
@@ -59,7 +60,7 @@ class PagosActivity : AppCompatActivity() {
         fun cargarMes() {
             val resumen = db.obtenerResumenPagosMes(anioActual, mesActual)
 
-            tvMes.text = nombreMes(mesActual)
+            tvMes.text = " ${nombreMes(mesActual)} $anioActual"
             tvNoSocios.text = "No Socios : ${resumen.cantNoSocios}"
             tvSocios.text = "Socios: ${resumen.cantSocios}"
             tvTotalClientes.text = "Total clientes: ${resumen.totalClientes}"

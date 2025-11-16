@@ -6,12 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.clubdeportivo.DBHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
@@ -80,9 +76,12 @@ class VerMasActivity : AppCompatActivity() {
                         Toast.makeText(this, "Eliminado correctamente", Toast.LENGTH_SHORT).show()
                         val data = Intent().putExtra("dniEliminado", cliente.dni)
                         setResult(Activity.RESULT_OK, data)
-                        finish()
+                        intent = Intent(this, ListadosActivity::class.java)
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_LONG).show()
+                        finish()
                     }
                 }
                 .show()
@@ -94,7 +93,7 @@ class VerMasActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

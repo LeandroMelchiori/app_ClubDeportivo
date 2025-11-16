@@ -49,7 +49,7 @@
 
             <!-- Fecha hoy -->
             <TextView
-                android:id="@+id/tvFechaHoy"
+                android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jueves, 28 de Septiembre"

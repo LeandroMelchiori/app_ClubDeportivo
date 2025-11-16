@@ -93,8 +93,9 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                                 val db = DBHelper(this)
                                 db.registrarPagoCuota(dni, monto, formaPago, fechaHoy)
                                 Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
-                                finish()
-
+                                intent = Intent(this, ListadosActivity::class.java)
+                                intent.putExtra("usuario", usuario)
+                                startActivity(intent)
                             } catch (e: IllegalArgumentException) {
                                 Toast.makeText(this, e.message ?: "Error al realizar el pago", Toast.LENGTH_LONG).show()
                             } catch (e: Exception) {
@@ -115,8 +116,9 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                         val db = DBHelper(this)
                         val idSocio = db.hacerSocioDesdeNoSocio(dni, monto, formaPago, fechaHoy)
                         Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
-                        finish()
-
+                        intent = Intent(this, ListadosActivity::class.java)
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -134,7 +136,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

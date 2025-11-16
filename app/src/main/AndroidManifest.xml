@@ -35,7 +35,7 @@
         <activity android:name=".NuevoUsuarioActivity" android:exported="false"/>
         <activity android:name=".EditarUsuarioActivity" android:exported="false"/>
         <activity android:name=".InicioActivity" android:exported="false"/>
-        <activity android:name=".PagosActivity" android:exported="false"/>
+        <activity android:name=".ResumenMensualActivity" android:exported="false"/>
         <activity android:name=".ConfiguracionActivity" android:exported="false"/>
         <activity android:name=".EditarAdminActivity" android:exported="false"/>
         <activity android:name=".InscribirActividadActivity" android:exported="false"/>

@@ -11,9 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -114,9 +112,12 @@ class InscribirActividadActivity : AppCompatActivity() {
                 .setPositiveButton("Sí") { _, _ ->
                     try {
                         pagarActividad(etBuscar.query.toString(), idActividad, precio)
+                        intent = Intent(this, InicioActivity::class.java)
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
                         Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
                     } catch (e: IllegalArgumentException) {
-                        Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, e.message ?: "No se pudo realizar la inscripcion", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
                         Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                     }
@@ -131,7 +132,7 @@ class InscribirActividadActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

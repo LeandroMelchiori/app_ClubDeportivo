@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -142,7 +141,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_pagos -> {
-                    val intent = Intent(this, PagosActivity::class.java)
+                    val intent = Intent(this, ResumenMensualActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true

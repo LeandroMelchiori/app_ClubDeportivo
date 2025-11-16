@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
@@ -66,7 +63,7 @@ class InicioActivity : AppCompatActivity() {
         bottom.setOnItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_pagos -> {
-                val intent = Intent(this, PagosActivity::class.java)
+                val intent = Intent(this, ResumenMensualActivity::class.java)
                 intent.putExtra("usuario", usuario)
                 startActivity(intent)
                 true
