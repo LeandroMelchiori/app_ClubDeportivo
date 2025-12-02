@@ -12,9 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
 class VerMasActivity : AppCompatActivity() {
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_mas)
@@ -48,10 +45,10 @@ class VerMasActivity : AppCompatActivity() {
         tvDireccion.text = "Domicilio: ${cliente?.direccion}"
         tvFechaNacimiento.text = "Fecha de nacimiento: ${cliente?.fecha_nac}"
         tvEmail.text = "Email: ${cliente?.email}"
-        if (cliente?.esSocio == false) {
-            tvIdTipoSocio.text = "ID noSocio: ${cliente.id}"
+        if (cliente.esSocio) {
+            tvIdTipoSocio.text = "Socio nº: ${cliente.id}"
         } else {
-        tvIdTipoSocio.text = "ID socio: ${cliente?.id}"}
+        tvIdTipoSocio.text = "NoSocio nª: ${cliente.id}"}
 
         // Boton editar
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
@@ -71,7 +68,7 @@ class VerMasActivity : AppCompatActivity() {
                 .setMessage("¿Seguro que querés eliminar a esta persona? Esta acción no se puede deshacer.")
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Eliminar") { _, _ ->
-                    val ok = db.eliminarPersonaPorDni(cliente!!.dni) // ← clave
+                    val ok = db.eliminarPersonaPorId(cliente!!.id.toString()) // ← clave
                     if (ok) {
                         Toast.makeText(this, "Eliminado correctamente", Toast.LENGTH_SHORT).show()
                         val data = Intent().putExtra("dniEliminado", cliente.dni)

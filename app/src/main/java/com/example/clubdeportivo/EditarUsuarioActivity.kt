@@ -99,36 +99,18 @@ class EditarUsuarioActivity : AppCompatActivity() {
                 .setMessage("¿Confirmás editar al usuario con DNI: $dni?")
                 .setPositiveButton("Sí") { _, _ ->
                     try {
-                        if (esSocio == true) {
-
-                            db.actualizarSocioPorId(
-                                idSocio     = id,
-                                nombre      = etNombre.text.toString().trim(),
-                                apellido    = etApellido.text.toString().trim(),
-                                dni         = etDni.text.toString().trim(),
-                                fechaNac    = etFechaNac.text.toString().trim(),
-                                telefono    = etTelefono.text.toString().trim(),
-                                direccion   = etDireccion.text.toString().trim(),
-                                email       = etEmail.text.toString().trim()
-                            )
-                            Toast.makeText(this, "Socio actualizado con exito", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
-                            db.actualizarNoSocioPorId(
-                                idNoSocio   = id,
-                                nombre      = etNombre.text.toString().trim(),
-                                apellido    = etApellido.text.toString().trim(),
-                                dni         = etDni.text.toString().trim(),
-                                fechaNac    = etFechaNac.text.toString().trim(),
-                                telefono    = etTelefono.text.toString().trim(),
-                                direccion   = etDireccion.text.toString().trim(),
-                                email       = etEmail.text.toString().trim(),
-                            )
-                            Toast.makeText(this, "No socio actualizado con exito", Toast.LENGTH_SHORT).show()
-                            intent = Intent(this, ListadosActivity::class.java)
-                            intent.putExtra("usuario", usuario)
-                            startActivity(intent)
-                        }
+                        db.actualizarClientePorId(
+                            id          = id,
+                            nombre      = etNombre.text.toString().trim(),
+                            apellido    = etApellido.text.toString().trim(),
+                            dni         = etDni.text.toString().trim(),
+                            fechaNac    = etFechaNac.text.toString().trim(),
+                            telefono    = etTelefono.text.toString().trim(),
+                            direccion   = etDireccion.text.toString().trim(),
+                            email       = etEmail.text.toString().trim()
+                        )
+                        Toast.makeText(this, "Socio actualizado con exito", Toast.LENGTH_SHORT).show()
+                        finish()
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "Error al actualizar usuario", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -137,7 +119,6 @@ class EditarUsuarioActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
-
         }
 
 

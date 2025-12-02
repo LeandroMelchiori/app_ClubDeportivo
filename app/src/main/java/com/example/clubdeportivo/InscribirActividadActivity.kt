@@ -74,7 +74,6 @@ class InscribirActividadActivity : AppCompatActivity() {
             diaActividad in 1..7 -> dias[diaActividad % 7] // 7→0 (Domingo)
             else -> diaActividad.toString()
         }
-
         // Asignar datos a views
         tvNombreActividad.text = "Actividad: $nombreActividad"
         tvHoraInicio.text = "$diaTxt - $horaInicio hs"
@@ -104,7 +103,6 @@ class InscribirActividadActivity : AppCompatActivity() {
         }
 
         // Boton Pagar
-
         btnPagar.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Confirmar pago actividad")
@@ -115,7 +113,6 @@ class InscribirActividadActivity : AppCompatActivity() {
                         intent = Intent(this, InicioActivity::class.java)
                         intent.putExtra("usuario", usuario)
                         startActivity(intent)
-                        Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "No se pudo realizar la inscripcion", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -126,6 +123,7 @@ class InscribirActividadActivity : AppCompatActivity() {
                 .show()
 
         }
+
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
@@ -174,14 +172,14 @@ class InscribirActividadActivity : AppCompatActivity() {
 
     fun pagarActividad(dni: String, idActividad: Int, precio: Double) {
         // 1) Buscar persona
-        val persona = db.obtenerPersonaPorDni(dni)
+        val cliente = db.obtenerPersonaPorDni(dni)
 
-        if (persona == null) {
+        if (cliente == null) {
             toast("Ingresa un DNI válido")
             return                      // IMPORTANTE: cortar acá
         }
 
-        if (persona.esSocio == true) {
+        if (cliente.esSocio == true) {
             toast("Los socios no necesitan pagar esta actividad")
             return                      // IMPORTANTE: tampoco seguir
         }
@@ -197,7 +195,7 @@ class InscribirActividadActivity : AppCompatActivity() {
 
         // 3) Registrar pago
         val insertedId = db.registrarPagoActividadNoSocio(
-            dni = persona.dni,          // ya no usamos persona!!
+            idCliente = cliente.id.toString(),          // ya no usamos persona!!
             horarioId = idActividad,
             monto = precio,
             medioPago = formaPago
