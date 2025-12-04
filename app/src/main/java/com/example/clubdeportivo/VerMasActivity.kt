@@ -25,7 +25,11 @@ class VerMasActivity : AppCompatActivity() {
         tvBienvenida.text = "Bienvenido, $usuario"
 
         // Recupera dni del intent y busca a la persona en la BBDD
-        val dniUsuario = intent.getStringExtra("dni") ?: "dni"
+        val dniUsuario = intent.getStringExtra("dni") ?: ""
+        if (dniUsuario.isEmpty()) {
+            Intent(this, InicioActivity::class.java)
+            Toast.makeText(this, "Error al cargar el cliente", Toast.LENGTH_LONG).show()
+        }
         val cliente = db.obtenerPersonaPorDni(dniUsuario)
 
         //Inicializar vistas

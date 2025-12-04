@@ -83,7 +83,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                 // Fecha hoy
                 val hoyISO = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
                 // Tabla
-                val tabla = "no_socios"
+                val tabla = "clientes"
 
                 // Valores a insertar
                 val values = ContentValues().apply {

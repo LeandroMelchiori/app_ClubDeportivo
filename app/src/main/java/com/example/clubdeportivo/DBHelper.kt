@@ -637,13 +637,12 @@ package com.example.clubdeportivo
             // ----- Cuotas de socios -----
             var cantSocios = 0
             var montoCuotas = 0.0
-            db.rawQuery(
-                """
-        SELECT COUNT(DISTINCT idSocio) AS cant, IFNULL(SUM(monto),0) AS total
-        FROM cuotas
-        WHERE strftime('%Y', fechaPago) = ? 
-          AND strftime('%m', fechaPago) = ?
-        """.trimIndent(),
+            db.rawQuery("""
+                SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
+                FROM cuotas
+                WHERE strftime('%Y', fechaPago) = ? 
+                  AND strftime('%m', fechaPago) = ?
+                """.trimIndent(),
                 arrayOf(anioStr, mesStr)
             ).use { c ->
                 if (c.moveToFirst()) {
@@ -657,7 +656,7 @@ package com.example.clubdeportivo
             var montoActividades = 0.0
             db.rawQuery(
                 """
-        SELECT COUNT(DISTINCT dni_nosocio) AS cant, IFNULL(SUM(monto),0) AS total
+        SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
         FROM pagos_actividad
         WHERE strftime('%Y', fecha_pago) = ? 
           AND strftime('%m', fecha_pago) = ?
@@ -686,7 +685,6 @@ package com.example.clubdeportivo
         }
 
     // ----------------------------------------- CREATE -----------------------------------------
-
     fun hacerSocioDesdeNoSocio(
         dni: Int,
         monto: Double,
@@ -861,7 +859,7 @@ package com.example.clubdeportivo
     }
 
     // ----------------------------------------- Delete -----------------------------------------
-    // 4) Borrado logico del padrón para evitar conflicto con tabla de pagos
+    // Borrado logico del padrón para evitar conflicto con tabla de pagos
     fun darDeBajaHorario(dhId: Int, motivo: String? = null): Boolean {
         val db = writableDatabase
         db.beginTransaction()
@@ -963,32 +961,45 @@ package com.example.clubdeportivo
         fechaNac: String,
         telefono: String?,
         direccion: String?,
-        email: String?,
+        email: String?
     ): Boolean {
         val db = this.writableDatabase
         db.beginTransaction()
         try {
-            // Verificar si existe cliente
-            var id: Long? = null
-            db.rawQuery("SELECT id FROM clientes WHERE id = ?", arrayOf(id.toString())).use { c ->
-                if (c.moveToFirst()) id = c.getLong(0)
+            // Opcional: verificar que exista el cliente
+            val existe = db.rawQuery(
+                "SELECT id FROM clientes WHERE id = ?",
+                arrayOf(id.toString())
+            ).use { c ->
+                c.moveToFirst()
             }
-        val cv = ContentValues().apply {
-            put("nombre", nombre)
-            put("apellido", apellido)
-            put("dni", dni)
-            put("fecha_nac", fechaNac)
-            put("telefono", telefono)
-            put("direccion", direccion)
-            put("email", email)
-        }
-        val rows = db.update("clientes", cv, "id = ?", arrayOf(id.toString()))
-        return rows > 0
+
+            if (!existe) return false
+
+            val cv = ContentValues().apply {
+                put("nombre", nombre)
+                put("apellido", apellido)
+                put("dni", dni)
+                put("fecha_nac", fechaNac)
+                put("telefono", telefono)
+                put("direccion", direccion)
+                put("email", email)
+            }
+
+            val rows = db.update(
+                "clientes",
+                cv,
+                "id = ?",
+                arrayOf(id.toString())
+            )
+
+            db.setTransactionSuccessful()
+            return rows > 0
         } finally {
             db.endTransaction()
+            db.close()
         }
     }
-
 
     // ----------------------------------------- Utilidades -----------------------------------------
     // Modelos de datos

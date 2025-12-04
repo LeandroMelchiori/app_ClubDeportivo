@@ -109,7 +109,7 @@ class InicioActivity : AppCompatActivity() {
             tvTitulo.text = "${act.horaInicio} - ${act.nombre}"
 
             btnAccion.setOnClickListener {
-                intent = Intent(this, InscribirActividadActivity::class.java)
+                intent = Intent(this, PagoActividadActivity::class.java)
                 intent.putExtra("idActividad", act.id)
                 intent.putExtra("nombreActividad", act.nombre)
                 intent.putExtra("precioActividad", act.precio)
