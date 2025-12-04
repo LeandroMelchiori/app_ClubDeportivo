@@ -30,7 +30,6 @@ class ActividadCardAdapter(
         }
     }
 
-
     class VH(v: View) : RecyclerView.ViewHolder(v) {
         val tvNombre: TextView = v.findViewById(R.id.tvNombre)
         val tvProfesores: TextView = v.findViewById(R.id.tvProfesor)
