@@ -44,7 +44,7 @@ class NoSocioAdapter :
             h.tvEstado.text ="Inactivo"
             h.vEstado.setBackgroundResource(R.drawable.bg_pill_light)
         }
-        h.tvUltimoPago.text = if (ns.ultimaPago != null) "Ultima actividad: ${ns.ultimaPago}" else "No registra actividad"
+        h.tvUltimoPago.text = if (ns.ultimaPago != null) "Ultima actividad: ${ns.nombreAct} - ${ns.ultimaPago}" else "No registra actividad"
 
         h.btnAccion.setOnClickListener {
             val c = h.itemView.context

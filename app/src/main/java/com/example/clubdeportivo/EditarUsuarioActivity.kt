@@ -72,22 +72,19 @@ class EditarUsuarioActivity : AppCompatActivity() {
                 Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-
             //  Validar DNI
             if (!dni.matches(Regex("^\\d{8,9}\$"))) {
                 Toast.makeText(this, "El DNI debe tener 8 o 9 números", Toast.LENGTH_LONG).show()
                 etDni.requestFocus()
                 return@setOnClickListener
             }
-
             // Validar teléfono
             if (!telefono.matches(Regex("^\\d{9,12}\$"))) {
                 Toast.makeText(this, "Ingrese numerode telefono valido", Toast.LENGTH_LONG).show()
                 etTelefono.requestFocus()
                 return@setOnClickListener
             }
-
-            // 4) Validar email
+            // Validar email
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_LONG).show()
                 etEmail.requestFocus()
@@ -96,39 +93,23 @@ class EditarUsuarioActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this)
                 .setTitle("Confirmar edicion")
-                .setMessage("¿Confirmás editar al usuario con DNI: $dni?")
+                .setMessage("¿Confirmás editar al cliente con DNI: $dni?")
                 .setPositiveButton("Sí") { _, _ ->
                     try {
-                        if (esSocio == true) {
-
-                            db.actualizarSocioPorId(
-                                idSocio     = id,
-                                nombre      = etNombre.text.toString().trim(),
-                                apellido    = etApellido.text.toString().trim(),
-                                dni         = etDni.text.toString().trim(),
-                                fechaNac    = etFechaNac.text.toString().trim(),
-                                telefono    = etTelefono.text.toString().trim(),
-                                direccion   = etDireccion.text.toString().trim(),
-                                email       = etEmail.text.toString().trim()
-                            )
-                            Toast.makeText(this, "Socio actualizado con exito", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
-                            db.actualizarNoSocioPorId(
-                                idNoSocio   = id,
-                                nombre      = etNombre.text.toString().trim(),
-                                apellido    = etApellido.text.toString().trim(),
-                                dni         = etDni.text.toString().trim(),
-                                fechaNac    = etFechaNac.text.toString().trim(),
-                                telefono    = etTelefono.text.toString().trim(),
-                                direccion   = etDireccion.text.toString().trim(),
-                                email       = etEmail.text.toString().trim(),
-                            )
-                            Toast.makeText(this, "No socio actualizado con exito", Toast.LENGTH_SHORT).show()
-                            intent = Intent(this, ListadosActivity::class.java)
-                            intent.putExtra("usuario", usuario)
-                            startActivity(intent)
-                        }
+                        db.actualizarClientePorId(
+                            id          = id,
+                            nombre      = etNombre.text.toString().trim(),
+                            apellido    = etApellido.text.toString().trim(),
+                            dni         = etDni.text.toString().trim(),
+                            fechaNac    = etFechaNac.text.toString().trim(),
+                            telefono    = etTelefono.text.toString().trim(),
+                            direccion   = etDireccion.text.toString().trim(),
+                            email       = etEmail.text.toString().trim()
+                        )
+                        val intent = Intent(this, VerMasActivity::class.java)
+                        intent.putExtra("dni", dni)
+                        startActivity(intent)
+                        Toast.makeText(this, "Cliente actualizado con exito", Toast.LENGTH_SHORT).show()
                     } catch (e: IllegalArgumentException) {
                         Toast.makeText(this, e.message ?: "Error al actualizar usuario", Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -137,10 +118,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
-
         }
-
-
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home

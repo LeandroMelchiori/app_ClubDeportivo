@@ -114,7 +114,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                     try {
                         val fechaHoy = LocalDate.now().toString()
                         val db = DBHelper(this)
-                        val idSocio = db.hacerSocioDesdeNoSocio(dni, monto, formaPago, fechaHoy)
+                        val idSocio = db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy)
                         Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
                         intent = Intent(this, ListadosActivity::class.java)
                         intent.putExtra("usuario", usuario)

@@ -13,16 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class IngresarActividadActivity : AppCompatActivity() {
-
-    data class ActividadItem(val id: Long, val nombre: String) {
-        override fun toString() = nombre  // sólo muestra el nombre
-    }
-
-    data class ProfesorItem(val dni: String, val nombre: String, val apellido: String) {
-        override fun toString() = "$nombre $apellido" // sólo nombre y apellido
-    }
-
+class NuevoHorarioActividadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ingresar_actividad)
@@ -153,6 +144,7 @@ class IngresarActividadActivity : AppCompatActivity() {
         }
     }
 
+    // Cargas de actividades y profesores
     private fun cargarActividades(ctx: Context): List<ActividadItem> {
         val db = DBHelper(ctx).readableDatabase
         val lista = mutableListOf<ActividadItem>()
@@ -182,9 +174,13 @@ class IngresarActividadActivity : AppCompatActivity() {
         db.close()
         return lista
     }
+
+    // Herramientas
     private val DIAS = listOf("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado")
     private fun buildSlots30min(
-        startHour: Int = 6, endHour: Int = 23, includeEndHalf: Boolean = true
+        startHour: Int = 6,
+        endHour: Int = 23,
+        includeEndHalf: Boolean = true
     ): List<String> {
         val out = mutableListOf<String>()
         var m = startHour * 60
@@ -201,5 +197,13 @@ class IngresarActividadActivity : AppCompatActivity() {
     private fun hhmmToMin(hhmm: String): Int {
         val (h, m) = hhmm.split(":").map { it.toInt() }
         return h * 60 + m
+    }
+
+    // Modelos de datos
+    data class ActividadItem(val id: Long, val nombre: String) {
+        override fun toString() = nombre  // sólo muestra el nombre
+    }
+    data class ProfesorItem(val dni: String, val nombre: String, val apellido: String) {
+        override fun toString() = "$nombre $apellido" // sólo nombre y apellido
     }
 }

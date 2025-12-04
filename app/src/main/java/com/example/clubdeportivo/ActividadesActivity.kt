@@ -50,7 +50,7 @@ class ActividadesActivity : AppCompatActivity() {
 
         // Agregar horario
         btnAgregar.setOnClickListener {
-            val intent = Intent(this, IngresarActividadActivity::class.java)
+            val intent = Intent(this, NuevoHorarioActividadActivity::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }

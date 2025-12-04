@@ -30,26 +30,8 @@ package com.example.clubdeportivo
             );
         """.trimIndent())
         db.execSQL("""
-            CREATE TABLE no_socios (
-                idNoSocio INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT NOT NULL,
-                apellido TEXT NOT NULL,
-                dni TEXT NOT NULL UNIQUE,
-                fecha_nac TEXT NOT NULL,
-                telefono TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                direccion TEXT NOT NULL,
-                activo INTEGER NOT NULL DEFAULT 1,
-                motivo_baja TEXT,
-                fecha_baja TEXT,
-                fecha_inscripcion TEXT NOT NULL DEFAULT (date('now')),
-                ficha_medica     INTEGER NOT NULL DEFAULT 1,     -- ← default 1
-                suspendido INTEGER NOT NULL DEFAULT 0
-                );
-            """.trimIndent())
-        db.execSQL("""
-            CREATE TABLE socios (
-                idSocio INTEGER PRIMARY KEY AUTOINCREMENT,
+            CREATE TABLE clientes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
                 apellido TEXT NOT NULL,
                 dni TEXT NOT NULL UNIQUE,
@@ -57,11 +39,11 @@ package com.example.clubdeportivo
                 telefono TEXT NOT NULL,
                 direccion TEXT NOT NULL,
                 fecha_inscripcion TEXT NOT NULL,
-                ficha_medica INTEGER NOT NULL,
+                ficha_medica BOOLEAN NOT NULL DEFAULT 1,
                 email TEXT NOT NULL UNIQUE,
-                activo INTEGER NOT NULL,
-                carnet INTEGER NOT NULL,
-                suspendido INTEGER NOT NULL DEFAULT 0
+                esSocio BOOLEAN NOT NULL DEFAULT 0,
+                activo BOOLEAN NOT NULL DEFAULT 1,
+                carnet BOOLEAN NOT NULL DEFAULT 0
                 );
             """.trimIndent())
         db.execSQL("""
@@ -75,31 +57,31 @@ package com.example.clubdeportivo
               fecha_inscripcion TEXT NOT NULL,
               ficha_medica INTEGER NOT NULL,
               email TEXT NOT NULL,
-              activo INTEGER,
+              activo INTEGER NOT NULL DEFAULT 0,
               titulo TEXT
             );
             """.trimIndent())
         db.execSQL("""
             CREATE TABLE cuotas (
               idCuota INTEGER PRIMARY KEY AUTOINCREMENT,
-              idSocio INTEGER NOT NULL,
+              idCliente INTEGER NOT NULL,
               monto NUMERIC,
               fechaPago TEXT NOT NULL,
               formaPago TEXT,
               estadoDelPago INTEGER NOT NULL,
               fechaVencimiento TEXT NOT NULL,
-              FOREIGN KEY (idSocio) REFERENCES socios(idSocio)
+              FOREIGN KEY (idCliente) REFERENCES clientes(id)
             );
             """.trimIndent())
         db.execSQL("""
             CREATE TABLE pagos_actividad (
               id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
-              dni_nosocio TEXT NOT NULL,
+              idCliente TEXT NOT NULL,
               id_actividad INTEGER NOT NULL,
               fecha_pago TEXT NOT NULL,
               forma_pago TEXT NOT NULL,
               monto NUMERIC NOT NULL,
-              FOREIGN KEY (dni_nosocio) REFERENCES no_socios(dni),
+              FOREIGN KEY (idCliente) REFERENCES clientes(id),
               FOREIGN KEY (id_actividad) REFERENCES dias_horarios(id)
             );
             """.trimIndent())
@@ -181,76 +163,76 @@ package com.example.clubdeportivo
                 ('20888999','Sofía','Almada','1991-12-01','3415556666','Córdoba 1500, Rosario','2025-02-01',1,'sofia.almada@club.com',1,'Prof. Vóley');
                 """.trimIndent()
             )
-            // --------- NO_SOCIOS ---------
+            // --------- CLIENTES (SOCIOS) ---------
             db.execSQL("""
-                INSERT OR IGNORE INTO no_socios
-                (nombre, apellido, dni, fecha_nac, telefono, email, direccion, fecha_inscripcion, ficha_medica, activo) VALUES
-                ('Carlos','Ruiz','33111222','1999-05-10','3416000001','carlos.ruiz@gmail.com','Mitre 120, Rosario','2025-03-01',1,1),
-                ('Ana','Martínez','30999888','2001-11-23','3416000002','ana.martinez@gmail.com','Belgrano 450, Rosario','2025-03-02',1,1),
-                ('Matías','Ojeda','28123456','1995-08-14','3416000003','matias.ojeda@gmail.com','Dorrego 980, Rosario','2025-03-03',1,1),
-                ('Camila','Lopez','32123456','2000-02-28','3416000004','camila.lopez@gmail.com','Tucumán 2100, Rosario','2025-03-04',1,1),
-                ('Bruno','Ferreyra','34123456','1998-07-07','3416000005','bruno.ferreyra@gmail.com','Paraguay 300, Rosario','2025-03-05',1,1),
-                ('Valentina','Suárez','35123456','2002-09-19','3416000006','valentina.suarez@gmail.com','Catamarca 750, Rosario','2025-03-06',1,1),
-                ('Ezequiel','Páez','36123456','1997-01-30','3416000007','eze.paez@gmail.com','Urquiza 210, Rosario','2025-03-07',1,1),
-                ('Julieta','Bianchi','37123456','2003-04-22','3416000008','julieta.bianchi@gmail.com','Salta 1750, Rosario','2025-03-08',1,1);
-                """.trimIndent()
-            )
-            //--------- SOCIOS ---------
-            db.execSQL("""
-                INSERT OR IGNORE INTO socios
-                (idSocio, nombre, apellido, dni, fecha_nac, telefono, direccion, fecha_inscripcion, ficha_medica, email, activo, carnet) VALUES
-                (1,'Pablo','Álvarez','40111111','1993-02-15','3415557001','San Luis 101, Rosario',date('now','-4 months'),1,'p.alvarez@club.com',1,1),
-                (2,'Mariana','Cabral','40222222','1991-07-09','3415557002','Santiago 220, Rosario',date('now','-2 months'),1,'m.cabral@club.com',1,1),
-                (3,'Diego','Ortiz','40333333','1989-11-20','3415557003','Pellegrini 1500, Rosario',date('now','-6 months'),1,'d.ortiz@club.com',1,1),
-                (4,'Lucía','Funes','40444444','1995-03-03','3415557004','Riobamba 800, Rosario',date('now','-8 months'),1,'l.funes@club.com',1,1),
-                (6,'Carla','Vega','40666666','1992-12-12','3415557006','Mitre 200, Rosario',date('now','-3 months'),1,'c.vega@club.com',1,1),
-                (7,'Sofía','Ramos','40777777','1990-09-17','3415557007','Salta 900, Rosario',date('now','-10 months'),1,'s.ramos@club.com',1,1),
-                (8,'Hernán','Molina','40888888','1994-01-30','3415557008','España 1200, Rosario',date('now','-1 months'),1,'h.molina@club.com',1,1);
+                INSERT OR IGNORE INTO clientes
+                (id, nombre, apellido, dni, fecha_nac, telefono, direccion, fecha_inscripcion, ficha_medica, email, activo, carnet, esSocio) VALUES
+                (1,'Pablo','Álvarez','40111111','1993-02-15','3415557001','San Luis 101, Rosario',date('now','-4 months'),1,'p.alvarez@club.com',1,1,1),
+                (2,'Mariana','Cabral','40222222','1991-07-09','3415557002','Santiago 220, Rosario',date('now','-2 months'),1,'m.cabral@club.com',1,1,1),
+                (3,'Diego','Ortiz','40333333','1989-11-20','3415557003','Pellegrini 1500, Rosario',date('now','-6 months'),1,'d.ortiz@club.com',1,1,1),
+                (4,'Lucía','Funes','40444444','1995-03-03','3415557004','Riobamba 800, Rosario',date('now','-8 months'),1,'l.funes@club.com',1,1,1),
+                (6,'Carla','Vega','40666666','1992-12-12','3415557006','Mitre 200, Rosario',date('now','-3 months'),1,'c.vega@club.com',1,1,1),
+                (7,'Sofía','Ramos','40777777','1990-09-17','3415557007','Salta 900, Rosario',date('now','-10 months'),1,'s.ramos@club.com',1,1,1),
+                (8,'Hernán','Molina','40888888','1994-01-30','3415557008','España 1200, Rosario',date('now','-1 months'),1,'h.molina@club.com',1,1,1);
                 """.trimIndent())
 
-            // --------- CUOTAS ---------
-
-            // Socio 1: AL DÍA (última cuota paga hoy, vence el mes que viene)
+            // --------- CLIENTES (NO SOCIOS) ---------
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO clientes
+                (nombre, apellido, dni, fecha_nac, telefono, email, direccion, fecha_inscripcion, ficha_medica, activo, carnet, esSocio) VALUES
+                ('Carlos','Ruiz','33111222','1999-05-10','3416000001','carlos.ruiz@gmail.com','Mitre 120, Rosario','2025-03-01',1,1,0,0),
+                ('Ana','Martínez','30999888','2001-11-23','3416000002','ana.martinez@gmail.com','Belgrano 450, Rosario','2025-03-02',1,1,0,0),
+                ('Matías','Ojeda','28123456','1995-08-14','3416000003','matias.ojeda@gmail.com','Dorrego 980, Rosario','2025-03-03',1,1,0,0),
+                ('Camila','Lopez','32123456','2000-02-28','3416000004','camila.lopez@gmail.com','Tucumán 2100, Rosario','2025-03-04',1,1,0,0),
+                ('Bruno','Ferreyra','34123456','1998-07-07','3416000005','bruno.ferreyra@gmail.com','Paraguay 300, Rosario','2025-03-05',1,1,0,0),
+                ('Valentina','Suárez','35123456','2002-09-19','3416000006','valentina.suarez@gmail.com','Catamarca 750, Rosario','2025-03-06',1,1,0,0),
+                ('Ezequiel','Páez','36123456','1997-01-30','3416000007','eze.paez@gmail.com','Urquiza 210, Rosario','2025-03-07',1,1,0,0),
+                ('Julieta','Bianchi','37123456','2003-04-22','3416000008','julieta.bianchi@gmail.com','Salta 1750, Rosario','2025-03-08',1,1,0,0);
+                 """.trimIndent())
+
+            // --------- CUOTAS ---------
+            // Cliente 1: AL DÍA (última cuota paga hoy, vence el mes que viene)
+            db.execSQL("""
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (1, 30000, date('now','-2 months'), 'Efectivo', 1, date('now','-1 months')),
                 (1, 30000, date('now','-1 months'), 'Efectivo', 1, date('now')),
                 (1, 30000, date('now'),            'Efectivo', 1, date('now','+1 months'));
                 """.trimIndent())
 
-            // Socio 2: POR VENCER (faltan < 7 días)
+            // Cliente 2: POR VENCER (faltan < 7 días)
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (2, 30000, date('now','-25 days'), 'Transferencia', 1, date('now','+5 days'));
                 """.trimIndent())
 
-            // Socio 3: VENCIDO hace 10 días (DEUDOR)
+            // Cliente 3: VENCIDO hace 10 días
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (3, 30000, date('now','-40 days'), 'Tarjeta', 1, date('now','-10 days'));
                 """.trimIndent())
 
-            // Socio 4: VENCIDO hace 40 días (DEUDOR)
+            // Cliente 4: VENCIDO hace 40 días
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (4, 30000, date('now','-70 days'), 'Efectivo', 1, date('now','-40 days'));
                 """.trimIndent())
 
-            // Socio 6: AL DÍA con historial
+            // Cliente 6: AL DÍA con historial
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (6, 30000, date('now','-2 months'), 'Tarjeta', 1, date('now','-1 months')),
                 (6, 30000, date('now','-1 months'), 'Tarjeta', 1, date('now'));
                 """.trimIndent())
 
-            // Socio 7: Vencido hace 5 meses (DEUDOR crónico)
+            // Cliente 7: Vencido hace 5 meses
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (7, 30000, date('now','-6 months'), 'Efectivo', 1, date('now','-5 months'));
                 """.trimIndent())
-            // Socio 8: VENCE HOY
+
+            // Cliente 8: VENCE HOY
             db.execSQL("""
-                INSERT OR IGNORE INTO cuotas (idSocio, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
+                INSERT OR IGNORE INTO cuotas (idCliente, monto, fechaPago, formaPago, estadoDelPago, fechaVencimiento) VALUES
                 (8, 30000, date('now','-30 days'), 'Transferencia', 1, date('now'));
                 """.trimIndent())
 
@@ -276,7 +258,6 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 1 AND profesor_dni = '27999888';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 1, 1140, 1200   -- 19:00–20:00
@@ -291,7 +272,6 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 2 AND profesor_dni = '20888999';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 2, 1170, 1260   -- 19:30–21:00
@@ -306,7 +286,6 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 4 AND profesor_dni = '22333444';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 3, 1080, 1140   -- 18:00–19:00
@@ -321,7 +300,6 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 7 AND profesor_dni = '20123456';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 4, 1080, 1140   -- 18:00–19:00
@@ -336,7 +314,6 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 1 AND profesor_dni = '27999888';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 5, 1170, 1230   -- 19:30–20:30
@@ -351,21 +328,18 @@ package com.example.clubdeportivo
                 FROM actividad_profesor
                 WHERE actividad_id = 8 AND profesor_dni = '25444777';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 6, 1080, 1140   -- 18:00–19:00
                 FROM actividad_profesor
                 WHERE actividad_id = 4 AND profesor_dni = '22333444';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 0, 600, 660     -- 10:00–11:00
                 FROM actividad_profesor
                 WHERE actividad_id = 6 AND profesor_dni = '20123456';
                 """.trimIndent())
-
             db.execSQL("""
                 INSERT OR IGNORE INTO dias_horarios (actividad_profesor_id, dia, hora_inicio, hora_fin)
                 SELECT id, 0, 1080, 1140   -- 18:00–19:00
@@ -400,12 +374,21 @@ package com.example.clubdeportivo
         val lista = mutableListOf<NoSocioCard>()
         val db = readableDatabase
         val sql = """
-        SELECT n.nombre, n.apellido, n.dni, MAX(p.fecha_pago) AS ultima_pago
-        FROM no_socios n
-        LEFT JOIN pagos_actividad p ON p.dni_nosocio = n.dni
-        WHERE n.suspendido = 0
-        GROUP BY n.dni, n.nombre, n.apellido
-        ORDER BY n.apellido, n.nombre
+        SELECT 
+            ns.nombre,
+            ns.apellido,
+            ns.dni,
+            MAX(p.fecha_pago) AS ultima_pago,
+            a.nombre AS actividad_pagada
+        FROM clientes ns
+        LEFT JOIN pagos_actividad p 
+               ON p.idCliente = ns.dni
+        LEFT JOIN actividades a
+               ON a.id_actividad = p.id_actividad
+        WHERE ns.esSocio = false AND activo = 1
+        GROUP BY ns.dni, ns.nombre, ns.apellido
+        ORDER BY ns.apellido, ns.nombre;
+
     """.trimIndent()
         val c = db.rawQuery(sql, null)
         if (c.moveToFirst()) {
@@ -413,8 +396,9 @@ package com.example.clubdeportivo
                 val nombre = c.getString(0)
                 val apellido = c.getString(1)
                 val dni = c.getString(2)
-                val ultima = if (!c.isNull(3)) c.getString(3) else null
-                lista.add(NoSocioCard(nombre, apellido, dni, ultima))
+                val ultimoPago = if (!c.isNull(3)) c.getString(3) else null
+                val nombreAct = if (!c.isNull(3)) c.getString(4) else null
+                lista.add(NoSocioCard(nombre, apellido, dni, ultimoPago, nombreAct))
             } while (c.moveToNext())
         }
         c.close(); db.close()
@@ -425,10 +409,10 @@ package com.example.clubdeportivo
         val db = readableDatabase
         val sql = """
         SELECT s.nombre, s.apellido, s.dni, MAX(c.fechaPago) AS ultimo_pago
-        FROM socios s
-        LEFT JOIN cuotas c ON c.idSocio = s.idSocio
-        WHERE s.suspendido = 0
-        GROUP BY s.idSocio, s.nombre, s.apellido, s.dni
+        FROM clientes s
+        LEFT JOIN cuotas c ON c.idCliente = s.id
+        WHERE s.activo = 1 AND esSocio = 1
+        GROUP BY s.id, s.nombre, s.apellido, s.dni
         ORDER BY s.apellido, s.nombre
     """.trimIndent()
         val c = db.rawQuery(sql, null)
@@ -448,27 +432,28 @@ package com.example.clubdeportivo
             val lista = mutableListOf<VencimientoCard>()
             val db = readableDatabase
             val sql = """
-        SELECT s.nombre,
-               s.apellido,
-               s.dni,
-               c.fechaVencimiento,
-               (SELECT MAX(c2.fechaPago)
-                FROM cuotas c2
-                WHERE c2.idSocio = s.idSocio) AS ultimo_pago
-        FROM cuotas c
-        JOIN socios s ON s.idSocio = c.idSocio
-        -- Nos quedamos solo con la ÚLTIMA cuota de cada socio
-        JOIN (
-            SELECT idSocio, MAX(fechaVencimiento) AS maxVenc
-            FROM cuotas
-            GROUP BY idSocio
-        ) ult ON ult.idSocio = c.idSocio
-             AND ult.maxVenc = c.fechaVencimiento
-        -- Vence hoy o ya venció
-        WHERE c.fechaVencimiento <= ?
-            AND s.suspendido = 0
-        ORDER BY s.apellido, s.nombre
-    """.trimIndent()
+                SELECT s.nombre,
+                       s.apellido,
+                       s.dni,
+                       c.fechaVencimiento,
+                       (SELECT MAX(c2.fechaPago)
+                        FROM cuotas c2
+                        WHERE c2.idCliente = s.id) AS ultimo_pago
+                FROM cuotas c
+                JOIN clientes s ON s.id = c.idCliente
+                -- Nos quedamos solo con la ÚLTIMA cuota de cada socio
+                JOIN (
+                    SELECT idCliente, MAX(fechaVencimiento) AS maxVenc
+                    FROM cuotas
+                    GROUP BY idCliente
+                ) ult ON ult.idCliente = c.idCliente
+                     AND ult.maxVenc = c.fechaVencimiento
+                -- Vence hoy o ya venció
+                WHERE c.fechaVencimiento <= ?
+                    AND s.activo = 1
+                    AND esSocio = 1
+                ORDER BY s.apellido, s.nombre
+            """.trimIndent()
 
             val c = db.rawQuery(sql, arrayOf(fecha))
             if (c.moveToFirst()) {
@@ -568,18 +553,16 @@ package com.example.clubdeportivo
     // Busquedas
     fun obtenerPersonaPorDni(dni: String): PersonaDTO? {
         val db = this.readableDatabase
-
-        // 1) intentar en "socios"
         db.query(
-            "socios",
+            "clientes",
             null,
-            "dni = ? AND suspendido = 0",
+            "dni = ? AND activo = 1",
             arrayOf(dni),
             null, null, null
         ).use { c ->
             if (c.moveToFirst()) {
                 return PersonaDTO(
-                    id = c.getInt(c.getColumnIndexOrThrow("idSocio")),
+                    id = c.getInt(c.getColumnIndexOrThrow("id")),
                     dni = c.getStringOrNull("dni") ?: dni,
                     nombre = c.getStringOrNull("nombre"),
                     apellido = c.getStringOrNull("apellido"),
@@ -588,77 +571,11 @@ package com.example.clubdeportivo
                     email = c.getStringOrNull("email"),
                     fecha_nac = c.getStringOrNull("fecha_nac"),
                     fichaMedica = c.getStringOrNull("ficha_medica"),
-                    esSocio = true,
-                )
-            }
-        }
-
-        // 2) si no está en socios, intentar en "no_socios"
-        db.query(
-            "no_socios",
-            null,
-            "dni = ? AND suspendido = 0",
-            arrayOf(dni),
-            null, null, null
-        ).use { c ->
-            if (c.moveToFirst()) {
-                return PersonaDTO(
-                    id = c.getInt(c.getColumnIndexOrThrow("idNoSocio")),
-                    dni = c.getStringOrNull("dni") ?: dni,
-                    nombre = c.getStringOrNull("nombre"),
-                    apellido = c.getStringOrNull("apellido"),
-                    telefono = c.getStringOrNull("telefono"),
-                    direccion = c.getStringOrNull("direccion"),
-                    email = c.getStringOrNull("email"),
-                    fecha_nac = c.getStringOrNull("fecha_nac"),
-                    fichaMedica = c.getStringOrNull("ficha_medica"),
-                    esSocio = false,
+                    esSocio = c.getInt(c.getColumnIndexOrThrow("esSocio")) == 1
                 )
             }
         }
         return null
-    }
-    fun obtenerNoSocioPorDni(dni: String): NoSocioDTO? {
-        // Obtener la base de datos en modo lectura
-        val db = this.readableDatabase
-
-        // Consultar la tabla "no_socios" filtrando por DNI
-        val cursor = db.query(
-            "no_socios",
-            null,
-            "dni = ? AND suspendido = 0",
-            arrayOf(dni),
-            null, null, null
-        )
-
-        var noSocio: NoSocioDTO? = null
-        if (cursor.moveToFirst()) {
-            // Extraer valores de cada columna del cursor
-            val dniValue = cursor.getInt(cursor.getColumnIndexOrThrow("dni"))
-            val nombreValue      = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
-            val apellidoValue    = cursor.getString(cursor.getColumnIndexOrThrow("apellido"))
-            val telefonoValue    = cursor.getString(cursor.getColumnIndexOrThrow("telefono"))
-            val direccionValue   = cursor.getString(cursor.getColumnIndexOrThrow("direccion"))
-            val emailValue       = cursor.getString(cursor.getColumnIndexOrThrow("email"))
-            val fechaNacValue = cursor.getString(cursor.getColumnIndexOrThrow("fecha_nac"))
-            val fichaMedicaValue = cursor.getString(cursor.getColumnIndexOrThrow("ficha_medica"))
-
-            // Crear un objeto NoSocioDTO con los datos obtenidos
-            noSocio = NoSocioDTO(
-                dni       = dniValue,
-                nombre    = nombreValue,
-                apellido  = apellidoValue,
-                telefono  = telefonoValue,
-                direccion = direccionValue,
-                email     = emailValue,
-                fecha_nac = fechaNacValue,
-                fichaMedica = fichaMedicaValue
-            )
-        }
-        // Cerrar el cursor para liberar recursos
-        cursor.close()
-
-        return noSocio
     }
     fun buscarActividadesPorNombre(texto: String): List<ActividadCard> {
         val db = readableDatabase
@@ -720,13 +637,12 @@ package com.example.clubdeportivo
             // ----- Cuotas de socios -----
             var cantSocios = 0
             var montoCuotas = 0.0
-            db.rawQuery(
-                """
-        SELECT COUNT(DISTINCT idSocio) AS cant, IFNULL(SUM(monto),0) AS total
-        FROM cuotas
-        WHERE strftime('%Y', fechaPago) = ? 
-          AND strftime('%m', fechaPago) = ?
-        """.trimIndent(),
+            db.rawQuery("""
+                SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
+                FROM cuotas
+                WHERE strftime('%Y', fechaPago) = ? 
+                  AND strftime('%m', fechaPago) = ?
+                """.trimIndent(),
                 arrayOf(anioStr, mesStr)
             ).use { c ->
                 if (c.moveToFirst()) {
@@ -740,7 +656,7 @@ package com.example.clubdeportivo
             var montoActividades = 0.0
             db.rawQuery(
                 """
-        SELECT COUNT(DISTINCT dni_nosocio) AS cant, IFNULL(SUM(monto),0) AS total
+        SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
         FROM pagos_actividad
         WHERE strftime('%Y', fecha_pago) = ? 
           AND strftime('%m', fecha_pago) = ?
@@ -769,62 +685,61 @@ package com.example.clubdeportivo
         }
 
     // ----------------------------------------- CREATE -----------------------------------------
-
     fun hacerSocioDesdeNoSocio(
-        dni: String,
+        dni: Int,
         monto: Double,
         formaPago: String,
         fechaPago: String // "YYYY-MM-DD"
-    ): Long {
+    ): Int? {
+
         val db = writableDatabase
         db.beginTransaction()
-        try {
-            // 1) Traer datos del no socio
-            val ns = obtenerNoSocioPorDni(dni) ?: throw IllegalArgumentException("No existe No Socio con ese DNI")
 
-            // 2) Insertar en socios
-            val cvSocio = ContentValues().apply {
-                put("nombre", ns.nombre)
-                put("apellido", ns.apellido)
-                put("dni", ns.dni)
-                put("fecha_nac", ns.fecha_nac)
-                put("telefono", ns.telefono)
-                put("direccion", ns.direccion)
-                put("fecha_inscripcion", fechaPago) // alta hoy
-                put("ficha_medica", ns.fichaMedica)
-                put("email", ns.email)
+        try {
+            // 1) Traer cliente por DNI
+            val cliente = obtenerPersonaPorDni(dni.toString())
+                ?: throw IllegalArgumentException("No existe un cliente con ese DNI")
+
+            // Si ya es socio, no corresponde hacer el alta
+            if (cliente.esSocio) {
+                throw IllegalStateException("El cliente ya es socio")
+            }
+
+            // 2) Actualizar tabla clientes: pasar a socio
+            val cvUpdate = ContentValues().apply {
+                put("esSocio", 1)
                 put("activo", 1)
                 put("carnet", 1)
             }
-            val idSocio = db.insertOrThrow("socios", null, cvSocio)
+
+            db.update(
+                "clientes",
+                cvUpdate,
+                "dni = ?",
+                arrayOf(dni.toString())
+            )
+
+            val idCliente = cliente.id  // tu clase Persona debería tener este id
 
             // 3) Registrar cuota inicial pagada
             val fechaVenc = LocalDate.parse(fechaPago).plusMonths(1).toString()
+
             val cvCuota = ContentValues().apply {
-                put("idSocio", idSocio)
+                put("idCliente", idCliente)
                 put("monto", monto)
                 put("fechaPago", fechaPago)
                 put("formaPago", formaPago)
-                put("estadoDelPago", 1) // 1=pagado
+                put("estadoDelPago", 1)  // pagado
                 put("fechaVencimiento", fechaVenc)
             }
             db.insertOrThrow("cuotas", null, cvCuota)
-
-            // 4) Borrado logico del padrón de no socios para evitar conflicto con tabla de pagos
-            // !!!!!!! Buscar otra solución !!!!!!
-            val cv = ContentValues().apply {
-                put("suspendido", 1)
-            }
-            db.update("no_socios", cv, "dni = ?", arrayOf(dni))
-
             db.setTransactionSuccessful()
-            return idSocio
+            return idCliente
         } finally {
             db.endTransaction()
             db.close()
         }
     }
-
     fun insertarHorario(
         actividadId: Long,
         profesorDni: String,
@@ -926,7 +841,7 @@ package com.example.clubdeportivo
         return db.insert("cuotas", null, cv)
     }
     fun registrarPagoActividadNoSocio(
-        dni: String,
+        idCliente: String,
         horarioId: Int,
         monto: Double,
         medioPago: String,
@@ -934,7 +849,7 @@ package com.example.clubdeportivo
     ): Long {
         val db = writableDatabase
         val cv = ContentValues().apply {
-            put("dni_nosocio", dni)
+            put("idCliente", idCliente)
             put("id_actividad", horarioId)
             put("monto", monto)
             put("forma_pago", medioPago)
@@ -944,8 +859,7 @@ package com.example.clubdeportivo
     }
 
     // ----------------------------------------- Delete -----------------------------------------
-    // 4) Borrado logico del padrón para evitar conflicto con tabla de pagos
-    // !!!!!!! Buscar otra solución !!!!!!
+    // Borrado logico del padrón para evitar conflicto con tabla de pagos
     fun darDeBajaHorario(dhId: Int, motivo: String? = null): Boolean {
         val db = writableDatabase
         db.beginTransaction()
@@ -984,60 +898,44 @@ package com.example.clubdeportivo
             true
         } finally { db.endTransaction() }
     }
-    fun eliminarPersonaPorDni(dni: String): Boolean {
-        val db = this.writableDatabase
-        db.beginTransaction()
-        try {
-            // ¿Es socio?
-            var idSocio: Long? = null
-            db.rawQuery("SELECT idSocio FROM socios WHERE dni = ?", arrayOf(dni)).use { c ->
-                if (c.moveToFirst()) idSocio = c.getLong(0)
-            }
+    fun eliminarPersonaPorId(id: String): Boolean {
+            val db = this.writableDatabase
+            db.beginTransaction()
+            try {
+                // Verificar si existe el cliente
+                val idCliente = db.rawQuery(
+                    "SELECT id FROM clientes WHERE id = ?",
+                    arrayOf(id)
+                ).use { c ->
+                    if (c.moveToFirst()) c.getLong(0) else null
+                }
 
-            val cv = ContentValues().apply {
-                put("suspendido", 1)
-            }
+                if (idCliente == null) return false
 
-            if (idSocio != null) {
-                val rows = db.update("socios", cv,"idSocio = ?", arrayOf(idSocio.toString()))
+                // Borrado lógico
+                val cv = ContentValues().apply {
+                    put("activo", 0)
+                    put("carnet", 0)
+                    put("esSocio", 0)
+                }
+
+                val rows = db.update(
+                    "clientes",
+                    cv,
+                    "id = ?",
+                    arrayOf(idCliente.toString())
+                )
+
                 db.setTransactionSuccessful()
                 return rows > 0
-            } else {
-                val rows = db.update("no_socios", cv,"dni = ?", arrayOf(dni))
-                db.setTransactionSuccessful()
-                return rows > 0
+
+            } finally {
+                db.endTransaction()
+                db.close()
             }
-        } finally {
-            db.endTransaction()
         }
-    }
 
     // ----------------------------------------- Update -----------------------------------------
-
-    // Socios
-    fun actualizarSocioPorId(
-        idSocio: Int,
-        nombre: String,
-        apellido: String,
-        dni: String,
-        fechaNac: String,
-        telefono: String?,
-        direccion: String?,
-        email: String?,
-    ): Boolean {
-        val cv = ContentValues().apply {
-            put("nombre", nombre)
-            put("apellido", apellido)
-            put("dni", dni)
-            put("fecha_nac", fechaNac)
-            putOrNull("telefono", telefono)
-            putOrNull("direccion", direccion)
-            putOrNull("email", email)
-        }
-        val rows = writableDatabase.update("socios", cv, "idSocio = ?", arrayOf(idSocio.toString()))
-        return rows > 0
-    }
-
     // Horarios
     fun actualizarHorarioPorId(
         idDiaHorario: Int,
@@ -1054,58 +952,54 @@ package com.example.clubdeportivo
         return rows > 0
     }
 
-    // No socios
-    fun actualizarNoSocioPorId(
-        idNoSocio: Int,
-        nombre: String,
-        apellido: String,
-        dni: String,
-        fechaNac: String,
-        telefono: String?,
-        direccion: String?,
-        email: String?,
-    ): Boolean {
-        val cv = ContentValues().apply {
-            put("nombre", nombre)
-            put("apellido", apellido)
-            put("dni", dni)
-            put("fecha_nac", fechaNac)
-            putOrNull("telefono", telefono)
-            putOrNull("direccion", direccion)
-            putOrNull("email", email)
-            // NO tocar: idNoSocio, dni, fecha_inscripcion
-        }
-        val rows = writableDatabase.update("no_socios", cv, "idNoSocio = ?", arrayOf(idNoSocio.toString()))
-        return rows > 0
-    }
-
-    fun actualizarPersonaPorDni(
+    // Clientes
+    fun actualizarClientePorId(
+        id: Int,
         dni: String,
         nombre: String,
         apellido: String,
         fechaNac: String,
         telefono: String?,
         direccion: String?,
-        email: String?,
+        email: String?
     ): Boolean {
-        val tabla = when {
-            existeConDni("socios", dni) -> "socios"
-            existeConDni("no_socios", dni) -> "no_socios"
-            else -> return false
-        }
-        val cv = ContentValues().apply {
-            put("nombre", nombre)
-            put("apellido", apellido)
-            put("dni", dni)
-            put("fecha_nac", fechaNac)
-            put("telefono", telefono)
-            put("direccion", direccion)
-            put("email", email)
-        }
-        val rows = writableDatabase.update(tabla, cv, "dni = ?", arrayOf(dni))
-        return rows > 0
-    }
+        val db = this.writableDatabase
+        db.beginTransaction()
+        try {
+            // Opcional: verificar que exista el cliente
+            val existe = db.rawQuery(
+                "SELECT id FROM clientes WHERE id = ?",
+                arrayOf(id.toString())
+            ).use { c ->
+                c.moveToFirst()
+            }
 
+            if (!existe) return false
+
+            val cv = ContentValues().apply {
+                put("nombre", nombre)
+                put("apellido", apellido)
+                put("dni", dni)
+                put("fecha_nac", fechaNac)
+                put("telefono", telefono)
+                put("direccion", direccion)
+                put("email", email)
+            }
+
+            val rows = db.update(
+                "clientes",
+                cv,
+                "id = ?",
+                arrayOf(id.toString())
+            )
+
+            db.setTransactionSuccessful()
+            return rows > 0
+        } finally {
+            db.endTransaction()
+            db.close()
+        }
+    }
 
     // ----------------------------------------- Utilidades -----------------------------------------
     // Modelos de datos
@@ -1113,7 +1007,8 @@ package com.example.clubdeportivo
         val nombre: String,
         val apellido: String,
         val dni: String,
-        val ultimaPago: String?
+        val ultimaPago: String?,
+        val nombreAct: String?
     )
     data class VencimientoCard(
         val nombre: String,
@@ -1128,15 +1023,16 @@ package com.example.clubdeportivo
         val dni: String,
         val ultimoPago: String?
     )
-    data class NoSocioDTO(
-        val dni: Int,
-        val nombre: String,
-        val apellido: String,
-        val telefono: String,
-        val direccion: String,
-        val email: String,
-        val fecha_nac: String,
-        val fichaMedica: String
+    data class ActividadCard(
+            val idActividad: Int,
+            val idDiaHorario: Int,   // ← dh.id para eliminar
+            val nombre: String,
+            val precio: Double,
+            val profesor: String,
+            val dia: Int,
+            val horaInicio: Int,     // en minutos
+            val horaFin: Int,        // en minutos
+            val etiquetaHorario: String // "Lun 08:00-09:00"
     )
     data class PersonaDTO(
         val id: Int?,
@@ -1150,17 +1046,6 @@ package com.example.clubdeportivo
         val fichaMedica: String?,
         val esSocio: Boolean,
         )
-    data class ActividadCard(
-        val idActividad: Int,
-        val idDiaHorario: Int,   // ← dh.id para eliminar
-        val nombre: String,
-        val precio: Double,
-        val profesor: String,
-        val dia: Int,
-        val horaInicio: Int,     // en minutos
-        val horaFin: Int,        // en minutos
-        val etiquetaHorario: String // "Lun 08:00-09:00"
-    )
     data class ResumenPagosMes(
         val anio: Int,
         val mes: Int,
