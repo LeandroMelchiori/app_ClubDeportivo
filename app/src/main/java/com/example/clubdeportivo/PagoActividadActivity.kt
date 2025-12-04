@@ -49,7 +49,6 @@ class PagoActividadActivity : AppCompatActivity() {
         btnPagar.isEnabled = false
         rgMedioPago.isEnabled = false
 
-
         // Recupera datos de la actividad del intent
         val idActividad = intent.getIntExtra("idActividad", -1)
         val nombreActividad = intent.getStringExtra("nombreActividad") ?: "nombre de la actividad"

@@ -48,7 +48,6 @@ class InicioActivity : AppCompatActivity() {
         // Renderiza la lista de actividades del día
         renderActividadesHoy(actividades, usuario)
 
-
         // Boton nuevo usuario
         val btnUsuario = findViewById<MaterialButton>(R.id.btnUsuario)
         btnUsuario.setOnClickListener {
