@@ -54,8 +54,6 @@ class ActividadesActivity : AppCompatActivity() {
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
-
-
         adapter = ActividadCardAdapter(
             onEditar = { act ->
                 startActivity(

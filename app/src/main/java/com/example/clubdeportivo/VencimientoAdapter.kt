@@ -72,7 +72,7 @@ class VencimientoAdapter(
                 putExtra("nombre", "${item.apellido}, ${item.nombre}")
                 putExtra("tipoOperacion", "Cuota mensual - 10% Recargo")
                 putExtra("ultimoPago", item.ultimoPago)
-                putExtra("precio", "40000")
+                putExtra("precio", "33000")
                 putExtra("esSocio", true)
             })
         }

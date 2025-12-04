@@ -16,7 +16,7 @@ import java.util.Locale
 class NuevoHorarioActividadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ingresar_actividad)
+        setContentView(R.layout.activity_pago_actividad)
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"

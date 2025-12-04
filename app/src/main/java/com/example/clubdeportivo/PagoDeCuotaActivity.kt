@@ -28,7 +28,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         val precio = intent.getStringExtra("precio") ?: "precio"
         val esSocio = intent.getBooleanExtra("esSocio", false)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pago_de_cuota)
+        setContentView(R.layout.activity_pago_cuota)
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
