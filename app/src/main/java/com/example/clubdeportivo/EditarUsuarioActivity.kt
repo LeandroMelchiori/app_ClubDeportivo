@@ -32,7 +32,6 @@ class EditarUsuarioActivity : AppCompatActivity() {
         // Recuperar datos del intent
         val id = intent.getIntExtra("id", -1)
         val dni = intent.getStringExtra("dni") ?: ""
-        val esSocio = intent.getBooleanExtra("esSocio", false)
 
         // Inicializar views
         val etDni = findViewById<TextView>(R.id.etDni)
@@ -44,7 +43,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         val etFechaNac = findViewById<TextView>(R.id.etFechaNac)
 
         // Llenar views
-        val persona = db.obtenerPersonaPorDni(dni)
+        val persona = db.buscarPersonaPorDni(dni)
         etNombre.text = persona?.nombre
         etApellido.text = persona?.apellido
         etTelefono.text = persona?.telefono
@@ -119,6 +118,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
+
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home

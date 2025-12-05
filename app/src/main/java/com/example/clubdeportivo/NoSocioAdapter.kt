@@ -14,7 +14,6 @@ import java.time.temporal.ChronoUnit
 
 class NoSocioAdapter :
     ListAdapter<DBHelper.NoSocioCard, NoSocioAdapter.VH>(DIFF) {
-
     class VH(view: View) : RecyclerView.ViewHolder(view) {
         val tvNombre: TextView = view.findViewById(R.id.tvNombre)
         val tvDni: TextView = view.findViewById(R.id.tvDni)
@@ -46,6 +45,7 @@ class NoSocioAdapter :
         }
         h.tvUltimoPago.text = if (ns.ultimaPago != null) "Ultima actividad: ${ns.nombreAct} - ${ns.ultimaPago}" else "No registra actividad"
 
+        // Botones
         h.btnAccion.setOnClickListener {
             val c = h.itemView.context
             c.startActivity(Intent(c, PagoDeCuotaActivity::class.java).apply {
@@ -60,14 +60,11 @@ class NoSocioAdapter :
             c.startActivity(Intent(c, VerMasActivity::class.java).putExtra("dni", ns.dni))
         }
     }
-
     private var fullList: List<DBHelper.NoSocioCard> = emptyList()
-
     override fun submitList(list: List<DBHelper.NoSocioCard>?) {
         fullList = list ?: emptyList()
         super.submitList(list)
     }
-
     fun filtrarPorNombre(texto: String) {
         val q = texto.trim().lowercase()
 

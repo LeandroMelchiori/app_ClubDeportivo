@@ -18,6 +18,7 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pago_actividad)
 
+        val db = DBHelper(this)
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
@@ -71,20 +72,28 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
             val hi = hhmmToMin(spHoraInicio.selectedItem as String)
             val hf = hhmmToMin(spHoraFin.selectedItem as String)
 
+            // Validar horario correcto
             if (hf <= hi) {
                 Toast.makeText(this, "El horario de fin debe ser mayor al de inicio", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
+            // Ventana confirmacion
             AlertDialog.Builder(this)
                 .setTitle("Confirmar horario")
                 .setMessage("¿Confirmar nuevo horario de ${actividad.nombre}?")
                 .setPositiveButton("Sí") { _, _ ->
                     try {
-                        val inserted = DBHelper(this).insertarHorario(actividad.id, profesor.dni, dia, hi, hf)
+                        val inserted = db.insertarHorario(
+                            actividad.id,
+                            profesor.dni,
+                            dia,
+                            hi,
+                            hf)
                         if (inserted == -1L) {
                             Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
-                        } else {
+                        }
+                            else {
                             Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
                             intent = Intent(this, ActividadesActivity::class.java)
                             intent.putExtra("usuario", usuario)
@@ -111,28 +120,24 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-
                 R.id.nav_activity -> {
                     val intent = Intent(this, ActividadesActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true
                 }
-
                 R.id.nav_settings -> {
                     val intent = Intent(this, ConfiguracionActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true
                 }
-
                 R.id.nav_listas -> {
                     val intent = Intent(this, ListadosActivity::class.java)
                     intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     true
                 }
-
                 R.id.nav_home -> {
                     val intent = Intent(this, InicioActivity::class.java)
                     intent.putExtra("usuario", usuario)
@@ -193,7 +198,6 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
         }
         return out
     }
-
     private fun hhmmToMin(hhmm: String): Int {
         val (h, m) = hhmm.split(":").map { it.toInt() }
         return h * 60 + m

@@ -30,7 +30,7 @@ class VerMasActivity : AppCompatActivity() {
             Intent(this, InicioActivity::class.java)
             Toast.makeText(this, "Error al cargar el cliente", Toast.LENGTH_LONG).show()
         }
-        val cliente = db.obtenerPersonaPorDni(dniUsuario)
+        val cliente = db.buscarPersonaPorDni(dniUsuario)
 
         //Inicializar vistas
         val tvNombreCompleto = findViewById<TextView>(R.id.tvNombreUsuario)

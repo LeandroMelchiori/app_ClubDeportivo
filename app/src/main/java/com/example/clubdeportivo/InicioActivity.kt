@@ -67,28 +67,25 @@ class InicioActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
                 }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> true
+            R.id.nav_activity -> {
+                val intent = Intent(this, ActividadesActivity::class.java)
+                intent.putExtra("usuario", usuario)
+                startActivity(intent)
+                true
+            }
+            R.id.nav_settings -> {
+                val intent = Intent(this, ConfiguracionActivity::class.java)
+                intent.putExtra("usuario", usuario)
+                startActivity(intent)
+                true
+            }
+            R.id.nav_listas -> {
+                val intent = Intent(this, ListadosActivity::class.java)
+                intent.putExtra("usuario", usuario)
+                startActivity(intent)
+                true
+            }
+            else -> true
             }
         }
     }
@@ -107,6 +104,7 @@ class InicioActivity : AppCompatActivity() {
             val btnAccion = view.findViewById<ImageButton>(R.id.btnAccion)
             tvTitulo.text = "${act.horaInicio} - ${act.nombre}"
 
+            // Boton para dirigir al formulario de pago de actividad
             btnAccion.setOnClickListener {
                 intent = Intent(this, PagoActividadActivity::class.java)
                 intent.putExtra("idActividad", act.id)

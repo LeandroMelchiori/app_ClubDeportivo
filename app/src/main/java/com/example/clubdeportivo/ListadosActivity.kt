@@ -51,7 +51,6 @@ class ListadosActivity : AppCompatActivity() {
         tvNombreLista = findViewById(R.id.tvNombreLista)
         tvFecha = findViewById(R.id.tvFecha)
 
-
         // Fecha actual
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
@@ -65,7 +64,7 @@ class ListadosActivity : AppCompatActivity() {
         val fechaHoy = formato.format(Date())
         tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
 
-
+        // Layout Manager
         rvNoSocios.layoutManager = LinearLayoutManager(this)
         rvSocios.layoutManager   = LinearLayoutManager(this)
         rvVenc.layoutManager     = LinearLayoutManager(this)
@@ -101,7 +100,6 @@ class ListadosActivity : AppCompatActivity() {
 
         // Buscador
         val svBuscar = findViewById<SearchView>(R.id.svBuscar)
-
         svBuscar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 filtrarSegunListaActual(query.orEmpty())
@@ -113,6 +111,7 @@ class ListadosActivity : AppCompatActivity() {
                 return true
             }
         })
+
         // onClick
         botonVencimiento.setOnClickListener {
             mostrar(rvVenc)

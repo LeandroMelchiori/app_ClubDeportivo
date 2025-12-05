@@ -51,7 +51,6 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                 val email     = etEmail.text.toString().trim()
 
                 // Validaciones campos vacios
-
                 if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || fecha.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || email.isEmpty()) {
                     Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
@@ -71,7 +70,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                // 4) Validar email
+                // Validar email
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_LONG).show()
                     etEmail.requestFocus()
@@ -105,6 +104,7 @@ class NuevoUsuarioActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
+                // Ventana confirmacion
                 AlertDialog.Builder(this)
                     .setTitle("Confirmar registro")
                     .setMessage("¿Confirmás registro nuevo usuario?")
@@ -178,7 +178,6 @@ class NuevoUsuarioActivity : AppCompatActivity() {
             }
         }
     }
-
     // Metodo para normalizar la fecha
     private fun normalizarFecha(input: String): String? {
         if (input.isBlank()) return null

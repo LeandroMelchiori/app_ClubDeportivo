@@ -60,27 +60,31 @@ class PagoDeCuotaActivity : AppCompatActivity() {
 
         // Logica de pago
         btnPagar.setOnClickListener {
-
             val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
             val selectedId = radioGroup.checkedRadioButtonId
-
             if (selectedId == -1) {
                 Toast.makeText(this, "Debe seleccionar una forma de pago", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val formaPago = findViewById<RadioButton>(selectedId).text.toString()
-
             val monto = precio.toDoubleOrNull()
             if (monto == null) {
                 Toast.makeText(this, "Monto inválido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            // intent
+            intent = Intent(this, ListadosActivity::class.java)
+            intent.putExtra("usuario", usuario)
+
+            // Si el cliente ya es socio, se procede al cobro de cuota mensual
+            // sino, se procede con el proceso de hacer socio
             if (esSocio) {
-                // Si ultimo pago esta dentro del mes actual, debe indicar que el pago  del mes ya esta hecho
+                // Recolectamos el ultimo pago de cuota
                 val fechaUltimoPago = LocalDate.parse(ultimoPago)
+                // Si ultimo pago esta dentro del mes actual, debe indicar que el pago  del mes ya esta hecho
                 if (fechaUltimoPago.month == fechaHoy.month) {
-                    Toast.makeText(this, "El pago del mes actual ya fue realizado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "El pago del mes actual ya se encuentra realizado", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
                     // 💬 Diálogo de confirmación
@@ -89,12 +93,8 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                         .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\"?")
                         .setPositiveButton("Sí") { _, _ ->
                             try {
-                                val fechaHoy = LocalDate.now().toString()
-                                val db = DBHelper(this)
-                                db.registrarPagoCuota(dni, monto, formaPago, fechaHoy)
+                                db.registrarPagoCuota(dni, monto, formaPago, fechaHoy.toString())
                                 Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
-                                intent = Intent(this, ListadosActivity::class.java)
-                                intent.putExtra("usuario", usuario)
                                 startActivity(intent)
                             } catch (e: IllegalArgumentException) {
                                 Toast.makeText(this, e.message ?: "Error al realizar el pago", Toast.LENGTH_LONG).show()
@@ -107,26 +107,22 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                 }
             } else {
             // 💬 Diálogo de confirmación
-            AlertDialog.Builder(this)
-                .setTitle("Confirmar pago")
-                .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $noSocio en socio?")
-                .setPositiveButton("Sí") { _, _ ->
-                    try {
-                        val fechaHoy = LocalDate.now().toString()
-                        val db = DBHelper(this)
-                        val idSocio = db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy)
-                        Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
-                        intent = Intent(this, ListadosActivity::class.java)
-                        intent.putExtra("usuario", usuario)
-                        startActivity(intent)
-                    } catch (e: IllegalArgumentException) {
-                        Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                AlertDialog.Builder(this)
+                    .setTitle("Confirmar pago")
+                    .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $noSocio en socio?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        try {
+                            val idSocio = db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy.toString())
+                            Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
+                            startActivity(intent)
+                        } catch (e: IllegalArgumentException) {
+                            Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
                     }
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
+                    .setNegativeButton("Cancelar", null)
+                    .show()
             }
         }
 

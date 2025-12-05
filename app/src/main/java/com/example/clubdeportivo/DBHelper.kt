@@ -5,7 +5,6 @@ package com.example.clubdeportivo
     import android.database.Cursor
     import android.database.sqlite.SQLiteDatabase
     import android.database.sqlite.SQLiteOpenHelper
-    import androidx.core.database.getIntOrNull
     import java.text.SimpleDateFormat
     import java.time.LocalDate
     import java.util.Date
@@ -549,9 +548,62 @@ package com.example.clubdeportivo
         }
         return lista
     }
+    fun obtenerResumenPagosMes(anio: Int, mes: Int): ResumenPagosMes {
+            val db = readableDatabase
+            val anioStr = anio.toString()
+            val mesStr = String.format("%02d", mes) // "01", "02", ..., "12"
+
+            // ----- Cuotas de socios -----
+            var cantSocios = 0
+            var montoCuotas = 0.0
+            db.rawQuery("""
+                SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
+                FROM cuotas
+                WHERE strftime('%Y', fechaPago) = ? 
+                  AND strftime('%m', fechaPago) = ?
+                """.trimIndent(),
+                arrayOf(anioStr, mesStr)
+            ).use { c ->
+                if (c.moveToFirst()) {
+                    cantSocios = c.getInt(0)
+                    montoCuotas = c.getDouble(1)
+                }
+            }
+
+            // ----- Pagos de actividades de NO socios -----
+            var cantNoSocios = 0
+            var montoActividades = 0.0
+            db.rawQuery(
+                """
+                SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
+                FROM pagos_actividad
+                WHERE strftime('%Y', fecha_pago) = ? 
+                  AND strftime('%m', fecha_pago) = ?
+                """.trimIndent(),
+                arrayOf(anioStr, mesStr)
+            ).use { c ->
+                if (c.moveToFirst()) {
+                    cantNoSocios = c.getInt(0)
+                    montoActividades = c.getDouble(1)
+                }
+            }
+            val totalClientes = cantSocios + cantNoSocios
+            val ingresosTotales = montoCuotas + montoActividades
+
+            return ResumenPagosMes(
+                anio = anio,
+                mes = mes,
+                cantNoSocios = cantNoSocios,
+                cantSocios = cantSocios,
+                totalClientes = totalClientes,
+                montoCuotas = montoCuotas,
+                montoActividades = montoActividades,
+                ingresosTotales = ingresosTotales
+            )
+        }
 
     // Busquedas
-    fun obtenerPersonaPorDni(dni: String): PersonaDTO? {
+    fun buscarPersonaPorDni(dni: String): PersonaDTO? {
         val db = this.readableDatabase
         db.query(
             "clientes",
@@ -629,60 +681,6 @@ package com.example.clubdeportivo
         }
         return lista
     }
-    fun obtenerResumenPagosMes(anio: Int, mes: Int): ResumenPagosMes {
-            val db = readableDatabase
-            val anioStr = anio.toString()
-            val mesStr = String.format("%02d", mes) // "01", "02", ..., "12"
-
-            // ----- Cuotas de socios -----
-            var cantSocios = 0
-            var montoCuotas = 0.0
-            db.rawQuery("""
-                SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
-                FROM cuotas
-                WHERE strftime('%Y', fechaPago) = ? 
-                  AND strftime('%m', fechaPago) = ?
-                """.trimIndent(),
-                arrayOf(anioStr, mesStr)
-            ).use { c ->
-                if (c.moveToFirst()) {
-                    cantSocios = c.getInt(0)
-                    montoCuotas = c.getDouble(1)
-                }
-            }
-
-            // ----- Pagos de actividades de NO socios -----
-            var cantNoSocios = 0
-            var montoActividades = 0.0
-            db.rawQuery(
-                """
-        SELECT COUNT(DISTINCT idCliente) AS cant, IFNULL(SUM(monto),0) AS total
-        FROM pagos_actividad
-        WHERE strftime('%Y', fecha_pago) = ? 
-          AND strftime('%m', fecha_pago) = ?
-        """.trimIndent(),
-                arrayOf(anioStr, mesStr)
-            ).use { c ->
-                if (c.moveToFirst()) {
-                    cantNoSocios = c.getInt(0)
-                    montoActividades = c.getDouble(1)
-                }
-            }
-
-            val totalClientes = cantSocios + cantNoSocios
-            val ingresosTotales = montoCuotas + montoActividades
-
-            return ResumenPagosMes(
-                anio = anio,
-                mes = mes,
-                cantNoSocios = cantNoSocios,
-                cantSocios = cantSocios,
-                totalClientes = totalClientes,
-                montoCuotas = montoCuotas,
-                montoActividades = montoActividades,
-                ingresosTotales = ingresosTotales
-            )
-        }
 
     // ----------------------------------------- CREATE -----------------------------------------
     fun hacerSocioDesdeNoSocio(
@@ -697,7 +695,7 @@ package com.example.clubdeportivo
 
         try {
             // 1) Traer cliente por DNI
-            val cliente = obtenerPersonaPorDni(dni.toString())
+            val cliente = buscarPersonaPorDni(dni.toString())
                 ?: throw IllegalArgumentException("No existe un cliente con ese DNI")
 
             // Si ya es socio, no corresponde hacer el alta
@@ -829,7 +827,7 @@ package com.example.clubdeportivo
     ): Long {
         val db = writableDatabase
         val fechaVenc = LocalDate.parse(ultimoPago).plusMonths(1).toString()
-        val s = obtenerPersonaPorDni(dni)
+        val s = buscarPersonaPorDni(dni)
         val cv = ContentValues().apply {
             put("idSocio", s!!.id)
             put("monto", monto)

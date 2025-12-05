@@ -83,7 +83,7 @@ class PagoActividadActivity : AppCompatActivity() {
         etBuscar = findViewById(R.id.etBuscar)
         etBuscar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                val persona = db.obtenerPersonaPorDni(query)
+                val persona = db.buscarPersonaPorDni(query)
                 if (persona != null) {
                     tvNombreUsuario.text = "${persona.apellido}, ${persona.nombre}"
                     tvIdUsuario.text = "DNI: ${persona.dni}"
@@ -175,7 +175,7 @@ class PagoActividadActivity : AppCompatActivity() {
 
     fun pagarActividad(dni: String, idActividad: Int, precio: Double) {
         // 1) Buscar persona
-        val cliente = db.obtenerPersonaPorDni(dni)
+        val cliente = db.buscarPersonaPorDni(dni)
 
         if (cliente!!.esSocio) {
             toast("Los socios no necesitan pagar esta actividad")
