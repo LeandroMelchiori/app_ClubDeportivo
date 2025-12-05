@@ -1,43 +1,37 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class PagoActividadActivity : AppCompatActivity() {
-
     private lateinit var db: DBHelper
+    private lateinit var utils: AppUtils
     private lateinit var etBuscar: SearchView            // <--- usa el id real de tu buscador (ej: etBuscar)
     private lateinit var tvNombreUsuario: TextView     // tvNombreUsuario
     private lateinit var tvNombreActividad: TextView   // tvNombreActividad
     private lateinit var tvHoraInicio: TextView           // tvHorario
     private lateinit var tvPrecio: TextView            // tvPrecio
-
     private lateinit var tvIdUsuario: TextView
     // tvIdUsuario
     private lateinit var btnPagar: Button              // btnPagar
     private lateinit var rgMedioPago: RadioGroup       // rgMedioPago
-
-
+    private var clienteSeleccionado: DBHelper.PersonaDTO? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inscribir_actividad)
         db = DBHelper(this)
+        utils = AppUtils(this)
 
         // Inicializar views
-        tvNombreActividad = findViewById<TextView>(R.id.tvNombreActividad)
+        tvNombreActividad = findViewById(R.id.tvNombreActividad)
         tvNombreUsuario = findViewById(R.id.tvNombreUsuario)
         tvIdUsuario = findViewById(R.id.tvIdUsuario)
         tvHoraInicio = findViewById(R.id.tvHorario)
@@ -63,17 +57,11 @@ class PagoActividadActivity : AppCompatActivity() {
 
         // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
-        // Valor int dia de la convertido a texto
-        val dias = arrayOf("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado")
-        val diaTxt = when {
-            diaActividad in 0..6 -> dias[diaActividad]
-            diaActividad in 1..7 -> dias[diaActividad % 7] // 7→0 (Domingo)
-            else -> diaActividad.toString()
-        }
+        // Valor int del dia convertido a texto
+        val diaTxt = utils.diaTexto(diaActividad)
+
         // Asignar datos a views
         tvNombreActividad.text = "Actividad: $nombreActividad"
         tvHoraInicio.text = "$diaTxt - $horaInicio hs"
@@ -85,11 +73,12 @@ class PagoActividadActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 val persona = db.buscarPersonaPorDni(query)
                 if (persona != null) {
+                    clienteSeleccionado = persona
                     tvNombreUsuario.text = "${persona.apellido}, ${persona.nombre}"
                     tvIdUsuario.text = "DNI: ${persona.dni}"
                     rgMedioPago.isEnabled = true
                 } else {
-                    toast("Ingresa un DNI valido")
+                    utils.toast("Ingresa un DNI valido")
                 }
                 return true
             }
@@ -104,106 +93,57 @@ class PagoActividadActivity : AppCompatActivity() {
 
         // Boton Pagar
         btnPagar.setOnClickListener {
-            if (etBuscar.query.isEmpty()) {
-                toast("Debe ingresar un dni valido")
+            if (clienteSeleccionado == null) {
+                utils.toast("Primero busque y seleccione un DNI válido")
+                return@setOnClickListener
             } else{
-                AlertDialog.Builder(this)
-                    .setTitle("Confirmar pago actividad")
-                    .setMessage("¿Confirmás registrar el pago de $precio por la actividad: $nombreActividad ?")
-                    .setPositiveButton("Sí") { _, _ ->
-                        try {
-                            pagarActividad(etBuscar.query.toString(), idActividad, precio)
-                            intent = Intent(this, InicioActivity::class.java)
-                            intent.putExtra("usuario", usuario)
-                            startActivity(intent)
-                        } catch (e: IllegalArgumentException) {
-                            Toast.makeText(this, e.message ?: "No se pudo realizar la inscripcion", Toast.LENGTH_LONG).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+                utils.confirmDialog(
+                    "Confirmar pago actividad",
+                    "¿Confirmás registrar el pago de $precio por la actividad: $nombreActividad ?"
+                ){
+                    val ok = pagarActividad(idActividad, precio)
+                    if (ok) utils.goTo(InicioActivity::class.java)
+                }
             }
         }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_home
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    startActivity(Intent(this, ListadosActivity::class.java)) // o MainActivity
-                    true
-                }
-
-                else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_pagos)
     }
-
-    private fun toast(msg: String) =
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-
-    fun pagarActividad(dni: String, idActividad: Int, precio: Double) {
+    private fun pagarActividad(idActividad: Int, precio: Double): Boolean {
         // 1) Buscar persona
-        val cliente = db.buscarPersonaPorDni(dni)
-
-        if (cliente!!.esSocio) {
-            toast("Los socios no necesitan pagar esta actividad")
-            return
+        val cliente = clienteSeleccionado
+        if (cliente == null) {
+            utils.toast("No se encontró una persona con ese DNI")
+            return false
+        }
+        if (cliente.esSocio) {
+            utils.toast("Los socios no necesitan pagar las actividades")
+            return false
         }
 
         // 2) Validar medio de pago
         val selectedId = rgMedioPago.checkedRadioButtonId
         if (selectedId == -1) {
-            Toast.makeText(this, "Debe seleccionar una forma de pago", Toast.LENGTH_SHORT).show()
-            return
+            utils.toast( "Debe seleccionar una forma de pago")
+            return false
         }
-
         val formaPago = findViewById<RadioButton>(selectedId).text.toString()
 
         // 3) Registrar pago
         val insertedId = db.registrarPagoActividadNoSocio(
-            idCliente = cliente!!.id.toString(),
+            idCliente = cliente.id,
             horarioId = idActividad,
             monto = precio,
             medioPago = formaPago
         )
-        if (insertedId > 0L) {
-            toast("Pago registrado")
-            finish()
+        return if (insertedId > 0L) {
+            utils.toast("Pago registrado")
+            true
         } else {
-            toast("No se pudo registrar el pago")
+            utils.toast("No se pudo registrar el pago")
+            false
         }
     }
-
 }

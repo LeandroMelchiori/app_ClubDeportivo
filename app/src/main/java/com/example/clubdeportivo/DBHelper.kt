@@ -27,7 +27,7 @@ package com.example.clubdeportivo
               nombre TEXT NOT NULL,
               precio NUMERIC NOT NULL
             );
-        """.trimIndent())
+            """.trimIndent())
         db.execSQL("""
             CREATE TABLE clientes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,14 +74,14 @@ package com.example.clubdeportivo
             """.trimIndent())
         db.execSQL("""
             CREATE TABLE pagos_actividad (
-              id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
-              idCliente TEXT NOT NULL,
-              id_actividad INTEGER NOT NULL,
-              fecha_pago TEXT NOT NULL,
-              forma_pago TEXT NOT NULL,
-              monto NUMERIC NOT NULL,
-              FOREIGN KEY (idCliente) REFERENCES clientes(id),
-              FOREIGN KEY (id_actividad) REFERENCES dias_horarios(id)
+            id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
+            idCliente INTEGER NOT NULL,              -- INTEGER
+            id_dia_horario INTEGER NOT NULL,        -- mejor nombre
+            fecha_pago TEXT NOT NULL,
+            forma_pago TEXT NOT NULL,
+            monto NUMERIC NOT NULL,
+            FOREIGN KEY (idCliente) REFERENCES clientes(id),
+            FOREIGN KEY (id_dia_horario) REFERENCES dias_horarios(id)
             );
             """.trimIndent())
         db.execSQL("""
@@ -122,6 +122,14 @@ package com.example.clubdeportivo
             CREATE INDEX IF NOT EXISTS idx_dh_apid
             ON dias_horarios(actividad_profesor_id);
             """.trimIndent())
+        db.execSQL("""
+            CREATE INDEX IF NOT EXISTS idx_clientes_dni
+            ON clientes(dni);
+        """.trimIndent())
+        db.execSQL("""
+            CREATE INDEX IF NOT EXISTS idx_cuotas_idCliente_venc
+            ON cuotas(idCliente, fechaVencimiento);
+        """.trimIndent())
         db.execSQL("""
             CREATE TRIGGER IF NOT EXISTS tr_ap_autoclean
             AFTER DELETE ON dias_horarios
@@ -353,16 +361,13 @@ package com.example.clubdeportivo
     }
     // Actualizar tablas
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS dias_horarios")
-        db.execSQL("DROP TABLE IF EXISTS actividad_profesores")
         db.execSQL("DROP TABLE IF EXISTS pagos_actividad")
         db.execSQL("DROP TABLE IF EXISTS cuotas")
+        db.execSQL("DROP TABLE IF EXISTS dias_horarios")
+        db.execSQL("DROP TABLE IF EXISTS actividad_profesor")
         db.execSQL("DROP TABLE IF EXISTS profesores")
-        db.execSQL("DROP TABLE IF EXISTS socios")
-        db.execSQL("DROP TABLE IF EXISTS no_socios")
+        db.execSQL("DROP TABLE IF EXISTS clientes")
         db.execSQL("DROP TABLE IF EXISTS actividades")
-
-        // Vuelve a crear todo
         onCreate(db)
     }
 
@@ -373,22 +378,35 @@ package com.example.clubdeportivo
         val lista = mutableListOf<NoSocioCard>()
         val db = readableDatabase
         val sql = """
-        SELECT 
-            ns.nombre,
-            ns.apellido,
-            ns.dni,
-            MAX(p.fecha_pago) AS ultima_pago,
-            a.nombre AS actividad_pagada
-        FROM clientes ns
-        LEFT JOIN pagos_actividad p 
-               ON p.idCliente = ns.dni
-        LEFT JOIN actividades a
-               ON a.id_actividad = p.id_actividad
-        WHERE ns.esSocio = false AND activo = 1
-        GROUP BY ns.dni, ns.nombre, ns.apellido
-        ORDER BY ns.apellido, ns.nombre;
-
-    """.trimIndent()
+    WITH ultimos_pagos AS (
+        SELECT
+            p.idCliente,
+            MAX(p.fecha_pago) AS ultima_fecha
+        FROM pagos_actividad p
+        GROUP BY p.idCliente
+    )
+    SELECT
+        c.nombre,
+        c.apellido,
+        c.dni,
+        up.ultima_fecha AS ultima_pago,
+        a.nombre AS actividad_pagada
+    FROM clientes c
+    LEFT JOIN ultimos_pagos up
+           ON up.idCliente = c.id
+    LEFT JOIN pagos_actividad p
+           ON p.idCliente = up.idCliente
+          AND p.fecha_pago = up.ultima_fecha
+    LEFT JOIN dias_horarios dh
+           ON dh.id = p.id_dia_horario
+    LEFT JOIN actividad_profesor ap
+           ON ap.id = dh.actividad_profesor_id
+    LEFT JOIN actividades a
+           ON a.id_actividad = ap.actividad_id
+    WHERE c.esSocio = 0
+      AND c.activo = 1
+    ORDER BY c.apellido, c.nombre;
+""".trimIndent()
         val c = db.rawQuery(sql, null)
         if (c.moveToFirst()) {
             do {
@@ -482,8 +500,6 @@ package com.example.clubdeportivo
            AND dh.dia = ?
         ORDER BY dh.hora_inicio
     """.trimIndent()
-
-        fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
 
         db.rawQuery(sql, arrayOf(dia.toString())).use { c ->
             while (c.moveToNext()) {
@@ -829,7 +845,7 @@ package com.example.clubdeportivo
         val fechaVenc = LocalDate.parse(ultimoPago).plusMonths(1).toString()
         val s = buscarPersonaPorDni(dni)
         val cv = ContentValues().apply {
-            put("idSocio", s!!.id)
+            put("idCliente", s!!.id)
             put("monto", monto)
             put("fechaPago", fechaPago)
             put("formaPago", formaPago)
@@ -839,8 +855,8 @@ package com.example.clubdeportivo
         return db.insert("cuotas", null, cv)
     }
     fun registrarPagoActividadNoSocio(
-        idCliente: String,
-        horarioId: Int,
+        idCliente: Int,      // ← mejor como Int, es FK a clientes.id
+        horarioId: Int,      // ← FK a dias_horarios.id
         monto: Double,
         medioPago: String,
         fechaIso: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -848,13 +864,14 @@ package com.example.clubdeportivo
         val db = writableDatabase
         val cv = ContentValues().apply {
             put("idCliente", idCliente)
-            put("id_actividad", horarioId)
+            put("id_dia_horario", horarioId)
             put("monto", monto)
             put("forma_pago", medioPago)
             put("fecha_pago", fechaIso)
         }
         return db.insert("pagos_actividad", null, cv)
     }
+
 
     // ----------------------------------------- Delete -----------------------------------------
     // Borrado logico del padrón para evitar conflicto con tabla de pagos
@@ -876,7 +893,7 @@ package com.example.clubdeportivo
             }
 
             val rows = db.update("dias_horarios", cv, "id=?", arrayOf(dhId.toString()))
-            if (rows == 0) { db.endTransaction(); return false }
+            if (rows == 0) return false
 
             // Si esa relación ya no tiene horarios activos, marcamos la relación como inactiva (no se borra)
             val quedanActivos = android.database.DatabaseUtils.longForQuery(
@@ -1033,7 +1050,7 @@ package com.example.clubdeportivo
             val etiquetaHorario: String // "Lun 08:00-09:00"
     )
     data class PersonaDTO(
-        val id: Int?,
+        val id: Int,
         val dni: String,
         val nombre: String?,
         val apellido: String?,

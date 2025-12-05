@@ -18,12 +18,13 @@ import java.util.Locale
 
 class NuevoUsuarioActivity : AppCompatActivity() {
     private lateinit var db: SQLiteDatabase
-
+    private lateinit var utils: AppUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nuevo_usuario)
 
         db = DBHelper(this).writableDatabase
+        utils = AppUtils(this)
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
@@ -52,27 +53,27 @@ class NuevoUsuarioActivity : AppCompatActivity() {
 
                 // Validaciones campos vacios
                 if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || fecha.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || email.isEmpty()) {
-                    Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show()
+                    utils.toast("Todos los campos son obligatorios")
                     return@setOnClickListener
                 }
 
                 //  Validar DNI
                 if (!dni.matches(Regex("^\\d{8,9}\$"))) {
-                    Toast.makeText(this, "El DNI debe tener 8 o 9 números", Toast.LENGTH_LONG).show()
+                    utils.toast("El DNI debe tener 8 o 9 números")
                     etDNI.requestFocus()
                     return@setOnClickListener
                 }
 
                 // Validar teléfono
                 if (!telefono.matches(Regex("^\\d{9,12}\$"))) {
-                    Toast.makeText(this, "Ingrese numerode telefono valido", Toast.LENGTH_LONG).show()
+                    utils.toast("Ingrese numerode telefono valido")
                     etTelefono.requestFocus()
                     return@setOnClickListener
                 }
 
                 // Validar email
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_LONG).show()
+                    utils.toast("Ingrese un correo electrónico válido")
                     etEmail.requestFocus()
                     return@setOnClickListener
                 }
@@ -100,83 +101,41 @@ class NuevoUsuarioActivity : AppCompatActivity() {
 
                 // Chequeo DNI duplicado
                 if (existeDni(db, tabla, dni)) {
-                    Toast.makeText(this, "El DNI ya está registrado", Toast.LENGTH_LONG).show()
+                    utils.toast("El DNI ya está registrado")
                     return@setOnClickListener
                 }
 
                 // Ventana confirmacion
-                AlertDialog.Builder(this)
-                    .setTitle("Confirmar registro")
-                    .setMessage("¿Confirmás registro nuevo usuario?")
-                    .setPositiveButton("Sí") { _, _ ->
-                        try {
-                            val rowId = db.insertOrThrow(tabla, null, values)  // usa insertOrThrow para ver el error real
-                            startActivity(Intent(this, InicioActivity::class.java))
-                            Toast.makeText(this, "Registro exitoso (ID $rowId)", Toast.LENGTH_LONG).show()
+                utils.confirmDialog(
+                    title = "Confirmar registro",
+                    message = "¿Confirmás registro nuevo usuario?"
+                ) {
+                    try {
+                        val rowId = db.insertOrThrow(tabla, null, values)
+                        utils.toast("Registro exitoso (ID $rowId)")
+                        utils.goTo(InicioActivity::class.java, usuario, finishCurrent = true)
 
-                            // Limpieza de campos
-                            etNombre.text.clear()
-                            etApellido.text.clear()
-                            etFecha.text.clear()
-                            etDNI.text.clear()
-                            etDireccion.text.clear()
-                            etTelefono.text.clear()
-                            etEmail.text.clear()
-
-                        } catch (e: android.database.sqlite.SQLiteConstraintException) {
-                            Log.e("DB", "Constraint al insertar: ${e.message}")
-                            Toast.makeText(this, "No se pudo registrar: ${e.message}", Toast.LENGTH_LONG).show()
-                        } catch (e: Exception) {
-                            Log.e("DB", "Error al insertar", e)
-                            Toast.makeText(this, "Error al registrar: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                        }
+                        etNombre.text.clear()
+                        etApellido.text.clear()
+                        etFecha.text.clear()
+                        etDNI.text.clear()
+                        etDireccion.text.clear()
+                        etTelefono.text.clear()
+                        etEmail.text.clear()
+                    } catch (e: android.database.sqlite.SQLiteConstraintException) {
+                        Log.e("DB", "Constraint al insertar: ${e.message}")
+                        utils.toast("No se pudo registrar: ${e.message}")
+                    } catch (e: Exception) {
+                        Log.e("DB", "Error al insertar", e)
+                        utils.toast("Error al registrar: ${e.localizedMessage}")
                     }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+                }
             }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottom.selectedItemId = R.id.nav_home
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_home)
     }
     // Metodo para normalizar la fecha
     private fun normalizarFecha(input: String): String? {

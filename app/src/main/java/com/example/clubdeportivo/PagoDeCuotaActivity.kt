@@ -1,23 +1,17 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.widget.RadioGroup
-import android.widget.RadioButton
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
 
 class PagoDeCuotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val db = DBHelper(this)
+        val utils = AppUtils(this)
         val fechaHoy = LocalDate.now()
 
         // Datos recuperados de la vista anterior
@@ -37,9 +31,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
 
         // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaEncabezado = formato.format(Date())
-        tvFecha.text = fechaEncabezado.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
         // Inicializar vistas
         val tvNombre = findViewById<TextView>(R.id.tvNombre)
@@ -47,6 +39,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         val tvTipoOperacion = findViewById<TextView>(R.id.tvTipoOperacion)
         val tvPrecio = findViewById<TextView>(R.id.tvPrecio)
         val btnPagar = findViewById<MaterialButton>(R.id.btnPagar)
+        val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
 
         // Asignar datos a las view
         tvNombre.text = "$noSocio"
@@ -54,119 +47,45 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         tvTipoOperacion.text = "$tipoOperacion"
         tvPrecio.text = "Valor: $precio"
 
-        // Forma de pago seleccionada
-        val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
-        val selectedId = radioGroup.checkedRadioButtonId
-
         // Logica de pago
         btnPagar.setOnClickListener {
-            val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
-            val selectedId = radioGroup.checkedRadioButtonId
-            if (selectedId == -1) {
-                Toast.makeText(this, "Debe seleccionar una forma de pago", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val formaPago = findViewById<RadioButton>(selectedId).text.toString()
-            val monto = precio.toDoubleOrNull()
-            if (monto == null) {
-                Toast.makeText(this, "Monto inválido", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // intent
-            intent = Intent(this, ListadosActivity::class.java)
-            intent.putExtra("usuario", usuario)
+            val formaPago = utils.getSelectedRadioText(this, radioGroup)
+                ?: return@setOnClickListener utils.toast("Debe seleccionar una forma de pago")
+            val monto = precio.toDoubleOrNull() ?: return@setOnClickListener utils.toast("Monto inválido")
 
             // Si el cliente ya es socio, se procede al cobro de cuota mensual
             // sino, se procede con el proceso de hacer socio
             if (esSocio) {
-                // Recolectamos el ultimo pago de cuota
                 val fechaUltimoPago = LocalDate.parse(ultimoPago)
-                // Si ultimo pago esta dentro del mes actual, debe indicar que el pago  del mes ya esta hecho
                 if (fechaUltimoPago.month == fechaHoy.month) {
-                    Toast.makeText(this, "El pago del mes actual ya se encuentra realizado", Toast.LENGTH_SHORT).show()
+                    utils.toast("El pago del mes actual ya se encuentra realizado")
                     finish()
                 } else {
-                    // 💬 Diálogo de confirmación
-                    AlertDialog.Builder(this)
-                        .setTitle("Confirmar pago")
-                        .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\"?")
-                        .setPositiveButton("Sí") { _, _ ->
-                            try {
-                                db.registrarPagoCuota(dni, monto, formaPago, fechaHoy.toString())
-                                Toast.makeText(this, "¡Pago exitoso!", Toast.LENGTH_LONG).show()
-                                startActivity(intent)
-                            } catch (e: IllegalArgumentException) {
-                                Toast.makeText(this, e.message ?: "Error al realizar el pago", Toast.LENGTH_LONG).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                            }
-                        }
-                        .setNegativeButton("Cancelar", null)
-                        .show()
+                    // Confirmar pago de cuota
+                    utils.confirmDialog(
+                        title = "Confirmar pago",
+                        message = "¿Confirmás registrar el pago de $$monto por \"$formaPago\"?"
+                    ) {
+                        db.registrarPagoCuota(dni, monto, formaPago, fechaHoy.toString())
+                        utils.toast("¡Pago exitoso!")
+                        utils.goTo(ListadosActivity::class.java, usuario, true)
+                    }
                 }
             } else {
-            // 💬 Diálogo de confirmación
-                AlertDialog.Builder(this)
-                    .setTitle("Confirmar pago")
-                    .setMessage("¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $noSocio en socio?")
-                    .setPositiveButton("Sí") { _, _ ->
-                        try {
-                            val idSocio = db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy.toString())
-                            Toast.makeText(this, "¡Pago exitoso! Ahora es socio (id $idSocio)", Toast.LENGTH_LONG).show()
-                            startActivity(intent)
-                        } catch (e: IllegalArgumentException) {
-                            Toast.makeText(this, e.message ?: "No se pudo hacer socio", Toast.LENGTH_LONG).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+                // Logica para convertir en socio
+                utils.confirmDialog(
+                    "Confirmar Pago",
+                    "¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $noSocio en socio?"
+                ){
+                    db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy.toString())
+                    utils.toast("¡Pago exitoso! Ahora ${noSocio} es socio")
+                    utils.goTo(ListadosActivity::class.java, usuario, true)
+                }
             }
         }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_pagos
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_pagos)
     }
 }
