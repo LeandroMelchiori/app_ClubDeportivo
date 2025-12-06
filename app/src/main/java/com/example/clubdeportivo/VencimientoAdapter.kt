@@ -13,10 +13,6 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class VencimientoAdapter(
-    private val onAccion: (DBHelper.VencimientoCard) -> Unit = {},
-    private val onVerMas: (DBHelper.VencimientoCard) -> Unit = {},
-    // Podés usar un layout propio (p.ej. R.layout.item_vencimiento).
-    // Mientras tanto reutilizo el de no socio que ya tenés.
     private val layoutRes: Int = R.layout.item_nosocio
 ) : ListAdapter<DBHelper.VencimientoCard, VencimientoAdapter.VH>(DIFF) {
     companion object {

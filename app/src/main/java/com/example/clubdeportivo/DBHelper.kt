@@ -732,7 +732,7 @@ package com.example.clubdeportivo
         monto: Double,
         formaPago: String,
         fechaPago: String // "YYYY-MM-DD"
-    ): Int? {
+    ): Int {
 
         val db = writableDatabase
         db.beginTransaction()
@@ -913,7 +913,7 @@ package com.example.clubdeportivo
                 arrayOf(dhId.toString())
             )
 
-            val hoy = java.time.LocalDate.now().toString() // "YYYY-MM-DD"
+            val hoy = LocalDate.now().toString()
             val cv = ContentValues().apply {
                 put("activo", 0)
                 put("fecha_baja", hoy)
@@ -1105,10 +1105,6 @@ package com.example.clubdeportivo
         val idx = getColumnIndex(col)
         return if (idx >= 0 && !isNull(idx)) getString(idx) else null
     }
-    private fun ContentValues.putOrNull(key: String, value: String?) {
-        if (value == null) putNull(key) else put(key, value)
-    }
-
     fun existeDni(dni: String): Boolean =
         readableDatabase.query(
             "clientes",

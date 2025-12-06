@@ -9,53 +9,44 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
-
 class InicioActivity : AppCompatActivity() {
     private lateinit var utils: AppUtils
+    private lateinit var db: DBHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
 
         // Helpers
         utils = AppUtils(this)
-
-        // Dia de la semana
-        val db = DBHelper(this)
-        val diaHoy = LocalDate.now().dayOfWeek.value % 7  // Lunes=1 ... Domingo=7 → ajustamos a 0–6
-
-        val actividades = db.obtenerActividadesDelDia(diaHoy) // devuelve List<ActividadHoy>
-
-        // Recupera el nombre de usuario del intent y lo muestra
+        db = DBHelper(this)
+        // Datos intents
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
+
+        // Encabezado
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
-        tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvBienvenida.text = "Bienvenido, $usuario"
+        tvFecha.text = utils.fechaActualFormato()
 
-        // Renderiza la lista de actividades del día
+        // Carga actividades del dia
+        val diaHoy = LocalDate.now().dayOfWeek.value % 7  // Lunes=1 ... Domingo=7 → ajustamos a 0–6
+        val actividades = db.obtenerActividadesDelDia(diaHoy)
         renderActividadesHoy(actividades, usuario)
 
         // Boton nuevo usuario
         val btnUsuario = findViewById<MaterialButton>(R.id.btnUsuario)
         btnUsuario.setOnClickListener {
-        val intent = Intent(this, NuevoUsuarioActivity::class.java)
-        intent.putExtra("usuario", usuario)
-        startActivity(intent)
+        utils.goTo(NuevoUsuarioActivity::class.java,
+            finishCurrent = true,
+            "usuario" to usuario)
         }
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         utils.setupBottomNav(bottom, usuario, R.id.nav_home)
     }
-
     // Renderiza la lista de actividades del día con el item de tarjeta
     private fun renderActividadesHoy(actividades: List<ActividadHoy>, usuario: String) {
         val contenedor = findViewById<LinearLayout>(R.id.contenedorActividadesHoy)
@@ -84,6 +75,7 @@ class InicioActivity : AppCompatActivity() {
             contenedor.addView(view)
         }
     }
+    // Modelo de datos para la tarjeta de actividad del día
     data class ActividadHoy(
         val id: Int,
         val nombre: String,

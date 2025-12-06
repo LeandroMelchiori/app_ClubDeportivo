@@ -1,18 +1,12 @@
 package com.example.clubdeportivo
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 class NuevoHorarioActividadActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
     private lateinit var utils: AppUtils
@@ -22,19 +16,15 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pago_actividad)
 
         // Helpers
-        val db = DBHelper(this)
-        val utils = AppUtils(this)
+        db = DBHelper(this)
+        utils = AppUtils(this)
 
-        // Recupera el nombre de usuario del intent y lo muestra
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
         // inputs
         val spDia        = findViewById<Spinner>(R.id.spDia)
@@ -44,7 +34,7 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
         val spProfesor   = findViewById<Spinner>(R.id.spProfesor)
 
         // Adapters
-        spDia.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, DIAS)
+        spDia.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, dias)
         val actividades = cargarActividades(this)
         spActividad.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, actividades)
         val profesores = cargarProfesores(this)
@@ -96,18 +86,19 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
                         hi,
                         hf)
                     if (inserted == -1L) {
-                        Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
+                        utils.toast("Ya existe ese horario para ese profesor en esa actividad")
                     }
                     else {
-                        Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
-                        intent = Intent(this, ActividadesActivity::class.java)
-                        intent.putExtra("usuario", usuario)
-                        startActivity(intent)
+                        utils.toast("Horario registrado correctamente")
+                        utils.goTo(
+                            ActividadesActivity::class.java,
+                            finishCurrent = true,
+                            "usuario" to usuario)
                     }
                 } catch (e: IllegalArgumentException) {
-                    Toast.makeText(this, e.message ?: "Error al insertar horario", Toast.LENGTH_LONG).show()
+                    utils.toast("Error al insertar horario: ${e.message}")
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    utils.toast("Error: ${e.message}")
                 }
             }
         }
@@ -149,7 +140,7 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
     }
 
     // Herramientas
-    private val DIAS = listOf("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado")
+    private val dias = listOf("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado")
     private fun buildSlots30min(
         startHour: Int = 6,
         endHour: Int = 23,

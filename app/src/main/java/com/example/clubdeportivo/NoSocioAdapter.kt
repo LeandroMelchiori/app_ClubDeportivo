@@ -22,6 +22,7 @@ class NoSocioAdapter :
         val btnAccion: Button = view.findViewById(R.id.btnAccion)
         val btnVerMas: Button = view.findViewById(R.id.btnVerMas)
         val vEstado: View = view.findViewById(R.id.vEstado)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {

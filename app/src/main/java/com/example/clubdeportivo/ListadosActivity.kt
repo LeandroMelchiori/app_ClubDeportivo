@@ -11,11 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
 class ListadosActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
@@ -58,7 +55,7 @@ class ListadosActivity : AppCompatActivity() {
         hoyISO = utils.hoyIso()
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
-        // Recupera el nombre de usuario del intent y lo muestra
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
@@ -93,8 +90,8 @@ class ListadosActivity : AppCompatActivity() {
         val botonNoSocios: Button = findViewById(R.id.btnListNoSocios)
 
         // Lista por defecto
-        botonNoSocios.setTextColor(Color.WHITE);
-        botonSocios.setTextColor(Color.BLACK);
+        botonNoSocios.setTextColor(Color.WHITE)
+        botonSocios.setTextColor(Color.BLACK)
         botonVencimiento.setTextColor(Color.BLACK)
         tvNombreLista.text = "Listado No Socios"
 
@@ -115,22 +112,22 @@ class ListadosActivity : AppCompatActivity() {
         // onClick
         botonVencimiento.setOnClickListener {
             mostrar(rvVenc)
-            botonNoSocios.setTextColor(Color.BLACK);
-            botonSocios.setTextColor(Color.BLACK);
+            botonNoSocios.setTextColor(Color.BLACK)
+            botonSocios.setTextColor(Color.BLACK)
             botonVencimiento.setTextColor(Color.WHITE)
             tvNombreLista.text = "Listado Vencimientos"
         }
         botonSocios.setOnClickListener {
             mostrar(rvSocios)
-            botonNoSocios.setTextColor(Color.BLACK);
-            botonSocios.setTextColor(Color.WHITE);
+            botonNoSocios.setTextColor(Color.BLACK)
+            botonSocios.setTextColor(Color.WHITE)
             botonVencimiento.setTextColor(Color.BLACK)
             tvNombreLista.text = "Listado Socios"
         }
         botonNoSocios.setOnClickListener {
             mostrar(rvNoSocios)
-            botonNoSocios.setTextColor(Color.WHITE);
-            botonSocios.setTextColor(Color.BLACK);
+            botonNoSocios.setTextColor(Color.WHITE)
+            botonSocios.setTextColor(Color.BLACK)
             botonVencimiento.setTextColor(Color.BLACK)
             tvNombreLista.text = "Listado No Socios"
         }

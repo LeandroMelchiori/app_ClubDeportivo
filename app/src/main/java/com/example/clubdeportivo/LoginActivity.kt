@@ -1,44 +1,50 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var db: DBHelper
+    private lateinit var utils: AppUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Helpers
+        db = DBHelper(this)
+        utils = AppUtils(this)
+
         // Variables
         val etUsuario = findViewById<EditText>(R.id.etUsuario)
-        val etContraseña = findViewById<EditText>(R.id.etContraseña)
+        val etPassword = findViewById<EditText>(R.id.etContraseña)
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
 
         // Logica inicio de sesion
         btnLogin.setOnClickListener {
             val usuario = etUsuario.text.toString()
-            val contraseña = etContraseña.text.toString()
+            val password = etPassword.text.toString()
+
             // Validacion campos en blanco
-            if (usuario.isEmpty() || contraseña.isEmpty()) {
-                Toast.makeText(this, "Por favor ingrese usuario y contraseña", Toast.LENGTH_SHORT)
-                    .show() }
+            if (usuario.isEmpty() || password.isEmpty()) {
+                utils.toast("Por favor, ingrese usuario y contraseña")
+            }
             // Validacion usuario correcto
-            else if (usuario == "admin" && contraseña == "admin"
-                || usuario == "charlie" && contraseña == "charlie"
-                || usuario == "sacha" && contraseña == "sacha"
-                || usuario == "javo" && contraseña == "javo"
-                || usuario == "heber" && contraseña == "heber") {
-                val intent = Intent(this, InicioActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                Toast.makeText(this, "Sesion iniciada...", Toast.LENGTH_LONG).show()
+            else if (usuario == "admin" && password == "admin"
+                || usuario == "charlie" && password == "charlie"
+                || usuario == "sacha" && password == "sacha"
+                || usuario == "javo" && password == "javo"
+                || usuario == "heber" && password == "heber") {
+                utils.goTo(
+                    InicioActivity::class.java,
+                    true,
+                    "usuario" to usuario)
+                utils.toast("Sesion iniciada...")
             }
             // Usuario o contraseña incorrectos
             else {
-                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                utils.toast("Usuario o contraseña incorrectos")
             }
         }
     }

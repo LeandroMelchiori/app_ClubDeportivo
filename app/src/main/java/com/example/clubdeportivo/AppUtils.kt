@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
-import android.os.Bundle
 import android.os.Parcelable
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -16,6 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class AppUtils(private val ctx: Context) {
 
     fun toast(msg: String) {
@@ -127,13 +126,10 @@ class AppUtils(private val ctx: Context) {
     fun hoyIso(): String {
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
     }
-
     fun esDniValido(dni: String): Boolean =
-        dni.matches(Regex("^\\d{8,9}\$"))
-
+        dni.matches(Regex("^\\d{8,9}$"))
     fun esTelefonoValido(tel: String): Boolean =
-        tel.matches(Regex("^\\d{9,12}\$"))
+        tel.matches(Regex("^\\d{9,12}$"))
     fun esEmailValido(mail: String): Boolean =
         android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()
-
 }

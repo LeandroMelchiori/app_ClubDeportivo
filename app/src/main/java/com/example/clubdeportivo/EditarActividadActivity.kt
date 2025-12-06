@@ -9,12 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class EditarActividadActivity : AppCompatActivity() {
+    private lateinit var utils: AppUtils
+    private lateinit var db: DBHelper
     private lateinit var spActividad: Spinner
     private lateinit var spProfesor: Spinner
     private lateinit var spDia: Spinner
@@ -22,18 +22,13 @@ class EditarActividadActivity : AppCompatActivity() {
     private lateinit var spHoraFin: Spinner
     private lateinit var etPrecio: EditText
     private lateinit var btnGuardar: MaterialButton
-
-    private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
-    private fun buildHoras(step: Int = 30): List<Int> = (0..(24 * 60 - step) step step).toList()
-    private fun posMasCercana(horas: List<Int>, valor: Int): Int {
-        val i = horas.indexOf(valor)
-        return if (i >= 0) i else horas.indexOfLast { it <= valor }.coerceAtLeast(0)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        val db = DBHelper(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_actividad)
+
+        // Helpers
+        db = DBHelper(this)
+        utils = AppUtils(this)
 
         // --- refs UI ---
         spActividad  = findViewById(R.id.spActividad)
@@ -46,11 +41,10 @@ class EditarActividadActivity : AppCompatActivity() {
 
         // --- extras que vienen del intent de la actividad ---
         val dhId         = intent.getIntExtra("dh_id", -1)
-        val idActividad  = intent.getIntExtra("id_actividad", -1)
         val nombreAct    = intent.getStringExtra("nombre_act") ?: ""
         val profesor     = intent.getStringExtra("profesor") ?: ""
         val diaActual   = intent.getIntExtra("dia", 1)
-        val HorainiActual   = intent.getIntExtra("hora_inicio", 8 * 60)
+        val horainiActual   = intent.getIntExtra("hora_inicio", 8 * 60)
         val horaFinActual   = intent.getIntExtra("hora_fin", 9 * 60)
         val precioActual = intent.getDoubleExtra("precio", 0.0)
 
@@ -58,16 +52,20 @@ class EditarActividadActivity : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
         // Actividad/Profesor fijos
-        spActividad.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf(nombreAct ?: ""))
-        spProfesor.adapter  = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf(profesor ?: ""))
+        spActividad.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(nombreAct)
+        )
+        spProfesor.adapter  = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(profesor)
+        )
         spActividad.isEnabled = false; spProfesor.isEnabled = false
         spActividad.isClickable = false; spProfesor.isClickable = false
 
@@ -81,7 +79,7 @@ class EditarActividadActivity : AppCompatActivity() {
         val labels = horas.map { hhmm(it) }
         spHoraInicio.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, labels)
         spHoraFin.adapter    = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, labels)
-        spHoraInicio.setSelection(posMasCercana(horas, HorainiActual))
+        spHoraInicio.setSelection(posMasCercana(horas, horainiActual))
         spHoraFin.setSelection(posMasCercana(horas, horaFinActual))
 
         // Precio
@@ -121,48 +119,14 @@ class EditarActividadActivity : AppCompatActivity() {
         }
 
         // Bottom
-        val bottom =
-            findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_activity
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
+        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
+        utils.setupBottomNav(bottom, usuario, R.id.nav_activity)
 
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
-        }
     }
-
+    private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
+    private fun buildHoras(step: Int): List<Int> = (0..(24 * 60 - step) step step).toList()
+    private fun posMasCercana(horas: List<Int>, valor: Int): Int {
+        val i = horas.indexOf(valor)
+        return if (i >= 0) i else horas.indexOfLast { it <= valor }.coerceAtLeast(0)
+    }
 }

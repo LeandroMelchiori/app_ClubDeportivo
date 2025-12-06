@@ -33,7 +33,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bienvenido"
+                    android:text="Bienvenido, usuario"
                     android:textColor="@color/blue_accent"
                     android:textSize="32sp"
                     android:textStyle="bold" />

@@ -42,9 +42,9 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
 
         // Asignar datos a las view
-        tvNombre.text = "$nombreNoSocio"
-        tvDni.text = "$dni"
-        tvTipoOperacion.text = "$tipoOperacion"
+        tvNombre.text = nombreNoSocio
+        tvDni.text = dni
+        tvTipoOperacion.text = tipoOperacion
         tvPrecio.text = "Valor: $precio"
 
         // Logica de pago
@@ -79,7 +79,7 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                     "¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $nombreNoSocio en socio?"
                 ){
                     db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy.toString())
-                    utils.toast("¡Pago exitoso! Ahora ${nombreNoSocio} es socio")
+                    utils.toast("¡Pago exitoso! Ahora $nombreNoSocio es socio")
                     utils.goTo(ListadosActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
             }

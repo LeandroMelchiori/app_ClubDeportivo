@@ -6,7 +6,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

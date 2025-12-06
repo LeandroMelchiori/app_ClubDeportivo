@@ -1,15 +1,10 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class ConfiguracionActivity : AppCompatActivity() {
     private lateinit var utils: AppUtils
@@ -29,32 +24,25 @@ class ConfiguracionActivity : AppCompatActivity() {
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
         btnEditar.isEnabled = false
         btnEditar.setOnClickListener {
-            startActivity(Intent(this, EditarAdminActivity::class.java))
+            utils.goTo(EditarAdminActivity::class.java)
         }
 
         // Boton nuevo admin
         val btnNuevo = findViewById<MaterialButton>(R.id.btnNuevo)
         btnNuevo.isEnabled = false
         btnNuevo.setOnClickListener {
-           // startActivity(Intent(this, NuevoAdminActivity::class.java))
+            // utils.goTo(NuevoAdminActivity::class.java)
         }
 
         // Boton cerrar sesion
         val btnSalir = findViewById<MaterialButton>(R.id.btnCerrarSesion)
         btnSalir.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Cerrar sesion")
-                .setMessage("¿Estas seguro que quieres cerrar sesion?")
-                .setPositiveButton("Si") { _, _ ->
-                    startActivity(
-                        Intent(
-                            this,
-                            LoginActivity::class.java
-                        )
-                    )
-                }
-                .setNegativeButton("No", null)
-                .show()
+            // Confirmacion
+            utils.confirmDialog(
+                "Cerrar sesion",
+                "¿Estas seguro que quieres cerrar sesion?") {
+                    utils.goTo(LoginActivity::class.java)
+            }
         }
 
         // Bottom

@@ -19,10 +19,12 @@ class NuevoUsuarioActivity : AppCompatActivity() {
         db = DBHelper(this)
         utils = AppUtils(this)
 
-        // Recupera el nombre de usuario del intent y lo muestra
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
+        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        tvFecha.text = utils.fechaActualFormato()
 
         // Inicializar views
         val etNombre     = findViewById<EditText>(R.id.etNombre)

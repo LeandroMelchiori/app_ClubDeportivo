@@ -1,16 +1,10 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class EditarUsuarioActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
@@ -32,9 +26,13 @@ class EditarUsuarioActivity : AppCompatActivity() {
         val tvFecha = findViewById<TextView>(R.id.tvFechaHoy)
         tvFecha.text = utils.fechaActualFormato()
 
-        // Recuperar datos del intent
-        val id = intent.getIntExtra("id", -1)
-        val dni = intent.getStringExtra("dni") ?: ""
+        // Recuperar dni del intent y buscamos en BD
+        val dni = intent.getStringExtra("dni") ?: run {
+            utils.toast("No se recibió el DNI del usuario")
+            finish()
+            return
+        }
+        val persona = db.buscarPersonaPorDni(dni)
 
         // Inicializar views
         val etDni = findViewById<TextView>(R.id.etDni)
@@ -45,8 +43,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         val etDireccion = findViewById<TextView>(R.id.etDireccion)
         val etFecha = findViewById<TextView>(R.id.etFechaNac)
 
-        // Llenar views
-        val persona = db.buscarPersonaPorDni(dni)
+        // Llenar campos con datos de la persona
         etNombre.text = persona?.nombre
         etApellido.text = persona?.apellido
         etTelefono.text = persona?.telefono
@@ -60,6 +57,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         // Boton editar
         val btnConfirmar = findViewById<Button>(R.id.btnConfirmar)
         btnConfirmar.setOnClickListener {
+            // Capturar datos actualizados
             val nombre = etNombre.text.toString().trim()
             val apellido = etApellido.text.toString().trim()
             val dni = etDni.text.toString().trim()
@@ -97,7 +95,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
             ) {
                 try {
                     db.actualizarClientePorId(
-                        id = id,
+                        id = persona!!.id,
                         nombre = nombre,
                         apellido = apellido,
                         dni = dni,

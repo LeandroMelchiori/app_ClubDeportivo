@@ -48,8 +48,8 @@ class ActividadCardAdapter(
     override fun onBindViewHolder(h: VH, position: Int) {
         val item = getItem(position)
         h.tvNombre.text = item.nombre
-        h.tvProfesores.text = item.profesor ?: "—"
-        h.tvHorarios.text = item.etiquetaHorario ?: "—"
+        h.tvProfesores.text = item.profesor
+        h.tvHorarios.text = item.etiquetaHorario
         h.tvPrecio.text = "Precio: $${"%.2f".format(item.precio)}"
         h.btnEditar.setOnClickListener { onEditar(item) }
         h.btnEliminar.setOnClickListener { onEliminar(item) }

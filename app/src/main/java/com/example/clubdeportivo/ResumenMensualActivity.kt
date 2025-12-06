@@ -1,14 +1,11 @@
 package com.example.clubdeportivo
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 class ResumenMensualActivity : AppCompatActivity() {
     private lateinit var db: DBHelper

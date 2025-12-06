@@ -13,9 +13,6 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class SocioAdapter(
-    private val onAccion: (DBHelper.SocioCard) -> Unit = {},
-    private val onVerMas: (DBHelper.SocioCard) -> Unit = {},
-    // Si ya tenés un layout específico para socios, cambialo aquí
     private val layoutRes: Int = R.layout.item_nosocio
 ) : ListAdapter<DBHelper.SocioCard, SocioAdapter.VH>(DIFF) {
 
