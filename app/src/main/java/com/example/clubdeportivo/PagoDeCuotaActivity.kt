@@ -9,27 +9,27 @@ import com.google.android.material.button.MaterialButton
 import java.time.LocalDate
 
 class PagoDeCuotaActivity : AppCompatActivity() {
+    private lateinit var utils: AppUtils
+    private lateinit var db: DBHelper
     override fun onCreate(savedInstanceState: Bundle?) {
-        val db = DBHelper(this)
-        val utils = AppUtils(this)
-        val fechaHoy = LocalDate.now()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_pago_cuota)
+        utils = AppUtils(this)
+        db = DBHelper(this)
 
         // Datos recuperados de la vista anterior
-        val noSocio = intent.getStringExtra("nombre") ?: "nombre"
+        val nombreNoSocio = intent.getStringExtra("nombre") ?: "nombre"
         val dni = intent.getStringExtra("dni") ?: "dni"
         val ultimoPago = intent.getStringExtra("ultimoPago") ?: "ultimoPago"
         val tipoOperacion = intent.getStringExtra("tipoOperacion") ?: "tipoOperacion"
         val precio = intent.getStringExtra("precio") ?: "precio"
         val esSocio = intent.getBooleanExtra("esSocio", false)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pago_cuota)
 
-        // Recupera el nombre de usuario del intent y lo muestra
+
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
         tvFecha.text = utils.fechaActualFormato()
 
@@ -42,13 +42,14 @@ class PagoDeCuotaActivity : AppCompatActivity() {
         val radioGroup = findViewById<RadioGroup>(R.id.rgMediosdePago)
 
         // Asignar datos a las view
-        tvNombre.text = "$noSocio"
+        tvNombre.text = "$nombreNoSocio"
         tvDni.text = "$dni"
         tvTipoOperacion.text = "$tipoOperacion"
         tvPrecio.text = "Valor: $precio"
 
         // Logica de pago
         btnPagar.setOnClickListener {
+            val fechaHoy = LocalDate.now()
             val formaPago = utils.getSelectedRadioText(this, radioGroup)
                 ?: return@setOnClickListener utils.toast("Debe seleccionar una forma de pago")
             val monto = precio.toDoubleOrNull() ?: return@setOnClickListener utils.toast("Monto inválido")
@@ -68,18 +69,18 @@ class PagoDeCuotaActivity : AppCompatActivity() {
                     ) {
                         db.registrarPagoCuota(dni, monto, formaPago, fechaHoy.toString())
                         utils.toast("¡Pago exitoso!")
-                        utils.goTo(ListadosActivity::class.java, usuario, true)
+                        utils.goTo(ListadosActivity::class.java, finishCurrent = true,"usuario" to usuario)
                     }
                 }
             } else {
                 // Logica para convertir en socio
                 utils.confirmDialog(
                     "Confirmar Pago",
-                    "¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $noSocio en socio?"
+                    "¿Confirmás registrar el pago de $$monto por \"$formaPago\" y convertir a $nombreNoSocio en socio?"
                 ){
                     db.hacerSocioDesdeNoSocio(dni.toInt(), monto, formaPago, fechaHoy.toString())
-                    utils.toast("¡Pago exitoso! Ahora ${noSocio} es socio")
-                    utils.goTo(ListadosActivity::class.java, usuario, true)
+                    utils.toast("¡Pago exitoso! Ahora ${nombreNoSocio} es socio")
+                    utils.goTo(ListadosActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
             }
         }

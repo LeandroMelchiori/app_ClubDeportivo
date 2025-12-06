@@ -14,11 +14,17 @@ import java.util.Date
 import java.util.Locale
 
 class NuevoHorarioActividadActivity : AppCompatActivity() {
+    private lateinit var db: DBHelper
+    private lateinit var utils: AppUtils
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pago_actividad)
 
+        // Helpers
         val db = DBHelper(this)
+        val utils = AppUtils(this)
+
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
@@ -65,7 +71,6 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
         // Botón registrar
         val btnIngresar = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnIngresar)
         btnIngresar.setOnClickListener {
-
             val actividad = spActividad.selectedItem as ActividadItem
             val profesor  = spProfesor.selectedItem as ProfesorItem
             val dia = spDia.selectedItemPosition
@@ -79,74 +84,37 @@ class NuevoHorarioActividadActivity : AppCompatActivity() {
             }
 
             // Ventana confirmacion
-            AlertDialog.Builder(this)
-                .setTitle("Confirmar horario")
-                .setMessage("¿Confirmar nuevo horario de ${actividad.nombre}?")
-                .setPositiveButton("Sí") { _, _ ->
-                    try {
-                        val inserted = db.insertarHorario(
-                            actividad.id,
-                            profesor.dni,
-                            dia,
-                            hi,
-                            hf)
-                        if (inserted == -1L) {
-                            Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
-                        }
-                            else {
-                            Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
-                            intent = Intent(this, ActividadesActivity::class.java)
-                            intent.putExtra("usuario", usuario)
-                            startActivity(intent)
-                        }
-                    } catch (e: IllegalArgumentException) {
-                        Toast.makeText(this, e.message ?: "Error al insertar horario", Toast.LENGTH_LONG).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            utils.confirmDialog(
+                "Confirmar registro",
+                "¿Confirmar nuevo horario de ${actividad.nombre}?"
+            ){
+                try {
+                    val inserted = db.insertarHorario(
+                        actividad.id,
+                        profesor.dni,
+                        dia,
+                        hi,
+                        hf)
+                    if (inserted == -1L) {
+                        Toast.makeText(this, "Ya existe ese horario para ese profesor en esa actividad", Toast.LENGTH_LONG).show()
                     }
+                    else {
+                        Toast.makeText(this, "Actividad registrada correctamente", Toast.LENGTH_LONG).show()
+                        intent = Intent(this, ActividadesActivity::class.java)
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
+                    }
+                } catch (e: IllegalArgumentException) {
+                    Toast.makeText(this, e.message ?: "Error al insertar horario", Toast.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            }
         }
 
         // Bottom
         val bottom = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_activity
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_activity)
     }
 
     // Cargas de actividades y profesores

@@ -15,18 +15,13 @@ import java.util.Date
 import java.util.Locale
 
 class InicioActivity : AppCompatActivity() {
-    data class ActividadHoy(
-        val id: Int,
-        val nombre: String,
-        val dia: Int,
-        val horaInicio: String,
-        val horaFin: String,
-        val precio: Double
-    )
-
+    private lateinit var utils: AppUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
+
+        // Helpers
+        utils = AppUtils(this)
 
         // Dia de la semana
         val db = DBHelper(this)
@@ -58,36 +53,7 @@ class InicioActivity : AppCompatActivity() {
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_home
-        bottom.setOnItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.nav_pagos -> {
-                val intent = Intent(this, ResumenMensualActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                true
-                }
-            R.id.nav_activity -> {
-                val intent = Intent(this, ActividadesActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                true
-            }
-            R.id.nav_settings -> {
-                val intent = Intent(this, ConfiguracionActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                true
-            }
-            R.id.nav_listas -> {
-                val intent = Intent(this, ListadosActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                true
-            }
-            else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_home)
     }
 
     // Renderiza la lista de actividades del día con el item de tarjeta
@@ -118,4 +84,12 @@ class InicioActivity : AppCompatActivity() {
             contenedor.addView(view)
         }
     }
+    data class ActividadHoy(
+        val id: Int,
+        val nombre: String,
+        val dia: Int,
+        val horaInicio: String,
+        val horaFin: String,
+        val precio: Double
+    )
 }

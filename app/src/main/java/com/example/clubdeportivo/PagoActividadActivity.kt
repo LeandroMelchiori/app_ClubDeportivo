@@ -102,7 +102,7 @@ class PagoActividadActivity : AppCompatActivity() {
                     "¿Confirmás registrar el pago de $precio por la actividad: $nombreActividad ?"
                 ){
                     val ok = pagarActividad(idActividad, precio)
-                    if (ok) utils.goTo(InicioActivity::class.java)
+                    if (ok) utils.goTo(InicioActivity::class.java, finishCurrent = true)
                 }
             }
         }

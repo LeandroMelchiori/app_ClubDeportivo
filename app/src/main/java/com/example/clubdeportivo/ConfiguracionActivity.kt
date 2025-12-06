@@ -12,20 +12,18 @@ import java.util.Date
 import java.util.Locale
 
 class ConfiguracionActivity : AppCompatActivity() {
+    private lateinit var utils: AppUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracion)
+        utils = AppUtils(this)
 
-        // Recupera el nombre de usuario del intent y lo muestra
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
         // Boton editar admin
         val btnEditar = findViewById<MaterialButton>(R.id.btnEditar)
@@ -61,38 +59,6 @@ class ConfiguracionActivity : AppCompatActivity() {
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> true
-            }
-        }
-        bottom.selectedItemId = R.id.nav_settings
+        utils.setupBottomNav(bottom, usuario, R.id.nav_settings)
     }
 }

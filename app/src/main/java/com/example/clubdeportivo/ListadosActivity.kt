@@ -19,6 +19,7 @@ import java.util.Locale
 
 class ListadosActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
+    private lateinit var utils: AppUtils
     private lateinit var hoyISO: String
     private lateinit var rvNoSocios: RecyclerView
     private lateinit var rvSocios: RecyclerView
@@ -31,7 +32,13 @@ class ListadosActivity : AppCompatActivity() {
     private lateinit var verMasLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // DB Helper
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_listados)
+
+        // Helpers
+        db = DBHelper(this)
+        utils = AppUtils(this)
+
         verMasLauncher = registerForActivityResult(
             androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -39,10 +46,6 @@ class ListadosActivity : AppCompatActivity() {
                 refreshVisibleList()
             }
         }
-        db = DBHelper(this)
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listados)
 
         // Views
         rvNoSocios = findViewById(R.id.rvNoSocios)
@@ -52,17 +55,14 @@ class ListadosActivity : AppCompatActivity() {
         tvFecha = findViewById(R.id.tvFecha)
 
         // Fecha actual
+        hoyISO = utils.hoyIso()
         val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
         // Recupera el nombre de usuario del intent y lo muestra
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
-        // Fecha encabezado
-        val formato = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        val fechaHoy = formato.format(Date())
-        tvFecha.text = fechaHoy.replaceFirstChar { it.uppercase() }
+        tvFecha.text = utils.fechaActualFormato()
 
         // Layout Manager
         rvNoSocios.layoutManager = LinearLayoutManager(this)
@@ -137,39 +137,7 @@ class ListadosActivity : AppCompatActivity() {
 
         // Bottom
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_listas
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_pagos -> {
-                    val intent = Intent(this, ResumenMensualActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-                else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_listas)
     }
     fun mostrar(rv: RecyclerView) {
         rvNoSocios.visibility = View.GONE

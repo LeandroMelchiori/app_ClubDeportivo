@@ -11,31 +11,30 @@ import java.util.Calendar
 import java.util.Locale
 
 class ResumenMensualActivity : AppCompatActivity() {
-
     private lateinit var db: DBHelper
     private var mesActual: Int = 0
     private var anioActual: Int = 0
-
+    private lateinit var utils: AppUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumen_mensual)
 
+        // Helpers
+        utils = AppUtils(this)
         db = DBHelper(this)
 
-        // --------- Usuario ----------
+        // Encabezado
         val usuario = intent.getStringExtra("usuario") ?: "Usuario"
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
         tvBienvenida.text = "Bienvenido, $usuario"
-
+        val tvFecha = findViewById<TextView>(R.id.tvFecha)
+        tvFecha.text = utils.fechaActualFormato()
 
         // --------- Fecha de hoy ----------
         val calendar = Calendar.getInstance()
         mesActual = calendar.get(Calendar.MONTH) + 1      // 1..12
         anioActual = calendar.get(Calendar.YEAR)
 
-        val tvFecha = findViewById<TextView>(R.id.tvFecha)
-        val formatoFecha = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "AR"))
-        tvFecha.text = formatoFecha.format(calendar.time)
 
         // --------- Referencias a los TextView del resumen ----------
         val tvMes = findViewById<TextView>(R.id.tvMes)
@@ -47,14 +46,6 @@ class ResumenMensualActivity : AppCompatActivity() {
         val tvIngresosTotales = findViewById<TextView>(R.id.tvIngresosTotales)
         val btnMesAnterior = findViewById<ImageButton>(R.id.btnMesAnterior)
         val btnMesSiguiente = findViewById<ImageButton>(R.id.btnMesSiguiente)
-
-        fun nombreMes(mes: Int): String {
-            val meses = arrayOf(
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-            )
-            return meses[mes - 1]
-        }
 
         // Cargar el mes actual al entrar
         fun cargarMes() {
@@ -74,6 +65,7 @@ class ResumenMensualActivity : AppCompatActivity() {
         val mesHoy = calHoy.get(Calendar.MONTH) + 1
         val anioHoy = calHoy.get(Calendar.YEAR)
 
+        // --------- Navegacion meses ----------
         btnMesAnterior.setOnClickListener {
             mesActual--
             if (mesActual < 1) {
@@ -82,7 +74,6 @@ class ResumenMensualActivity : AppCompatActivity() {
             }
             cargarMes()
         }
-
         btnMesSiguiente.setOnClickListener {
             // Solo dejamos avanzar hasta el mes actual del año actual
             val esMismoAnio = (anioActual == anioHoy)
@@ -99,42 +90,15 @@ class ResumenMensualActivity : AppCompatActivity() {
             }
         }
 
-
         // --------- Bottom nav ----------
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottom.selectedItemId = R.id.nav_pagos
-        bottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_activity -> {
-                    val intent = Intent(this, ActividadesActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_settings -> {
-                    val intent = Intent(this, ConfiguracionActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_listas -> {
-                    val intent = Intent(this, ListadosActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.nav_home -> {
-                    val intent = Intent(this, InicioActivity::class.java)
-                    intent.putExtra("usuario", usuario)
-                    startActivity(intent)
-                    true
-                }
-
-                else -> true
-            }
-        }
+        utils.setupBottomNav(bottom, usuario, R.id.nav_pagos)
+    }
+    fun nombreMes(mes: Int): String {
+        val meses = arrayOf(
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        )
+        return meses[mes - 1]
     }
 }

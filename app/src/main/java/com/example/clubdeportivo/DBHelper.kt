@@ -699,6 +699,34 @@ package com.example.clubdeportivo
     }
 
     // ----------------------------------------- CREATE -----------------------------------------
+    // En DBHelper.kt
+    fun insertarCliente(
+        dni: String,
+        nombre: String,
+        apellido: String,
+        fechaNacISO: String?,
+        direccion: String,
+        telefono: String,
+        email: String,
+        fechaInscripcionISO: String,
+        fichaMedica: Int = 1,
+        activo: Int = 1
+    ): Long {
+        val values = ContentValues().apply {
+            put("dni", dni.trim())
+            put("nombre", nombre.trim())
+            put("apellido", apellido.trim())
+            put("direccion", direccion.trim())
+            put("telefono", telefono.trim())
+            put("email", email.trim())
+            put("fecha_inscripcion", fechaInscripcionISO)
+            put("ficha_medica", fichaMedica)
+            put("activo", activo)
+            fechaNacISO?.let { put("fecha_nac", it) }
+        }
+        return writableDatabase.insertOrThrow("clientes", null, values)
+    }
+
     fun hacerSocioDesdeNoSocio(
         dni: Int,
         monto: Double,
@@ -1080,11 +1108,20 @@ package com.example.clubdeportivo
     private fun ContentValues.putOrNull(key: String, value: String?) {
         if (value == null) putNull(key) else put(key, value)
     }
-    private fun existeConDni(table: String, dni: String): Boolean =
-        readableDatabase.query(table, arrayOf("dni"), "dni = ?", arrayOf(dni), null, null, null)
-            .use { it.moveToFirst() }
+
+    fun existeDni(dni: String): Boolean =
+        readableDatabase.query(
+            "clientes",
+            arrayOf("dni"),
+            "dni = ?",
+            arrayOf(dni),
+            null,
+            null,
+            null
+        ).use { it.moveToFirst() }
+
     private fun etiquetaDia(dia: Int) = when (dia) {
-        0 -> "Dom"; 1 -> "Lun"; 2 -> "Mar"; 3 -> "Mié"; 4 -> "Jue"; 5 -> "Vie"; else -> "Sáb"
+    0 -> "Dom"; 1 -> "Lun"; 2 -> "Mar"; 3 -> "Mié"; 4 -> "Jue"; 5 -> "Vie"; else -> "Sáb"
     }
     private fun hhmm(mins: Int) = String.format("%02d:%02d", mins / 60, mins % 60)
 }

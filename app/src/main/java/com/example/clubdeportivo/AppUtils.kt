@@ -4,10 +4,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
+import android.os.Bundle
+import android.os.Parcelable
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,14 +21,29 @@ class AppUtils(private val ctx: Context) {
     fun toast(msg: String) {
         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
     }
-
     fun <T> goTo(
         destination: Class<T>,
-        usuario: String? = null,
-        finishCurrent: Boolean = false
+        finishCurrent: Boolean = false,
+        vararg extras: Pair<String, Any?>
     ) {
         val intent = Intent(ctx, destination)
-        if (usuario != null) intent.putExtra("usuario", usuario)
+
+        // Extras dinámicos opcionales
+        extras.forEach { (key, value) ->
+            when (value) {
+                null -> intent.putExtra(key, null as String?)
+                is String -> intent.putExtra(key, value)
+                is Int -> intent.putExtra(key, value)
+                is Boolean -> intent.putExtra(key, value)
+                is Double -> intent.putExtra(key, value)
+                is Float -> intent.putExtra(key, value)
+                is Long -> intent.putExtra(key, value)
+                is Serializable -> intent.putExtra(key, value)
+                is Parcelable -> intent.putExtra(key, value)
+                else -> throw IllegalArgumentException("Tipo no soportado en goTo(): $key")
+            }
+        }
+
         ctx.startActivity(intent)
         if (finishCurrent && ctx is Activity) ctx.finish()
     }
@@ -76,25 +95,45 @@ class AppUtils(private val ctx: Context) {
             // 2) Según el item, navegamos a la Activity correspondiente
             when (item.itemId) {
                 R.id.nav_home -> {
-                    goTo(InicioActivity::class.java, usuario, finishCurrent = true)
+                    goTo(InicioActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
                 R.id.nav_pagos -> {
-                    goTo(ResumenMensualActivity::class.java, usuario, finishCurrent = true)
+                    goTo(ResumenMensualActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
                 R.id.nav_activity -> {
-                    goTo(ActividadesActivity::class.java, usuario, finishCurrent = true)
+                    goTo(ActividadesActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
                 R.id.nav_settings -> {
-                    goTo(ConfiguracionActivity::class.java, usuario, finishCurrent = true)
+                    goTo(ConfiguracionActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
                 R.id.nav_listas -> {
-                    goTo(ListadosActivity::class.java, usuario, finishCurrent = true)
+                    goTo(ListadosActivity::class.java, finishCurrent = true,"usuario" to usuario)
                 }
             }
 
             true
         }
     }
+    fun normalizarFecha(input: String): String? {
+        if (input.isBlank()) return null
+        return try {
+            val inFmt  = SimpleDateFormat("dd/MM/yyyy", Locale("es", "AR"))
+            val outFmt = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            outFmt.format(inFmt.parse(input)!!)
+        } catch (_: Exception) {
+            null
+        }
+    }
+    fun hoyIso(): String {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+    }
 
+    fun esDniValido(dni: String): Boolean =
+        dni.matches(Regex("^\\d{8,9}\$"))
+
+    fun esTelefonoValido(tel: String): Boolean =
+        tel.matches(Regex("^\\d{9,12}\$"))
+    fun esEmailValido(mail: String): Boolean =
+        android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()
 
 }
