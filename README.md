@@ -404,35 +404,35 @@ Las operaciones que afectan múltiples tablas (hacerSocio, insertarHorario, darD
 
 El proyecto cumple los objetivos funcionales planteados, pero el equipo es consciente de que existen aspectos técnicos que, por alcance y tiempo, quedaron fuera de esta versión. A continuación se detallan las mejoras identificadas, organizadas por prioridad.
 
-###🔐 Seguridad
+### 🔐 Seguridad
 
  Autenticación segura — Las credenciales actuales están hardcodeadas en el código fuente como solución provisional para el entorno de desarrollo. En una versión productiva deberían almacenarse en la base de datos con hash (bcrypt / Argon2) y sal, nunca en texto plano.
  Gestión de sesión — El usuario logueado se propaga manualmente como extra en cada Intent. Lo correcto sería guardarlo en SharedPreferences o un objeto de sesión singleton para no depender de que cada Activity lo reenvíe correctamente.
 
-###🏗️ Arquitectura
+### 🏗️ Arquitectura
 
  Migrar a MVVM — Actualmente toda la lógica de negocio, validaciones y acceso a datos conviven en las Activities y en DBHelper. Separar en capas (ViewModel + Repository) haría el código más testeable, mantenible y escalable.
  Room Database — Reemplazar SQLiteOpenHelper por Room permitiría consultas tipadas con verificación en tiempo de compilación, eliminando el riesgo de errores silenciosos por nombres de columna mal escritos.
  Estrategia de migración de BD — El onUpgrade() actual hace DROP de todas las tablas, lo que implica pérdida total de datos ante cualquier actualización de versión. Debería implementarse un sistema de migraciones incrementales.
 
-###⚡ Performance y estabilidad
+### ⚡ Performance y estabilidad
 
  Operaciones asíncronas — Todas las consultas a la base de datos se ejecutan en el hilo principal (Main Thread). Esto puede generar congelamiento de la UI o errores ANR en dispositivos lentos o con volúmenes de datos grandes. La solución es mover las operaciones de BD a coroutines con Dispatchers.IO.
  Prevención de pagos duplicados — Los botones de pago no se deshabilitan mientras se procesa la operación, lo que permite registrar el mismo pago dos veces si el usuario toca rápido. Se debe deshabilitar el botón al primer toque y mostrar un indicador de carga.
 
-###🎨 Experiencia de usuario
+### 🎨 Experiencia de usuario
 
  DatePicker para fechas — Los campos de fecha de nacimiento aceptan texto libre, lo que puede resultar en formatos inválidos. Reemplazarlos con un DatePickerDialog nativo eliminaría este vector de error.
  Feedback visual en operaciones — Agregar ProgressBar o skeleton loaders mientras se cargan los listados, especialmente en la pantalla de actividades y listados de socios.
  Botones de Configuración — Los botones "Editar admin" y "Nuevo admin" están visibles pero deshabilitados. Hasta que la funcionalidad esté implementada, es mejor ocultarlos con View.GONE para no generar confusión.
 
-###🧩 Calidad de código
+### 🧩 Calidad de código
 
  Strings en strings.xml — Varios textos de la UI están hardcodeados directamente en las Activities en lugar de centralizarse en el archivo de recursos. Esto dificulta cambios de redacción y cualquier futura internacionalización.
  Corregir tipo de fichaMedica en PersonaDTO — El campo se define como String? en el DTO pero se almacena y usa como booleano en toda la app. Unificar el tipo evita conversiones implícitas y posibles comparaciones incorrectas.
  Navegación tipada entre Activities — La comunicación entre pantallas mediante extras sueltos (putExtra("key", value)) no tiene ningún contrato en tiempo de compilación. Si una key cambia en el origen y no se actualiza en el destino, falla silenciosamente. Navigation Component o un wrapper de parámetros tipados resolvería esto.
 
-###✨ Funcionalidades nuevas
+### ✨ Funcionalidades nuevas
 
  Notificaciones de vencimiento — Alertas automáticas para avisar cuando una cuota está próxima a vencer, sin necesidad de entrar a la app.
  Exportación de reportes — Generar PDF o CSV del resumen mensual para compartir o archivar.
@@ -440,7 +440,7 @@ El proyecto cumple los objetivos funcionales planteados, pero el equipo es consc
  Backup de datos — Exportar e importar la base de datos local, o sincronizar con un backend remoto para no depender únicamente del almacenamiento del dispositivo.
 
 
-👨‍💻 Autores
+## 👨‍💻 Autores
 Desarrollado como proyecto universitario por Leandro Melchiori, Jaiver Navarro, Carlos 
 
 ---
