@@ -400,7 +400,7 @@ Las operaciones que afectan múltiples tablas (hacerSocio, insertarHorario, darD
 
 ---
 
-🚀 Mejoras futuras
+## 🚀 Mejoras futuras
 
 El proyecto cumple los objetivos funcionales planteados, pero el equipo es consciente de que existen aspectos técnicos que, por alcance y tiempo, quedaron fuera de esta versión. A continuación se detallan las mejoras identificadas, organizadas por prioridad.
 
